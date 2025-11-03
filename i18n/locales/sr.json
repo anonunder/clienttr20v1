@@ -1,0 +1,65 @@
+{
+  "common": {
+    "loading": "Učitavanje...",
+    "error": "Došlo je do greške",
+    "retry": "Pokušaj ponovo",
+    "cancel": "Otkaži",
+    "save": "Sačuvaj",
+    "delete": "Obriši",
+    "edit": "Izmeni",
+    "close": "Zatvori",
+    "confirm": "Potvrdi"
+  },
+  "auth": {
+    "login": "Prijavi se",
+    "logout": "Odjavi se",
+    "email": "Email",
+    "password": "Lozinka",
+    "forgotPassword": "Zaboravili ste lozinku?",
+    "noAccount": "Nemate nalog?",
+    "signUp": "Registruj se"
+  },
+  "tabs": {
+    "home": "Početna",
+    "programs": "Programi",
+    "progress": "Napredak",
+    "chat": "Razgovor",
+    "profile": "Profil"
+  },
+  "home": {
+    "welcome": "Dobrodošli",
+    "dashboard": "Kontrolna tabla",
+    "todayWorkout": "Današnji trening",
+    "nutrition": "Ishrana",
+    "quickActions": "Brze akcije"
+  },
+  "programs": {
+    "training": "Treninzi",
+    "nutrition": "Planovi ishrane",
+    "noPlans": "Nema dostupnih planova",
+    "selectPlan": "Izaberite plan da počnete"
+  },
+  "progress": {
+    "title": "Vaš napredak",
+    "streak": "Trenutni niz",
+    "workouts": "Završeni treninzi",
+    "calories": "Praćene kalorije",
+    "weekly": "Nedeljni napredak"
+  },
+  "chat": {
+    "title": "Razgovor",
+    "sendMessage": "Pošalji poruku",
+    "typeMessage": "Unesite poruku...",
+    "noMessages": "Još nema poruka"
+  },
+  "profile": {
+    "title": "Profil",
+    "settings": "Podešavanja",
+    "personal": "Lični podaci",
+    "preferences": "Preferencije",
+    "theme": "Tema",
+    "language": "Jezik",
+    "notifications": "Obaveštenja"
+  }
+}
+

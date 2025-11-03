@@ -1,0 +1,65 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "confirm": "Confirm"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up"
+  },
+  "tabs": {
+    "home": "Home",
+    "programs": "Programs",
+    "progress": "Progress",
+    "chat": "Chat",
+    "profile": "Profile"
+  },
+  "home": {
+    "welcome": "Welcome",
+    "dashboard": "Dashboard",
+    "todayWorkout": "Today's Workout",
+    "nutrition": "Nutrition",
+    "quickActions": "Quick Actions"
+  },
+  "programs": {
+    "training": "Training Plans",
+    "nutrition": "Nutrition Plans",
+    "noPlans": "No plans available",
+    "selectPlan": "Select a plan to get started"
+  },
+  "progress": {
+    "title": "Your Progress",
+    "streak": "Current Streak",
+    "workouts": "Workouts Completed",
+    "calories": "Calories Tracked",
+    "weekly": "Weekly Progress"
+  },
+  "chat": {
+    "title": "Chat",
+    "sendMessage": "Send message",
+    "typeMessage": "Type a message...",
+    "noMessages": "No messages yet"
+  },
+  "profile": {
+    "title": "Profile",
+    "settings": "Settings",
+    "personal": "Personal Information",
+    "preferences": "Preferences",
+    "theme": "Theme",
+    "language": "Language",
+    "notifications": "Notifications"
+  }
+}
+
