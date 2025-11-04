@@ -22,10 +22,10 @@ const mockFetchDashboardData = async (): Promise<DashboardData> => {
   // Return mock data
   return {
     stats: {
-      activePrograms: 3,
-      completedWorkouts: 24,
-      totalExercises: 156,
-      streak: 7,
+      activePrograms: 0,
+      completedWorkouts: 0,
+      totalExercises: 0,
+      streak: 0,
     },
     continueWorkout: {
       name: "Upper Body Strength",

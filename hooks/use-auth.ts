@@ -1,26 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { RootState } from '@/state/store';
+import { logout } from '@/state/slices/auth-slice';
+import { clearTokenSecure } from '@/services/auth/auth-storage';
 
 /**
- * Mock Auth Hook
- * TODO: Replace with actual auth implementation
+ * Auth Hook
+ * Reads authentication state from Redux
  */
 export const useAuth = () => {
-  const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
-  useEffect(() => {
-    // Mock user - replace with actual auth logic
-    setUser({
-      id: 'user-123',
-      name: 'John Doe',
-      email: 'john@example.com',
-    });
-  }, []);
+  const handleLogout = async () => {
+    await clearTokenSecure();
+    dispatch(logout());
+  };
 
   return {
     user,
-    isAuthenticated: !!user,
-    login: async () => {},
-    logout: async () => {},
+    token,
+    isAuthenticated,
+    logout: handleLogout,
   };
 };
 

@@ -1,36 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, Pressable, Modal, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '@/state/store';
+import { setSelectedCompany } from '@/state/slices/auth-slice';
 import { darkTheme } from '@/styles/theme';
 
 interface HeaderProps {
   title: string;
-  description?: string;
+  description?: string; // Reserved for future use
 }
 
 interface Company {
   id: string;
   name: string;
-  members: number;
+  company_id: string;
 }
 
-const Header = ({ title, description }: HeaderProps) => {
-  const [selectedCompany, setSelectedCompany] = useState<string>('1');
+const Header = ({ title }: HeaderProps) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
   const [showDropdown, setShowDropdown] = useState(false);
   const windowWidth = Dimensions.get('window').width;
   const isTablet = windowWidth >= 768;
 
-  const companies: Company[] = [
-    { id: "1", name: "FitLife Studios", members: 250 },
-    { id: "2", name: "PowerGym Elite", members: 180 },
-    { id: "3", name: "Wellness Center Pro", members: 320 },
-    { id: "4", name: "Iron Paradise", members: 150 },
-    { id: "5", name: "Flex & Flow", members: 200 },
-  ];
+  // Get companies from user relationships
+  const companies: Company[] = useMemo(() => {
+    if (!user?.relationships || user.relationships.length === 0) {
+      console.log('Header: No relationships found', { user, relationships: user?.relationships });
+      return [];
+    }
+    const mapped = user.relationships.map(rel => ({
+      id: rel.id,
+      name: rel.name,
+      company_id: rel.company_id,
+    }));
+    console.log('Header: Companies mapped', mapped);
+    return mapped;
+  }, [user?.relationships]);
 
-  const selectedCompanyData = companies.find(c => c.id === selectedCompany);
+  const selectedCompanyData = companies.find(c => c.company_id === selectedCompanyId);
+
+  const handleCompanySelect = (companyId: string) => {
+    dispatch(setSelectedCompany(companyId));
+    setShowDropdown(false);
+  };
 
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
@@ -59,12 +76,15 @@ const Header = ({ title, description }: HeaderProps) => {
           <View style={styles.rightSection}>
             <Pressable
               style={styles.selectTrigger}
-              onPress={() => setShowDropdown(true)}
+              onPress={() => companies.length > 0 && setShowDropdown(true)}
+              disabled={companies.length === 0}
             >
               <Text style={styles.selectValue} numberOfLines={1}>
-                {selectedCompanyData?.name || 'Select company'}
+                {selectedCompanyData?.name || (user ? 'No companies available' : 'Loading...')}
               </Text>
-              <Ionicons name="chevron-down" size={16} color={darkTheme.color.mutedForeground} />
+              {companies.length > 0 && (
+                <Ionicons name="chevron-down" size={16} color={darkTheme.color.mutedForeground} />
+              )}
             </Pressable>
           </View>
         </View>
@@ -87,22 +107,19 @@ const Header = ({ title, description }: HeaderProps) => {
                     key={company.id}
                     style={[
                       styles.dropdownItem,
-                      selectedCompany === company.id && styles.dropdownItemSelected,
+                      selectedCompanyId === company.company_id && styles.dropdownItemSelected,
                     ]}
-                    onPress={() => {
-                      setSelectedCompany(company.id);
-                      setShowDropdown(false);
-                    }}
+                    onPress={() => handleCompanySelect(company.company_id)}
                   >
                     <Text
                       style={[
                         styles.dropdownItemText,
-                        selectedCompany === company.id && styles.dropdownItemTextSelected,
+                        selectedCompanyId === company.company_id && styles.dropdownItemTextSelected,
                       ]}
                     >
                       {company.name}
                     </Text>
-                    {selectedCompany === company.id && (
+                    {selectedCompanyId === company.company_id && (
                       <Ionicons name="checkmark" size={16} color={darkTheme.color.primary} />
                     )}
                   </Pressable>

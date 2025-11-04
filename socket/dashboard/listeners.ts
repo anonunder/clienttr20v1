@@ -66,7 +66,6 @@ class DashboardSocketListeners {
     socket.on(event, callback);
     this.activeListeners.set(event, callback);
 
-    console.log(`👂 Registered listener: ${event}`);
   }
 
   /**
@@ -171,7 +170,6 @@ class DashboardSocketListeners {
     this.registerListener<StatsUpdatedPayload>(
       DASHBOARD_LISTEN_EVENTS.STATS_UPDATED,
       (payload) => {
-        console.log('📊 Stats updated:', payload);
         this.dispatch!(updateStats(payload.stats));
       }
     );
@@ -180,7 +178,6 @@ class DashboardSocketListeners {
     this.registerListener<MeasurementAddedPayload>(
       DASHBOARD_LISTEN_EVENTS.MEASUREMENT_ADDED,
       (payload) => {
-        console.log('📏 Measurement added:', payload);
         this.dispatch!(addMeasurement(payload.measurement));
       }
     );
@@ -189,7 +186,6 @@ class DashboardSocketListeners {
     this.registerListener<ReportGeneratedPayload>(
       DASHBOARD_LISTEN_EVENTS.REPORT_GENERATED,
       (payload) => {
-        console.log('📄 Report generated:', payload);
         this.dispatch!(addReport(payload.report));
       }
     );
@@ -198,12 +194,10 @@ class DashboardSocketListeners {
     this.registerListener<DataRefreshPayload>(
       DASHBOARD_LISTEN_EVENTS.DATA_REFRESH,
       (payload) => {
-        console.log('🔄 Data refresh requested:', payload);
         this.dispatch!(fetchDashboardData());
       }
     );
 
-    console.log(`✅ Registered ${this.activeListeners.size} dashboard listeners`);
   }
 
   /**
@@ -215,11 +209,9 @@ class DashboardSocketListeners {
 
     this.activeListeners.forEach((callback, event) => {
       socket.off(event, callback);
-      console.log(`👋 Unregistered listener: ${event}`);
     });
 
     this.activeListeners.clear();
-    console.log('✅ All dashboard listeners unregistered');
   }
 
   /**

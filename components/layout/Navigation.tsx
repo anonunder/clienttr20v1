@@ -2,11 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { router, usePathname } from 'expo-router';
+import { router, usePathname, useSegments } from 'expo-router';
 import { darkTheme } from '@/styles/theme';
 
 const Navigation = () => {
   const pathname = usePathname();
+  const segments = useSegments();
   const windowWidth = Dimensions.get('window').width;
   const isTablet = windowWidth >= 768;
 
@@ -14,18 +15,38 @@ const Navigation = () => {
   const pendingReportsCount = 2;
 
   const navItems = [
-    { icon: 'home', label: 'Home', path: '/(protected)/(tabs)/home' },
-    { icon: 'barbell', label: 'Programs', path: '/(protected)/(tabs)/programs' },
-    { icon: 'heart', label: 'Favorites', path: '/(protected)/(tabs)/favorites' },
-    { icon: 'chatbubble-ellipses', label: 'Chat', path: '/(protected)/(tabs)/chat' },
-    { icon: 'bar-chart', label: 'Reports', path: '/(protected)/(tabs)/reports', badge: pendingReportsCount },
-    { icon: 'resize', label: 'Measurements', path: '/(protected)/(tabs)/progress' },
-    { icon: 'person', label: 'Profile', path: '/(protected)/(tabs)/profile' },
+    { icon: 'home', label: 'Home', path: '/(protected)/(tabs)/home', segment: 'home' },
+    { icon: 'barbell', label: 'Programs', path: '/(protected)/(tabs)/programs', segment: 'programs' },
+    { icon: 'heart', label: 'Favorites', path: '/(protected)/(tabs)/favorites', segment: 'favorites' },
+    { icon: 'chatbubble-ellipses', label: 'Chat', path: '/(protected)/(tabs)/chat', segment: 'chat' },
+    { icon: 'bar-chart', label: 'Reports', path: '/(protected)/(tabs)/reports', segment: 'reports', badge: pendingReportsCount },
+    { icon: 'resize', label: 'Measurements', path: '/(protected)/(tabs)/progress', segment: 'progress' },
+    { icon: 'person', label: 'Profile', path: '/(protected)/(tabs)/profile', segment: 'profile' },
   ];
 
-  const isActive = (path: string) => {
-    if (path === '/(protected)/(tabs)/home') return pathname === path;
-    return pathname?.startsWith(path);
+  const isActive = (path: string, segment: string) => {
+    // First check using segments (more reliable in expo-router)
+    // Find the last meaningful segment (excluding route groups like (protected), (tabs))
+    const lastSegment = segments[segments.length - 1];
+    const meaningfulSegments = segments.filter(s => !s.startsWith('(') && !s.endsWith(')'));
+    const lastMeaningfulSegment = meaningfulSegments[meaningfulSegments.length - 1];
+    
+    // Check if current segment matches
+    if (lastSegment === segment || lastMeaningfulSegment === segment) return true;
+    
+    // Fallback to pathname matching
+    if (path === '/(protected)/(tabs)/home') {
+      return pathname === path || 
+             pathname === '/home' || 
+             lastSegment === 'home' ||
+             lastMeaningfulSegment === 'home';
+    }
+    
+    // Check if pathname starts with the path or the segment
+    return pathname?.startsWith(path) || 
+           pathname?.startsWith(`/${segment}`) ||
+           pathname?.includes(`/${segment}/`) ||
+           pathname?.endsWith(`/${segment}`);
   };
 
   const handlePress = (path: string) => {
@@ -41,18 +62,18 @@ const Navigation = () => {
             <Pressable
               style={[
                 styles.homeButton,
-                isActive(navItems[0].path) ? styles.homeButtonActive : styles.homeButtonInactive,
+                isActive(navItems[0].path, navItems[0].segment) ? styles.homeButtonActive : styles.homeButtonInactive,
               ]}
               onPress={() => handlePress(navItems[0].path)}
             >
               <Ionicons 
                 name="home" 
                 size={20} 
-                color={isActive(navItems[0].path) ? darkTheme.color.primaryForeground : darkTheme.color.foreground} 
+                color={isActive(navItems[0].path, navItems[0].segment) ? darkTheme.color.primaryForeground : darkTheme.color.foreground} 
               />
               <Text style={[
                 styles.homeButtonText,
-                isActive(navItems[0].path) && styles.homeButtonTextActive,
+                isActive(navItems[0].path, navItems[0].segment) && styles.homeButtonTextActive,
               ]}>
                 {navItems[0].label}
               </Text>
@@ -75,7 +96,7 @@ const Navigation = () => {
                 <View style={styles.desktopNav}>
                   {/* Reorder items to put Home in the middle on desktop: [Programs, Favorites, Measurements, Home, Chat, Reports, Profile] */}
                   {[navItems[1], navItems[2], navItems[5], navItems[0], navItems[3], navItems[4], navItems[6]].map((item) => {
-                    const active = isActive(item.path);
+                    const active = isActive(item.path, item.segment);
                     const isHomeItem = item.path === navItems[0].path;
                     return (
                       <Pressable
@@ -123,7 +144,7 @@ const Navigation = () => {
             {!isTablet && (
               <View style={styles.mobileNav}>
                 {navItems.slice(1).map((item) => {
-                  const active = isActive(item.path);
+                  const active = isActive(item.path, item.segment);
                   return (
                     <Pressable
                       key={item.path}

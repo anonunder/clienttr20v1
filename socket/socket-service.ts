@@ -6,8 +6,18 @@ class SocketService {
   private maxReconnectAttempts = 5;
 
   async connect(url?: string, token?: string): Promise<Socket> {
-    if (this.socket?.connected) {
+    // If socket exists and is connected with the same token, return it
+    if (this.socket?.connected && this.socket.auth?.token === token) {
       return this.socket;
+    }
+
+    // If socket exists but token is different or missing, disconnect and recreate
+    if (this.socket) {
+      this.disconnect();
+    }
+
+    if (!token) {
+      throw new Error('Token is required for socket connection');
     }
 
     const socketUrl = url || process.env.EXPO_PUBLIC_SOCKET_URL || 'ws://localhost:3000';

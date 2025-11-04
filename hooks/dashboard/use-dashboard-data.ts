@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '@/state/store';
 import { fetchDashboardData } from '@/features/dashboard/dashboard-thunks';
@@ -50,6 +50,9 @@ export const useDashboardData = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
+  
+  // Use ref to track initialization without causing re-renders
+  const initializationRef = useRef(false);
 
   // Redux selectors
   const data = useSelector(selectDashboardData);
@@ -68,11 +71,13 @@ export const useDashboardData = () => {
 
   // Initialize dashboard - clean async function, no Redux leaking
   const initializeDashboard = useCallback(async (): Promise<void> => {
-    if (isInitializing || loading) {
+    // Check ref to prevent duplicate calls (loading check removed to prevent dependency loop)
+    if (initializationRef.current) {
       console.log('⏭️ Skipping initialization - already in progress');
       return; // Prevent duplicate calls
     }
     
+    initializationRef.current = true;
     setIsInitializing(true);
     try {
       await dispatch(fetchDashboardData()).unwrap();
@@ -81,9 +86,10 @@ export const useDashboardData = () => {
       console.error('❌ Failed to initialize dashboard:', error);
       throw error; // Re-throw if component wants to handle
     } finally {
+      initializationRef.current = false;
       setIsInitializing(false);
     }
-  }, [dispatch, isInitializing, loading]);
+  }, [dispatch]);
 
   // Refresh function for pull-to-refresh - clean async function
   const refresh = useCallback(async (): Promise<void> => {

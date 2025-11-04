@@ -237,6 +237,11 @@ export default function LoginScreen() {
       }
       
       // Now update Redux state
+      console.log('Login: Dispatching user data', {
+        hasRelationships: !!response.user.relationships,
+        relationshipsCount: response.user.relationships?.length || 0,
+        relationships: response.user.relationships
+      });
       dispatch(setToken(response.token));
       dispatch(setUser(response.user));
       
