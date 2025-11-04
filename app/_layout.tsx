@@ -25,14 +25,17 @@ function RootNavigator() {
 
     const inAuthGroup = segments[0] === '(auth)';
     const inProtectedGroup = segments[0] === '(protected)';
+    const isOnLoadingScreen = segments[1] === 'loading';
+    const isOnLoginScreen = segments[1] === 'login';
 
     // If not authenticated and trying to access protected routes → go to login
     if (!isAuthenticated && inProtectedGroup) {
       router.replace('/(auth)/login');
     }
 
-    // If authenticated and on login page → go to home
-    if (isAuthenticated && inAuthGroup) {
+    // If authenticated and on auth pages (except loading) → go to home
+    // Allow loading screen to show even if authenticated initially
+    if (isAuthenticated && inAuthGroup && !isOnLoadingScreen) {
       router.replace('/(protected)/(tabs)/home');
     }
   }, [isAuthenticated, isInitialized, segments, router]);
@@ -40,7 +43,7 @@ function RootNavigator() {
   // Show loading while checking auth
   if (!isInitialized) {
     return (
-      <View className="flex-1 items-center justify-center bg-bg">
+      <View className="flex-1 items-center justify-center bg-background">
         <ActivityIndicator size="large" />
       </View>
     );

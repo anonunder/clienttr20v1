@@ -12,8 +12,8 @@ export default function Index() {
 
   if (!isInitialized) {
     return (
-      <View className="flex-1 items-center justify-center bg-bg">
-        <ActivityIndicator size="large" />
+      <View className="flex-1 items-center justify-center bg-background">
+        <ActivityIndicator size="large" color="#3EE9A8" />
       </View>
     );
   }
@@ -23,6 +23,7 @@ export default function Index() {
     return <Redirect href="/(protected)/(tabs)/home" />;
   }
 
-  return <Redirect href="/(auth)/login" />;
+  // Show loading screen first, then redirect to login
+  return <Redirect href="/(auth)/loading" />;
 }
 

@@ -14,23 +14,31 @@ export function useAuthInit() {
         const token = await getTokenSecure();
 
         if (token) {
-          // Validate token with backend
-          const user = await getCurrentUser();
-
-          if (user) {
-            dispatch(setToken(token));
-            dispatch(setUser(user));
-          } else {
-            // Token invalid, clear it from storage and Redux
-            await clearTokenSecure();
-            dispatch(logout());
+          // Restore token to Redux immediately
+          dispatch(setToken(token));
+          
+          // Try to validate token with backend (non-blocking)
+          try {
+            const user = await getCurrentUser();
+            if (user) {
+              dispatch(setUser(user));
+            } else {
+              // Token might be invalid, but keep it in Redux for now
+              // User will be logged out on next API call if token is truly invalid
+              console.warn('Failed to get current user, but keeping token');
+            }
+          } catch (error) {
+            // Validation failed, but don't clear token immediately
+            // It might be a network issue - keep token and let API calls handle it
+            console.warn('Token validation failed:', error);
           }
         } else {
           // No token found, ensure Redux is cleared
           dispatch(logout());
         }
       } catch (error) {
-        // If validation fails, clear auth state from storage and Redux
+        // If getting token fails, clear auth state
+        console.error('Auth initialization error:', error);
         await clearTokenSecure();
         dispatch(logout());
       } finally {
