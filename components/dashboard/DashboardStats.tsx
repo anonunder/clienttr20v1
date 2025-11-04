@@ -1,41 +1,48 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { StatsCard } from '@/components/common/StatsCard';
+import { StatsCard } from '@/components/data-display/StatsCard';
+import { useResponsive } from '@/hooks/use-responsive';
 import { darkTheme } from '@/styles/theme';
 
-export function DashboardStats() {
-  const windowWidth = Dimensions.get('window').width;
+interface Stats {
+  activePrograms: number;
+  completedWorkouts: number;
+  totalExercises: number;
+  streak: number;
+}
+
+interface DashboardStatsProps {
+  stats?: Stats;
+}
+
+export function DashboardStats({ stats }: DashboardStatsProps) {
+  const { isTablet, isDesktop } = useResponsive();
   
-  // Responsive breakpoints
-  const isTablet = windowWidth >= 640 && windowWidth < 1024; // sm breakpoint
-  const isDesktop = windowWidth >= 1024; // lg breakpoint
-  
-  const stats = [
+  const statsData = [
     { 
-      label: 'Calories Burned', 
-      value: '2,234', 
-      icon: <Ionicons name="flame" size={32} color={darkTheme.color.warning} />, 
+      label: 'Active Programs', 
+      value: stats?.activePrograms?.toString() || '0', 
+      icon: <Ionicons name="barbell" size={32} color={darkTheme.color.warning} />, 
     },
     { 
-      label: 'Active Days', 
-      value: '35', 
-      icon: <Ionicons name="pulse" size={32} color={darkTheme.color.success} />, 
+      label: 'Completed Workouts', 
+      value: stats?.completedWorkouts?.toString() || '0', 
+      icon: <Ionicons name="checkmark-circle" size={32} color={darkTheme.color.success} />, 
     },
     { 
-      label: 'Goals Hit', 
-      value: '12/15', 
-      icon: <Ionicons name="checkmark-circle" size={32} color={darkTheme.color.info} />, 
+      label: 'Total Exercises', 
+      value: stats?.totalExercises?.toString() || '0', 
+      icon: <Ionicons name="fitness" size={32} color={darkTheme.color.info} />, 
     },
     { 
       label: 'Streak', 
-      value: '7 days', 
+      value: `${stats?.streak || 0} days`, 
       icon: <Ionicons name="trending-up" size={32} color={darkTheme.color.primary} />, 
     },
   ];
 
   // Determine grid layout based on screen size
-  // Mobile: 1 column, Tablet: 2 columns, Desktop: 4 columns
   const getContainerStyle = () => {
     if (isDesktop) {
       return styles.statsContainerDesktop; // 4 columns
@@ -48,17 +55,17 @@ export function DashboardStats() {
 
   const getCardWrapperStyle = () => {
     if (isDesktop) {
-      return styles.statCardWrapperDesktop; // flex: 1 (equal width)
+      return styles.statCardWrapperDesktop;
     } else if (isTablet) {
-      return styles.statCardWrapperTablet; // 2 columns with flexBasis
+      return styles.statCardWrapperTablet;
     } else {
-      return styles.statCardWrapperMobile; // 100% width
+      return styles.statCardWrapperMobile;
     }
   };
 
   return (
     <View style={[styles.statsContainer, getContainerStyle()]}>
-      {stats.map((stat) => (
+      {statsData.map((stat) => (
         <View 
           key={stat.label} 
           style={getCardWrapperStyle()}
@@ -79,27 +86,27 @@ const styles = StyleSheet.create({
     // Base styles
   },
   statsContainerMobile: {
-    flexDirection: 'column', // 1 column on mobile
-    gap: 16, // gap-4 = 16px between stat cards vertically
+    flexDirection: 'column',
+    gap: 16,
   },
   statsContainerTablet: {
-    flexDirection: 'row', // 2 columns on tablet
-    flexWrap: 'wrap', // Allow wrapping to next row
-    gap: 16, // gap-4 = 16px between stat cards
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
   },
   statsContainerDesktop: {
-    flexDirection: 'row', // 4 columns on desktop (all in one row)
-    gap: 16, // gap-4 = 16px between stat cards horizontally
+    flexDirection: 'row',
+    gap: 16,
   },
   statCardWrapperMobile: {
-    width: '100%', // Full width on mobile
+    width: '100%',
   },
   statCardWrapperTablet: {
-    flexBasis: '48%', // Approximately 50% width accounting for gap
+    flexBasis: '48%',
     flexGrow: 0,
     flexShrink: 0,
   },
   statCardWrapperDesktop: {
-    flex: 1, // Equal width for all cards on desktop (4 columns)
+    flex: 1,
   },
 });

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Card } from '@/components/common/Card';
-import { Progress } from '@/components/common/Progress';
-import { darkTheme } from '@/styles/theme';
+import { Card } from '@/components/ui/Card';
+import { Progress } from '@/components/ui/Progress';
+import { spacingStyles, layoutStyles, textStyles } from '@/styles/shared-styles';
 
 export interface Goal {
   name: string;
@@ -25,9 +25,9 @@ export function DailyProgress({ goals }: DailyProgressProps) {
             const percentage = (goal.current / goal.target) * 100;
             return (
               <View key={goal.name} style={styles.goalItem}>
-                <View style={styles.goalHeader}>
-                  <Text style={styles.goalName}>{goal.name}</Text>
-                  <Text style={styles.goalValue}>
+                <View style={layoutStyles.rowBetween}>
+                  <Text style={textStyles.smallMedium}>{goal.name}</Text>
+                  <Text style={textStyles.smallMuted}>
                     {goal.current} / {goal.target} {goal.unit}
                   </Text>
                 </View>
@@ -43,33 +43,18 @@ export function DailyProgress({ goals }: DailyProgressProps) {
 
 const styles = StyleSheet.create({
   cardContent: {
-    padding: 24, // p-6
+    ...spacingStyles.p24,
   },
   title: {
-    fontSize: 20,
+    ...textStyles.h3,
     fontWeight: '600',
-    color: darkTheme.color.foreground,
-    marginBottom: 24,
+    ...spacingStyles.mb24,
   },
   goalsList: {
     gap: 24,
   },
   goalItem: {
     gap: 8,
-  },
-  goalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  goalName: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: darkTheme.color.foreground,
-  },
-  goalValue: {
-    fontSize: 14,
-    color: darkTheme.color.mutedForeground,
   },
 });
 

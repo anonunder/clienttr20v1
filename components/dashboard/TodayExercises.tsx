@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card } from '@/components/common/Card';
-import { Button } from '@/components/common/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/data-display/SectionHeader';
 import { darkTheme } from '@/styles/theme';
-import { router } from 'expo-router';
+import { spacingStyles, componentStyles, textStyles, borderStyles, layoutStyles } from '@/styles/shared-styles';
 
 export interface Exercise {
   id: string;
@@ -22,34 +22,28 @@ export function TodayExercises({ exercises }: TodayExercisesProps) {
   return (
     <Card>
       <View style={styles.cardContent}>
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Ionicons name="barbell" size={20} color={darkTheme.color.primary} />
-            <Text style={styles.title}>Today's Exercises</Text>
-          </View>
-          <Button
-            variant="ghost"
-            size="sm"
-            title="View All"
-            onPress={() => router.push('/programs/training')}
-          />
-        </View>
+        <SectionHeader
+          icon="barbell"
+          title="Today's Exercises"
+          actionTitle="View All"
+          onActionPress={() => console.log('View all exercises - route not implemented')}
+        />
         <View style={styles.exercisesList}>
           {exercises.map((exercise) => (
             <View
               key={exercise.id}
-              style={styles.exerciseItem}
+              style={componentStyles.listItem}
             >
-              <View style={styles.exerciseContent}>
+              <View style={layoutStyles.flex1}>
                 <Text
                   style={[
-                    styles.exerciseName,
+                    textStyles.smallMedium,
                     exercise.completed && styles.exerciseNameCompleted,
                   ]}
                 >
                   {exercise.name}
                 </Text>
-                <Text style={styles.exerciseDetails}>
+                <Text style={textStyles.smallMuted}>
                   {exercise.sets} sets × {exercise.reps} reps
                 </Text>
               </View>
@@ -68,57 +62,20 @@ export function TodayExercises({ exercises }: TodayExercisesProps) {
 
 const styles = StyleSheet.create({
   cardContent: {
-    padding: 24, // p-6
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: darkTheme.color.foreground,
+    ...spacingStyles.p24,
   },
   exercisesList: {
     gap: 12,
-  },
-  exerciseItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: `${darkTheme.color.secondary}4D`, // 30% opacity
-  },
-  exerciseContent: {
-    flex: 1,
-  },
-  exerciseName: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: darkTheme.color.foreground,
-    marginBottom: 4,
   },
   exerciseNameCompleted: {
     color: darkTheme.color.mutedForeground,
     textDecorationLine: 'line-through',
   },
-  exerciseDetails: {
-    fontSize: 14,
-    color: darkTheme.color.mutedForeground,
-  },
   completedBadge: {
     width: 24,
     height: 24,
-    borderRadius: 12,
-    backgroundColor: `${darkTheme.color.success}33`, // 20% opacity
+    ...borderStyles.rounded12,
+    backgroundColor: `${darkTheme.color.success}33`,
     alignItems: 'center',
     justifyContent: 'center',
   },

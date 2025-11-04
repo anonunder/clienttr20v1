@@ -1,16 +1,38 @@
-import { useEffect } from 'react';
-import { connectSocket, getSocket, disconnectSocket } from '../services/socket/socket-client';
+import { useState, useEffect } from 'react';
+import { socketService } from '@/socket/socket-service';
 
-export function useSocket(token?: string) {
+/**
+ * Hook for Socket.IO Connection
+ * Manages socket connection lifecycle
+ */
+export const useSocket = () => {
+  const [socket, setSocket] = useState(socketService.getSocket());
+  const [connected, setConnected] = useState(false);
+
   useEffect(() => {
-    const s = connectSocket(token);
+    const initSocket = async () => {
+      try {
+        const socketInstance = await socketService.connect();
+        setSocket(socketInstance);
+
+        socketInstance.on('connect', () => setConnected(true));
+        socketInstance.on('disconnect', () => setConnected(false));
+      } catch (error) {
+        console.error('Failed to initialize socket:', error);
+      }
+    };
+
+    initSocket();
 
     return () => {
-      s.off();
-      disconnectSocket();
+      // Don't disconnect on unmount, let the app manage socket lifecycle
+      setConnected(false);
     };
-  }, [token]);
+  }, []);
 
-  return getSocket();
-}
-
+  return {
+    socket,
+    connected,
+    emit: socketService.emit.bind(socketService),
+  };
+};

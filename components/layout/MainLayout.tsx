@@ -9,9 +9,10 @@ interface MainLayoutProps {
   title: string;
   description?: string;
   hideNavigation?: boolean;
+  refreshControl?: React.ReactElement<any>;
 }
 
-export function MainLayout({ children, title, description, hideNavigation = false }: MainLayoutProps) {
+export function MainLayout({ children, title, description, hideNavigation = false, refreshControl }: MainLayoutProps) {
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -22,6 +23,7 @@ export function MainLayout({ children, title, description, hideNavigation = fals
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={refreshControl}
       >
         <View style={styles.contentWrapper}>
           {children}

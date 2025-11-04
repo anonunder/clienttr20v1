@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import AnimatedComponent, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, withSequence, withDelay, Easing } from 'react-native-reanimated';
 import { Image } from 'expo-image';
-import { Progress } from '../../components/common/Progress';
+import { Progress } from '@/components/ui/Progress';
 import { darkTheme } from '@/styles/theme';
 
 const loadingSteps = [

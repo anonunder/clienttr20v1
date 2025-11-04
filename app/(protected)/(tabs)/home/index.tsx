@@ -1,67 +1,122 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { Card } from '@/components/common/Card';
-import { Progress } from '@/components/common/Progress';
-import { Button } from '@/components/common/Button';
-import { MainLayout } from '@/components/common/MainLayout';
+import { Card } from '@/components/ui/Card';
+import { Progress } from '@/components/ui/Progress';
+import { Button } from '@/components/ui/Button';
+import { MainLayout } from '@/components/layout/MainLayout';
+import { SectionHeader } from '@/components/data-display/SectionHeader';
 import { DashboardStats } from '@/components/dashboard/DashboardStats';
 import { TodayExercises } from '@/components/dashboard/TodayExercises';
 import { TodayMeals } from '@/components/dashboard/TodayMeals';
 import { DailyProgress } from '@/components/dashboard/DailyProgress';
 import { darkTheme } from '@/styles/theme';
+import { useResponsive } from '@/hooks/use-responsive';
+import { useDashboardData } from '@/hooks/dashboard';
+import { 
+  spacingStyles, 
+  layoutStyles, 
+  textStyles, 
+  borderStyles, 
+  componentStyles 
+} from '@/styles/shared-styles';
 
+/**
+ * 📊 Dashboard Screen - MOCK DATA ONLY
+ * 
+ * This screen displays mock data for development.
+ * No real API calls are made.
+ */
 export default function DashboardScreen() {
-  const windowWidth = Dimensions.get('window').width;
-  const isTablet = windowWidth >= 640; // sm breakpoint
+  const { isTablet } = useResponsive();
   
-  const todayGoals = [
-    { name: "Today's Exercise Time", current: 22, target: 30, unit: "min" },
-    { name: "Daily Steps", current: 5832, target: 10000, unit: "steps" },
-    { name: "Completed Goals", current: 3, target: 5, unit: "goals" },
-  ];
+  // Use dashboard data hook - MOCK DATA ONLY
+  const {
+    stats,
+    todayExercises,
+    todayMeals,
+    continueWorkout,
+    todayGoals,
+    measurements,
+    recentReports,
+    loading,
+    isRefreshing,
+    isInitializing,
+    error,
+    socketConnected,
+    socketReady,
+    initializeDashboard,
+    refresh,
+  } = useDashboardData();
 
-  const continueWorkout = {
-    name: "Upper Body Strength",
-    progress: 60,
-    lastExercise: "Dumbbell Shoulder Press",
-    planId: "1",
-    workoutId: "1",
-    exerciseId: "2"
-  };
+  // Initialize dashboard data on mount
+  React.useEffect(() => {
+    initializeDashboard().catch((error) => {
+      console.error('Failed to initialize dashboard:', error);
+      // Error is already handled in the hook, but component can add custom handling here if needed
+    });
+  }, [initializeDashboard]);
 
-  const todaysExercises = [
-    { id: "1", name: "Dumbbell Shoulder Press", sets: 3, reps: 12, completed: true },
-    { id: "2", name: "Barbell Squats", sets: 4, reps: 10, completed: false },
-    { id: "3", name: "Bench Press", sets: 3, reps: 8, completed: false },
-  ];
+  // Show loading state on initial load
+  if ((loading || isInitializing) && !stats) {
+    return (
+      <MainLayout title="Dashboard" description="Loading your fitness data...">
+        <View style={styles.centerContainer}>
+          <Text style={styles.loadingText}>Loading dashboard...</Text>
+        </View>
+      </MainLayout>
+    );
+  }
 
-  const todaysMeal = {
-    breakfast: { name: "Breakfast", description: "Oatmeal with Berries", calories: 350 },
-    lunch: { name: "Lunch", description: "Grilled Chicken Salad", calories: 450 },
-    dinner: { name: "Dinner", description: "Not logged yet", calories: 0 },
-    totalCalories: 800,
-    targetCalories: 2100
-  };
-
-  const recentReports = [
-    { id: "1", name: "Weekly Progress", date: "2025-10-20", type: "Progress" },
-    { id: "2", name: "Body Composition", date: "2025-10-15", type: "Measurements" },
-    { id: "3", name: "Nutrition Summary", date: "2025-10-12", type: "Nutrition" },
-  ];
-
-  const measurements = [
-    { label: "Weight", value: "75.2", unit: "kg", change: "-0.5", trend: "down" },
-    { label: "Body Fat", value: "18.5", unit: "%", change: "-1.2", trend: "down" },
-    { label: "Muscle Mass", value: "61.3", unit: "kg", change: "+0.8", trend: "up" },
-  ];
+  // Show error state (but still allow refresh)
+  if (error && !stats) {
+    return (
+      <MainLayout 
+        title="Dashboard" 
+        description="Unable to load data"
+        refreshControl={
+          <RefreshControl 
+            refreshing={isRefreshing} 
+            onRefresh={refresh}
+            tintColor={darkTheme.color.primary}
+          />
+        }
+      >
+        <View style={styles.centerContainer}>
+          <Ionicons name="alert-circle-outline" size={48} color={darkTheme.color.destructive} />
+          <Text style={styles.errorText}>{error}</Text>
+          <Button onPress={refresh} title="Retry" />
+        </View>
+      </MainLayout>
+    );
+  }
 
   return (
-    <MainLayout title="Dashboard" description="Manage your fitness journey and track progress">
+    <MainLayout 
+      title="Dashboard" 
+      description="Manage your fitness journey and track progress"
+      refreshControl={
+        <RefreshControl 
+          refreshing={isRefreshing} 
+          onRefresh={refresh}
+          tintColor={darkTheme.color.primary}
+        />
+      }
+    >
+      {/* Socket Status Indicator */}
+      {!socketReady && (
+        <View style={styles.offlineBanner}>
+          <Ionicons name="cloud-offline-outline" size={16} color={darkTheme.color.warning} />
+          <Text style={styles.offlineText}>
+            {socketConnected ? 'Connecting to real-time updates...' : 'Real-time updates unavailable'}
+          </Text>
+        </View>
+      )}
+
       {/* Stats Grid */}
-      <DashboardStats />
+      <DashboardStats stats={stats} />
 
       {/* Quick Action - Favorites */}
       <Pressable onPress={() => router.push('/(protected)/(tabs)/favorites' as any)}>
@@ -90,52 +145,56 @@ export default function DashboardScreen() {
         </Card>
       </Pressable>
 
-      {/* Continue Section */}
-      <Card>
-        <LinearGradient
-          colors={[`${darkTheme.color.primary}1A`, `${darkTheme.color.primary}0D`]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradientCard}
-        >
-          <View style={styles.cardPadding}>
-            <View style={styles.continueCard}>
-              <View style={styles.continueContent}>
-                <View style={styles.continueHeader}>
-                  <Ionicons name="play-circle" size={20} color={darkTheme.color.primary} />
-                  <Text style={styles.continueTitle}>Continue Workout</Text>
-                </View>
-                <Text style={styles.continueWorkoutName}>{continueWorkout.name}</Text>
-                <Text style={styles.continueLastExercise}>Last: {continueWorkout.lastExercise}</Text>
-                <View style={styles.progressSection}>
-                  <View style={styles.progressHeader}>
-                    <Text style={styles.progressLabel}>Progress</Text>
-                    <Text style={styles.progressValue}>{continueWorkout.progress}%</Text>
+      {/* Continue Section - Only show if workout exists */}
+      {continueWorkout && (
+        <Card>
+          <LinearGradient
+            colors={[`${darkTheme.color.primary}1A`, `${darkTheme.color.primary}0D`]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.gradientCard}
+          >
+            <View style={styles.cardPadding}>
+              <View style={styles.continueCard}>
+                <View style={styles.continueContent}>
+                  <View style={styles.continueHeader}>
+                    <Ionicons name="play-circle" size={20} color={darkTheme.color.primary} />
+                    <Text style={styles.continueTitle}>Continue Workout</Text>
                   </View>
-                  <Progress value={continueWorkout.progress} />
+                  <Text style={styles.continueWorkoutName}>{continueWorkout.name}</Text>
+                  <Text style={styles.continueLastExercise}>Last: {continueWorkout.lastExercise}</Text>
+                  <View style={styles.progressSection}>
+                    <View style={styles.progressHeader}>
+                      <Text style={styles.progressLabel}>Progress</Text>
+                      <Text style={styles.progressValue}>{continueWorkout.progress}%</Text>
+                    </View>
+                    <Progress value={continueWorkout.progress} />
+                  </View>
                 </View>
+                <Button
+                  size="lg"
+                  onPress={() => console.log('Continue workout - route not implemented')}
+                >
+                  <Text style={{ color: darkTheme.color.primaryForeground, marginRight: 8 }}>Continue</Text>
+                  <Ionicons name="chevron-forward" size={16} color={darkTheme.color.primaryForeground} />
+                </Button>
               </View>
-              <Button
-                size="lg"
-                onPress={() => router.push(`/programs/training/${continueWorkout.planId}/workout/${continueWorkout.workoutId}` as any)}
-              >
-                <Text style={{ color: darkTheme.color.primaryForeground, marginRight: 8 }}>Continue</Text>
-                <Ionicons name="chevron-forward" size={16} color={darkTheme.color.primaryForeground} />
-              </Button>
             </View>
-          </View>
-        </LinearGradient>
-      </Card>
+          </LinearGradient>
+        </Card>
+      )}
 
       {/* Today's Exercises & Meals Grid */}
       <View style={styles.grid}>
-        <TodayExercises exercises={todaysExercises} />
+        <TodayExercises 
+          exercises={todayExercises.length > 0 ? todayExercises : []} 
+        />
         <TodayMeals
-          breakfast={todaysMeal.breakfast}
-          lunch={todaysMeal.lunch}
-          dinner={todaysMeal.dinner}
-          totalCalories={todaysMeal.totalCalories}
-          targetCalories={todaysMeal.targetCalories}
+          breakfast={todayMeals.breakfast}
+          lunch={todayMeals.lunch}
+          dinner={todayMeals.dinner}
+          totalCalories={todayMeals.totalCalories}
+          targetCalories={todayMeals.targetCalories}
         />
       </View>
 
@@ -147,45 +206,46 @@ export default function DashboardScreen() {
         {/* Measurements Overview */}
         <Card>
           <View style={styles.cardPadding}>
-            <View style={styles.sectionHeader}>
-              <View style={styles.sectionHeaderLeft}>
-                <Ionicons name="resize" size={20} color={darkTheme.color.primary} />
-                <Text style={styles.sectionTitle}>Measurements</Text>
-              </View>
-              <Button
-                variant="ghost"
-                size="sm"
-                title="View All"
-                onPress={() => router.push('/progress')}
-              />
-            </View>
+            <SectionHeader
+              icon="resize"
+              title="Measurements"
+              actionTitle="View All"
+              onActionPress={() => console.log('View measurements - route not implemented')}
+            />
             <View style={styles.measurementsList}>
-              {measurements.map((measurement) => (
-                <View key={measurement.label} style={styles.measurementItem}>
-                  <View>
-                    <Text style={styles.measurementLabel}>{measurement.label}</Text>
-                    <Text style={styles.measurementValue}>
-                      {measurement.value} <Text style={styles.measurementUnit}>{measurement.unit}</Text>
-                    </Text>
-                  </View>
-                  <View style={[
-                    styles.trendBadge,
-                    measurement.trend === 'down' ? styles.trendBadgeSuccess : styles.trendBadgeInfo
-                  ]}>
-                    <Ionicons 
-                      name={measurement.trend === 'down' ? 'trending-down' : 'trending-up'} 
-                      size={16} 
-                      color={measurement.trend === 'down' ? darkTheme.color.success : darkTheme.color.info} 
-                    />
-                    <Text style={[
-                      styles.trendText,
-                      measurement.trend === 'down' ? styles.trendTextSuccess : styles.trendTextInfo
+              {measurements.length > 0 ? (
+                measurements.map((measurement) => (
+                  <View key={measurement.label} style={componentStyles.listItem}>
+                    <View>
+                      <Text style={styles.measurementLabel}>{measurement.label}</Text>
+                      <Text style={styles.measurementValue}>
+                        {measurement.value} <Text style={styles.measurementUnit}>{measurement.unit}</Text>
+                      </Text>
+                    </View>
+                    <View style={[
+                      styles.trendBadge,
+                      measurement.trend === 'down' ? styles.trendBadgeSuccess : styles.trendBadgeInfo
                     ]}>
-                      {measurement.change}
-                    </Text>
+                      <Ionicons 
+                        name={measurement.trend === 'down' ? 'trending-down' : 'trending-up'} 
+                        size={16} 
+                        color={measurement.trend === 'down' ? darkTheme.color.success : darkTheme.color.info} 
+                      />
+                      <Text style={[
+                        styles.trendText,
+                        measurement.trend === 'down' ? styles.trendTextSuccess : styles.trendTextInfo
+                      ]}>
+                        {measurement.change}
+                      </Text>
+                    </View>
                   </View>
+                ))
+              ) : (
+                <View style={styles.emptyState}>
+                  <Ionicons name="analytics-outline" size={32} color={darkTheme.color.mutedForeground} />
+                  <Text style={styles.emptyStateText}>No measurements yet</Text>
                 </View>
-              ))}
+              )}
             </View>
           </View>
         </Card>
@@ -193,37 +253,38 @@ export default function DashboardScreen() {
         {/* Recent Reports */}
         <Card>
           <View style={styles.cardPadding}>
-            <View style={styles.sectionHeader}>
-              <View style={styles.sectionHeaderLeft}>
-                <Ionicons name="document-text" size={20} color={darkTheme.color.primary} />
-                <Text style={styles.sectionTitle}>Recent Reports</Text>
-              </View>
-              <Button
-                variant="ghost"
-                size="sm"
-                title="View All"
-                onPress={() => router.push('/progress')}
-              />
-            </View>
+            <SectionHeader
+              icon="document-text"
+              title="Recent Reports"
+              actionTitle="View All"
+              onActionPress={() => console.log('View reports - route not implemented')}
+            />
             <View style={styles.reportsList}>
-              {recentReports.map((report) => (
-                <Pressable
-                  key={report.id}
-                  style={styles.reportItem}
-                  onPress={() => router.push('/progress')}
-                >
-                  <View style={styles.reportContent}>
-                    <Text style={styles.reportName}>{report.name}</Text>
-                    <Text style={styles.reportDate}>{report.date}</Text>
-                  </View>
-                  <View style={styles.reportFooter}>
-                    <View style={styles.reportBadge}>
-                      <Text style={styles.reportBadgeText}>{report.type}</Text>
+              {recentReports.length > 0 ? (
+                recentReports.map((report) => (
+                  <Pressable
+                    key={report.id}
+                    style={styles.reportItem}
+                    onPress={() => console.log('View report - route not implemented')}
+                  >
+                    <View style={styles.reportContent}>
+                      <Text style={styles.reportName}>{report.name}</Text>
+                      <Text style={styles.reportDate}>{report.date}</Text>
                     </View>
-                    <Ionicons name="chevron-forward" size={16} color={darkTheme.color.mutedForeground} />
-                  </View>
-                </Pressable>
-              ))}
+                    <View style={styles.reportFooter}>
+                      <View style={styles.reportBadge}>
+                        <Text style={styles.reportBadgeText}>{report.type}</Text>
+                      </View>
+                      <Ionicons name="chevron-forward" size={16} color={darkTheme.color.mutedForeground} />
+                    </View>
+                  </Pressable>
+                ))
+              ) : (
+                <View style={styles.emptyState}>
+                  <Ionicons name="document-text-outline" size={32} color={darkTheme.color.mutedForeground} />
+                  <Text style={styles.emptyStateText}>No reports yet</Text>
+                </View>
+              )}
             </View>
           </View>
         </Card>
@@ -250,7 +311,7 @@ export default function DashboardScreen() {
               </View>
               <Button
                 title="Try a 6-min cardio workout today"
-                onPress={() => router.push('/(protected)/(tabs)/programs' as any)}
+                onPress={() => console.log('Programs - route not implemented')}
               />
             </View>
           </View>
@@ -261,143 +322,130 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+    gap: 16,
+  },
+  loadingText: {
+    ...textStyles.body,
+    color: darkTheme.color.mutedForeground,
+  },
+  errorText: {
+    ...textStyles.body,
+    color: darkTheme.color.destructive,
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  offlineBanner: {
+    ...layoutStyles.rowCenterGap8,
+    ...spacingStyles.p12,
+    backgroundColor: `${darkTheme.color.warning}1A`,
+    ...borderStyles.rounded8,
+    marginBottom: 16,
+  },
+  offlineText: {
+    ...textStyles.small,
+    color: darkTheme.color.warning,
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...spacingStyles.py24,
+    gap: 8,
+  },
+  emptyStateText: {
+    ...textStyles.small,
+    color: darkTheme.color.mutedForeground,
+  },
   gradientCard: {
-    borderRadius: 8,
+    ...borderStyles.rounded8,
     overflow: 'hidden',
   },
   cardPadding: {
-    padding: 24, // p-6
+    ...spacingStyles.p24,
   },
   favoritesCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    ...layoutStyles.rowBetween,
   },
   favoritesContent: {
-    flex: 1,
+    ...layoutStyles.flex1,
     gap: 8,
   },
   favoritesHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    ...layoutStyles.rowCenterGap8,
   },
   favoritesTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: darkTheme.color.foreground,
+    ...textStyles.h4,
   },
   favoritesDescription: {
-    fontSize: 14,
+    ...textStyles.small,
     color: darkTheme.color.mutedForeground,
   },
   continueCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    ...layoutStyles.rowBetween,
   },
   continueContent: {
-    flex: 1,
+    ...layoutStyles.flex1,
     gap: 8,
   },
   continueHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    ...layoutStyles.rowCenterGap8,
   },
   continueTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: darkTheme.color.foreground,
+    ...textStyles.h4,
   },
   continueWorkoutName: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: darkTheme.color.foreground,
+    ...textStyles.bodyMedium,
   },
   continueLastExercise: {
-    fontSize: 14,
+    ...textStyles.small,
     color: darkTheme.color.mutedForeground,
   },
   progressSection: {
     gap: 4,
-    paddingTop: 8,
+    ...spacingStyles.pt8,
   },
   progressHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    ...layoutStyles.rowBetween,
   },
   progressLabel: {
-    fontSize: 14,
-    color: darkTheme.color.mutedForeground,
+    ...textStyles.smallMuted,
   },
   progressValue: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: darkTheme.color.foreground,
+    ...textStyles.smallMedium,
   },
   grid: {
     gap: 24,
   },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  sectionHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: darkTheme.color.foreground,
-  },
   measurementsList: {
     gap: 16,
   },
-  measurementItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: `${darkTheme.color.secondary}4D`, // 30% opacity
-  },
   measurementLabel: {
-    fontSize: 14,
-    color: darkTheme.color.mutedForeground,
-    marginBottom: 4,
+    ...textStyles.smallMuted,
+    ...spacingStyles.mb4,
   },
   measurementValue: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: darkTheme.color.foreground,
+    ...textStyles.valueLarge,
   },
   measurementUnit: {
     fontSize: 14,
     fontWeight: '400',
   },
   trendBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
+    ...layoutStyles.rowCenterGap4,
+    ...componentStyles.badge,
   },
   trendBadgeSuccess: {
-    backgroundColor: `${darkTheme.color.success}33`, // 20% opacity
+    ...componentStyles.badgeSuccess,
   },
   trendBadgeInfo: {
-    backgroundColor: `${darkTheme.color.info}33`, // 20% opacity
+    ...componentStyles.badgeInfo,
   },
   trendText: {
-    fontSize: 14,
-    fontWeight: '500',
+    ...textStyles.smallMedium,
   },
   trendTextSuccess: {
     color: darkTheme.color.success,
@@ -409,36 +457,24 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   reportItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: `${darkTheme.color.secondary}4D`, // 30% opacity
+    ...componentStyles.listItem,
   },
   reportContent: {
-    flex: 1,
+    ...layoutStyles.flex1,
   },
   reportName: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: darkTheme.color.foreground,
-    marginBottom: 4,
+    ...textStyles.smallMedium,
+    ...spacingStyles.mb4,
   },
   reportDate: {
-    fontSize: 14,
-    color: darkTheme.color.mutedForeground,
+    ...textStyles.smallMuted,
   },
   reportFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    ...layoutStyles.rowCenterGap8,
   },
   reportBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    backgroundColor: `${darkTheme.color.primary}33`, // 20% opacity
+    ...componentStyles.badge,
+    ...componentStyles.badgePrimary,
   },
   reportBadgeText: {
     fontSize: 12,
@@ -452,21 +488,17 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   dailyGoalCardHorizontal: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    ...layoutStyles.rowBetween,
   },
   dailyGoalContent: {
-    flex: 1,
+    ...layoutStyles.flex1,
     gap: 8,
   },
   dailyGoalTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: darkTheme.color.foreground,
+    ...textStyles.h3,
   },
   dailyGoalDescription: {
-    fontSize: 14,
+    ...textStyles.small,
     color: darkTheme.color.mutedForeground,
   },
 });
