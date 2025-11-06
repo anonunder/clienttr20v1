@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   imageContainer: {
-    width: 96, // w-24 equivalent
-    height: 96, // h-24 equivalent
+    width: 300,
+    height: 200,
     flexShrink: 0,
     overflow: 'hidden',
     borderRadius: 8,
@@ -179,7 +179,6 @@ const styles = StyleSheet.create({
   },
   completedOverlay: {
     position: 'absolute',
-    inset: 0,
     backgroundColor: `${darkTheme.color.overlay}66`, // 40% opacity
     alignItems: 'center',
     justifyContent: 'center',

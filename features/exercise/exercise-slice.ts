@@ -2,12 +2,24 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fetchExerciseDetail } from './exercise-thunks';
 
 // Types matching API response
+export interface ExerciseSet {
+  effort: {
+    type: string;
+    value: string;
+  };
+  intensity: {
+    type: string;
+    value: string;
+  };
+  rest: string;
+}
+
 export interface ExerciseMeta {
   description?: {
     text: string;
     editorState: string;
   };
-  sets?: any[];
+  sets?: ExerciseSet[];
   source_exercise_term_taxonomy_id?: string;
   exercise?: string;
   exercise_thumbnail_media_id?: string;

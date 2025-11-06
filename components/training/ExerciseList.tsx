@@ -269,8 +269,8 @@ const styles = StyleSheet.create({
     padding: 14,
   },
   exerciseThumbnail: {
-    width: 100,
-    height: 100,
+    width: 350,
+    height: 200,
     borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: darkTheme.color.bgMuted,

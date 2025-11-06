@@ -16,9 +16,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Video, ResizeMode, Audio } from 'expo-av';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ExerciseVideoPlayer } from '@/components/exercise/ExerciseVideoPlayer';
 import { ExerciseTimer, ExerciseTimerHandle } from '@/components/exercise/ExerciseTimer';
-import { ExerciseInfo } from '@/components/exercise/ExerciseInfo';
 import { ExerciseActionButtons } from '@/components/exercise/ExerciseActionButtons';
 import { Loading } from '@/components/common/Loading';
 import { Card } from '@/components/ui/Card';
@@ -26,8 +26,10 @@ import { Button } from '@/components/ui/Button';
 import { darkTheme } from '@/styles/theme';
 import { textStyles } from '@/styles/shared-styles';
 import { env } from '@/config/env';
-import { WorkoutExercise } from '@/features/programs/programs-slice';
 import { useTrainingPlan } from '@/hooks/programs/use-training-plan';
+import { ExerciseDetail } from '@/features/exercise/exercise-slice';
+import { api } from '@/services/api-client';
+import { endpoints } from '@/services/api-client/endpoints';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -44,10 +46,12 @@ export default function ExerciseScreen() {
     exerciseId: string;
   }>();
   
-  const { trainingPlan, loading } = useTrainingPlan(programId || '');
+  const { trainingPlan, loading: trainingPlanLoading } = useTrainingPlan(programId || '');
+  const companyId = 1; // TODO: Get from auth state
 
   // UI State
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentSet, setCurrentSet] = useState(1); // Track current set
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -64,19 +68,77 @@ export default function ExerciseScreen() {
   const previewVideoRef = useRef<Video>(null);
   const isTransitioning = useRef(false);
 
-  // Get all exercises from the workout
-  const exercises: WorkoutExercise[] = [];
-  if (trainingPlan?.trainingPlanDays) {
-    for (const day of trainingPlan.trainingPlanDays) {
-      for (const workout of day.trainingPlanDayWorkouts) {
-        if (workout.id === parseInt(workoutId || '0', 10)) {
-          exercises.push(...(workout.workoutExercises || []));
-          break;
+  // Fetch exercise details for all exercises in this workout
+  const [exerciseDetails, setExerciseDetails] = useState<ExerciseDetail[]>([]);
+  const [loadingExercises, setLoadingExercises] = useState(true);
+
+  useEffect(() => {
+    const fetchAllExercises = async () => {
+      if (!programId || !workoutId || !trainingPlan) {
+        setLoadingExercises(false);
+        return;
+      }
+
+      // Get all exercise IDs from the workout
+      const exerciseIds: number[] = [];
+      if (trainingPlan.trainingPlanDays) {
+        for (const day of trainingPlan.trainingPlanDays) {
+          for (const workout of day.trainingPlanDayWorkouts) {
+            if (workout.id === parseInt(workoutId || '0', 10)) {
+              exerciseIds.push(...(workout.workoutExercises?.map(e => e.term_taxonomy_id) || []));
+              break;
+            }
+          }
         }
       }
-    }
-  }
 
+      console.log('🏋️ Exercise IDs found:', exerciseIds);
+      console.log('🏋️ Workout ID:', workoutId);
+
+      if (exerciseIds.length === 0) {
+        console.warn('⚠️ No exercise IDs found for workout:', workoutId);
+        setLoadingExercises(false);
+        return;
+      }
+
+      try {
+        setLoadingExercises(true);
+        
+        const promises = exerciseIds.map(async (exId) => {
+          try {
+            const endpoint = endpoints.programs.exercise(
+              parseInt(programId, 10),
+              parseInt(workoutId, 10),
+              exId,
+              companyId
+            );
+            console.log('📡 Fetching exercise:', endpoint);
+            
+            const response = await api<{ success: boolean; data: ExerciseDetail }>(endpoint);
+            console.log('✅ Exercise fetched:', response);
+            
+            return response.success ? response.data : null;
+          } catch (error) {
+            console.error('❌ Failed to fetch exercise:', exId, error);
+            return null;
+          }
+        });
+
+        const results = await Promise.all(promises);
+        const validExercises = results.filter((ex): ex is ExerciseDetail => ex !== null);
+        console.log('🎯 Valid exercises:', validExercises.length);
+        setExerciseDetails(validExercises);
+      } catch (error) {
+        console.error('❌ Failed to fetch exercises:', error);
+      } finally {
+        setLoadingExercises(false);
+      }
+    };
+
+    fetchAllExercises();
+  }, [programId, workoutId, trainingPlan, companyId]);
+
+  const exercises = exerciseDetails;
   const nextExercise = currentIndex < exercises.length - 1 ? exercises[currentIndex + 1] : null;
 
   // Set initial index based on exerciseId
@@ -85,6 +147,7 @@ export default function ExerciseScreen() {
       const idx = exercises.findIndex((ex) => ex.term_taxonomy_id === parseInt(exerciseId, 10));
       if (idx !== -1) {
         setCurrentIndex(idx);
+        setCurrentSet(1); // Reset to first set when changing exercise
         // Scroll to the exercise
         setTimeout(() => {
           scrollViewRef.current?.scrollTo({ y: idx * SCREEN_HEIGHT, animated: false });
@@ -127,24 +190,51 @@ export default function ExerciseScreen() {
     return `${baseUrl}${videoPath}`;
   };
 
-  // Parse description for exercise details
-  const parseDescription = (description: string) => {
-    let duration = 60;
-    let restTime = 15;
-    let sets = 3;
+  // Parse exercise data from API response
+  const parseExerciseData = (exercise: ExerciseDetail) => {
+    // Get sets from meta
+    const sets = exercise.term?.meta?.sets || [];
+    const numSets = sets.length > 0 ? sets.length : 1;
+    
+    // Get reps from first set's effort value
     let reps = 12;
-
-    const durationMatch = description.match(/Trajanje:\s*(\d+)\s*min/i);
+    if (sets.length > 0 && sets[0]?.effort?.value) {
+      reps = parseInt(sets[0].effort.value, 10) || 12;
+    }
+    
+    // Get rest time from first set's rest value (already in seconds)
+    let restTime = 15;
+    if (sets.length > 0 && sets[0]?.rest) {
+      restTime = parseInt(sets[0].rest, 10) || 15;
+    }
+    
+    // Parse duration from description
+    let duration = 60;
+    const description = exercise.description || '';
+    const durationMatch = description.match(/Trajanje:\s*oko\s*(\d+)\s*min/i);
     if (durationMatch) {
       duration = parseInt(durationMatch[1], 10) * 60;
     }
-
-    const repsMatch = description.match(/(\d+)\s*ponavljanja/i);
-    if (repsMatch) {
-      reps = parseInt(repsMatch[1], 10);
-    }
-
-    return { duration, restTime, sets, reps };
+    
+    // Get video URL - prefer exercise_thumbnail_media_id over demo_media_id
+    const videoUrl = exercise.media?.exercise_thumbnail_media_id?.post_content
+      ? getVideoUrl(exercise.media.exercise_thumbnail_media_id.post_content)
+      : exercise.media?.demo_media_id?.post_content
+        ? getVideoUrl(exercise.media.demo_media_id.post_content)
+        : undefined;
+    
+    // Get exercise name
+    const name = exercise.term?.name || 'Exercise';
+    
+    return {
+      name,
+      videoUrl,
+      duration,
+      restTime,
+      sets: numSets,
+      reps,
+      description: exercise.description,
+    };
   };
 
   // Clean HTML from description
@@ -165,8 +255,24 @@ export default function ExerciseScreen() {
   const handleRestComplete = () => {
     setIsResting(false);
     playNotificationSound('rest');
-    Alert.alert('Rest Complete!', 'Moving to next exercise...');
-    goToNextExercise();
+    
+    // Get current exercise details
+    const exercise = exercises[currentIndex];
+    if (!exercise) return;
+    
+    const { sets } = parseExerciseData(exercise);
+    
+    // Check if there are more sets
+    if (currentSet < sets) {
+      // Move to next set
+      setCurrentSet(prev => prev + 1);
+      Alert.alert('Rest Complete!', `Ready for Set ${currentSet + 1}/${sets}!`);
+    } else {
+      // All sets complete, move to next exercise
+      setCurrentSet(1); // Reset for next exercise
+      Alert.alert('Exercise Complete!', 'Moving to next exercise...');
+      goToNextExercise();
+    }
   };
 
   // Go to next exercise
@@ -179,6 +285,7 @@ export default function ExerciseScreen() {
 
     isTransitioning.current = true;
     setIsPlaying(false);
+    setCurrentSet(1); // Reset set counter for next exercise
 
     // Scroll to next exercise
     scrollViewRef.current?.scrollTo({ 
@@ -201,6 +308,7 @@ export default function ExerciseScreen() {
 
     if (newIndex !== currentIndex && newIndex <= exercises.length) {
       setCurrentIndex(newIndex);
+      setCurrentSet(1); // Reset to first set when manually scrolling
       
       // Update URL if not on completion screen
       if (newIndex < exercises.length) {
@@ -245,7 +353,7 @@ export default function ExerciseScreen() {
   };
 
   // Loading state
-  if (loading) {
+  if (trainingPlanLoading || loadingExercises) {
     return (
       <View style={styles.loadingContainer}>
         <Loading message="Loading exercises..." />
@@ -291,12 +399,12 @@ export default function ExerciseScreen() {
           if (isCompletionScreen) {
             // Calculate total time
             const totalDuration = exercises.reduce((sum, ex) => {
-              const { duration } = parseDescription(ex.description || '');
+              const { duration } = parseExerciseData(ex);
               return sum + duration;
             }, 0);
             
             const totalTime = exercises.reduce((sum, ex) => {
-              const { duration, restTime } = parseDescription(ex.description || '');
+              const { duration, restTime } = parseExerciseData(ex);
               return sum + duration + restTime;
             }, 0);
 
@@ -351,11 +459,9 @@ export default function ExerciseScreen() {
             );
           }
 
-          const videoUrl = exercise?.media?.demo_media_id?.post_content
-            ? getVideoUrl(exercise.media.demo_media_id.post_content)
-            : undefined;
-
-          const { duration, restTime, sets, reps } = parseDescription(exercise.description || '');
+          // Exercise details
+          const exerciseData = parseExerciseData(exercise);
+          const { name, videoUrl, duration, restTime, sets, reps, description } = exerciseData;
 
           return (
             <View key={exercise.term_taxonomy_id || index} style={styles.snapItem}>
@@ -365,22 +471,6 @@ export default function ExerciseScreen() {
                   <TouchableOpacity style={styles.headerButton} onPress={handleBack}>
                     <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
                   </TouchableOpacity>
-                  
-                  <View style={styles.headerRight}>
-                    <TouchableOpacity
-                      style={styles.headerButton}
-                      onPress={() => {
-                        setIsLiked(!isLiked);
-                        Alert.alert(isLiked ? 'Removed from favorites' : 'Added to favorites');
-                      }}
-                    >
-                      <Ionicons
-                        name={isLiked ? 'star' : 'star-outline'}
-                        size={24}
-                        color={isLiked ? darkTheme.color.warning : '#FFFFFF'}
-                      />
-                    </TouchableOpacity>
-                  </View>
                 </SafeAreaView>
               )}
 
@@ -457,41 +547,86 @@ export default function ExerciseScreen() {
 
               {/* Bottom Info Panel - Only when not playing */}
               {isActive && !isPlaying && (
-                <SafeAreaView edges={['bottom']} style={styles.bottomPanel}>
-                  <View style={styles.bottomContent}>
-                    <ScrollView 
-                      style={styles.infoScroll}
-                      contentContainerStyle={styles.infoScrollContent}
-                      showsVerticalScrollIndicator={false}
-                    >
-                      <ExerciseInfo
-                        name={exercise.term?.name || 'Exercise'}
-                        description={cleanDescription(exercise.description)}
-                        difficulty="Medium"
-                        sets={sets}
-                        reps={reps}
-                        muscles={showInfo ? ['Full Body'] : undefined}
-                        instructions={
-                          showInfo
-                            ? cleanDescription(exercise.description).split('.').filter(s => s.trim())
-                            : undefined
-                        }
-                      />
-                    </ScrollView>
+                <View style={styles.bottomPanelContainer} pointerEvents="box-none">
+                  {/* Gradient Background */}
+                  <LinearGradient
+                    colors={
+                      showInfo
+                        ? ['transparent', 'rgba(0, 0, 0, 0.7)', 'rgba(0, 0, 0, 0.9)']
+                        : ['transparent', 'rgba(0, 0, 0, 0.3)', 'rgba(0, 0, 0, 0.6)']
+                    }
+                    locations={[0, 0.3, 1]}
+                    style={styles.gradient}
+                    pointerEvents="none"
+                  />
+                  
+                  <SafeAreaView edges={['bottom']} style={styles.bottomPanel}>
+                    <View style={styles.bottomContent}>
+                      {/* Set Counter - only show if not first time */}
+                      {currentSet > 1 && (
+                        <View style={styles.setCounter}>
+                          <Text style={styles.setCounterText}>
+                            NEXT SET {currentSet}/{sets}
+                          </Text>
+                        </View>
+                      )}
 
-                    {/* Start Button */}
-                    <TouchableOpacity
-                      style={styles.startButton}
-                      onPress={() => {
-                        setIsPlaying(true);
-                        setTimerStartSignal((s) => s + 1);
-                      }}
-                      activeOpacity={0.8}
-                    >
-                      <Text style={styles.startButtonText}>START</Text>
-                    </TouchableOpacity>
-                  </View>
-                </SafeAreaView>
+                      {/* Exercise Name */}
+                      <Text style={styles.exerciseName}>{name}</Text>
+
+                      {/* Description */}
+                      <Text style={styles.exerciseDescription} numberOfLines={showInfo ? undefined : 2}>
+                        {cleanDescription(description)}
+                      </Text>
+
+                      {/* Badges Row */}
+                      <View style={styles.badgesRow}>
+                        <View style={styles.difficultyBadge}>
+                          <Text style={styles.badgeText}>Medium</Text>
+                        </View>
+                        <View style={styles.statsBadge}>
+                          <Text style={styles.badgeText}>{sets} sets × {reps} reps</Text>
+                        </View>
+                      </View>
+
+                      {/* Expandable Info */}
+                      {showInfo && (
+                        <ScrollView 
+                          style={styles.infoScroll}
+                          contentContainerStyle={styles.infoScrollContent}
+                          showsVerticalScrollIndicator={false}
+                        >
+                          <View style={styles.expandedInfo}>
+                            <Text style={styles.sectionLabel}>TARGET MUSCLES</Text>
+                            <View style={styles.musclesList}>
+                              <Text style={styles.muscleItem}>Full Body</Text>
+                            </View>
+
+                            <Text style={styles.sectionLabel}>INSTRUCTIONS</Text>
+                            {cleanDescription(description).split('.').filter(s => s.trim()).map((instruction, idx) => (
+                              <View key={idx} style={styles.instructionItem}>
+                                <Text style={styles.instructionNumber}>{idx + 1}.</Text>
+                                <Text style={styles.instructionText}>{instruction}</Text>
+                              </View>
+                            ))}
+                          </View>
+                        </ScrollView>
+                      )}
+
+                      {/* Start Button */}
+                      <TouchableOpacity
+                        style={styles.startButton}
+                        onPress={() => {
+                          setIsPlaying(true);
+                          setTimerStartSignal((s) => s + 1);
+                        }}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={styles.startButtonText}>START</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </SafeAreaView>
+                </View>
               )}
             </View>
           );
@@ -536,13 +671,15 @@ export default function ExerciseScreen() {
               </TouchableOpacity>
             </View>
 
-            {nextExercise && (
+            {nextExercise && (() => {
+              const nextData = parseExerciseData(nextExercise);
+              return (
               <ScrollView style={styles.modalScroll} showsVerticalScrollIndicator={false}>
                 {/* Video Preview */}
                 <View style={styles.previewVideoContainer}>
                   <Video
                     ref={previewVideoRef}
-                    source={{ uri: getVideoUrl(nextExercise.media?.demo_media_id?.post_content) || '' }}
+                    source={{ uri: nextData.videoUrl || '' }}
                     style={styles.previewVideo}
                     resizeMode={ResizeMode.CONTAIN}
                     isLooping
@@ -569,7 +706,7 @@ export default function ExerciseScreen() {
                 <View style={styles.previewDetails}>
                   {/* Title and Difficulty */}
                   <View style={styles.previewTitleSection}>
-                    <Text style={styles.previewTitle}>{nextExercise.term?.name || 'Exercise'}</Text>
+                    <Text style={styles.previewTitle}>{nextData.name}</Text>
                     <View style={styles.previewBadges}>
                       <View style={styles.previewDifficultyBadge}>
                         <Text style={styles.previewBadgeText}>Medium</Text>
@@ -581,33 +718,33 @@ export default function ExerciseScreen() {
                   <View style={styles.previewStatsGrid}>
                     <View style={styles.previewStatCard}>
                       <Text style={styles.previewStatLabel}>Sets</Text>
-                      <Text style={styles.previewStatValue}>{parseDescription(nextExercise.description || '').sets}</Text>
+                      <Text style={styles.previewStatValue}>{nextData.sets}</Text>
                     </View>
                     <View style={styles.previewStatCard}>
                       <Text style={styles.previewStatLabel}>Reps</Text>
-                      <Text style={styles.previewStatValue}>{parseDescription(nextExercise.description || '').reps}</Text>
+                      <Text style={styles.previewStatValue}>{nextData.reps}</Text>
                     </View>
                     <View style={styles.previewStatCard}>
                       <Text style={styles.previewStatLabel}>Duration</Text>
-                      <Text style={styles.previewStatValue}>{parseDescription(nextExercise.description || '').duration}s</Text>
+                      <Text style={styles.previewStatValue}>{nextData.duration}s</Text>
                     </View>
                     <View style={styles.previewStatCard}>
                       <Text style={styles.previewStatLabel}>Rest</Text>
-                      <Text style={styles.previewStatValue}>{parseDescription(nextExercise.description || '').restTime}s</Text>
+                      <Text style={styles.previewStatValue}>{nextData.restTime}s</Text>
                     </View>
                   </View>
 
                   {/* Description */}
                   <View style={styles.previewSection}>
                     <Text style={styles.previewDescription}>
-                      {cleanDescription(nextExercise.description)}
+                      {cleanDescription(nextData.description)}
                     </Text>
                   </View>
 
                   {/* Instructions */}
                   <View style={styles.previewSection}>
                     <Text style={styles.previewSectionTitle}>INSTRUCTIONS</Text>
-                    {cleanDescription(nextExercise.description).split('.').filter(s => s.trim()).map((instruction, idx) => (
+                    {cleanDescription(nextData.description).split('.').filter(s => s.trim()).map((instruction, idx) => (
                       <View key={idx} style={styles.previewInstruction}>
                         <Text style={styles.previewInstructionNumber}>{idx + 1}.</Text>
                         <Text style={styles.previewInstructionText}>{instruction}</Text>
@@ -616,7 +753,8 @@ export default function ExerciseScreen() {
                   </View>
                 </View>
               </ScrollView>
-            )}
+              );
+            })()}
           </View>
         </View>
       </Modal>
@@ -750,24 +888,126 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
-  bottomPanel: {
+  bottomPanelContainer: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     zIndex: 30,
   },
+  gradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 500,
+  },
+  bottomPanel: {
+    position: 'relative',
+  },
   bottomContent: {
     paddingHorizontal: 16,
     paddingTop: 32,
     paddingBottom: 16,
-    gap: 16,
-    backgroundColor: 'rgba(0, 0, 0, 0.95)',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
+    gap: 12,
+  },
+  exerciseName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    letterSpacing: 0.3,
+  },
+  exerciseDescription: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+    lineHeight: 20,
+  },
+  badgesRow: {
+    flexDirection: 'row',
+    gap: 8,
+    flexWrap: 'wrap',
+  },
+  difficultyBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: 'rgba(251, 191, 36, 0.2)', // warning color with opacity
+    borderWidth: 1,
+    borderColor: 'rgba(251, 191, 36, 0.4)',
+  },
+  statsBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  badgeText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  setCounter: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    backgroundColor: darkTheme.color.primary,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: `${darkTheme.color.primary}60`,
+    marginBottom: 8,
+  },
+  setCounterText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: darkTheme.color.primaryForeground,
+    letterSpacing: 1,
+  },
+  expandedInfo: {
+    gap: 12,
+    paddingTop: 8,
+  },
+  sectionLabel: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: 'rgba(255, 255, 255, 0.6)',
+    letterSpacing: 1.5,
+    marginTop: 8,
+  },
+  musclesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  muscleItem: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    backgroundColor: `${darkTheme.color.primary}20`,
+    borderWidth: 1,
+    borderColor: `${darkTheme.color.primary}40`,
+    fontSize: 12,
+    color: darkTheme.color.primary,
+  },
+  instructionItem: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 8,
+  },
+  instructionNumber: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: darkTheme.color.primary,
+  },
+  instructionText: {
+    flex: 1,
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.9)',
+    lineHeight: 20,
   },
   infoScroll: {
-    maxHeight: 240,
+    maxHeight: 200,
   },
   infoScrollContent: {
     paddingBottom: 8,
@@ -784,6 +1024,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 8,
     elevation: 8,
+    marginTop: 8,
   },
   startButtonText: {
     fontSize: 18,
