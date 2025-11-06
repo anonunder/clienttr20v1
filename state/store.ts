@@ -3,6 +3,7 @@ import authReducer from './slices/auth-slice';
 import uiReducer from './slices/ui-slice';
 import dashboardReducer from '@/features/dashboard/dashboard-slice';
 import programsReducer from '@/features/programs/programs-slice';
+import exerciseReducer from '@/features/exercise/exercise-slice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     ui: uiReducer,
     dashboard: dashboardReducer,
     programs: programsReducer,
+    exercise: exerciseReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -26,6 +26,29 @@ export interface ReferencedMedia {
   };
 }
 
+export interface WorkoutExercise {
+  term_taxonomy_id: number;
+  term_id: number;
+  description?: string;
+  term?: {
+    name?: string;
+    meta?: {
+      sets?: any[];
+      [key: string]: any;
+    };
+  };
+  media?: {
+    exercise_thumbnail_media_id?: {
+      post_content?: string;
+      post_mime_type?: string;
+    };
+    demo_media_id?: {
+      post_content?: string;
+      post_mime_type?: string;
+    };
+  };
+}
+
 export interface TrainingPlanWorkout {
   id: number;
   post_type: string;
@@ -35,12 +58,30 @@ export interface TrainingPlanWorkout {
   post_parent: number;
   referencedMedia: ReferencedMedia[];
   meta: TrainingPlanMeta[];
-  workoutExercises: any[];
+  workoutExercises: WorkoutExercise[];
 }
 
 export interface TrainingPlanDay {
   dayNumber: number;
   trainingPlanDayWorkouts: TrainingPlanWorkout[];
+}
+
+export interface ProgramData {
+  id: number;
+  title: string;
+  description: string;
+  imageUri: string | null;
+  duration: string | null;
+  difficulty: string;
+  status: string;
+  paymentStatus: string;
+  startDate: string;
+  endDate: string;
+  autoRevealDays?: number | null;
+  dateAssigned: string;
+  trainerId: number;
+  createdAt: string;
+  updatedAt: string | null;
 }
 
 export interface TrainingPlanDetail {
@@ -53,6 +94,7 @@ export interface TrainingPlanDetail {
   meta: TrainingPlanMeta[];
   trainingPlanDays: TrainingPlanDay[];
   imageUri: string | null;
+  program?: ProgramData;
 }
 
 export interface NutritionPlan {

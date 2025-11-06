@@ -3,8 +3,9 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
 import { darkTheme } from '@/styles/theme';
-import { textStyles, spacingStyles, layoutStyles } from '@/styles/shared-styles';
+import { textStyles, layoutStyles } from '@/styles/shared-styles';
 import { env } from '@/config/env';
+import { ExerciseList, WorkoutExercise } from './ExerciseList';
 
 interface WorkoutCardProps {
   id: number | string;
@@ -14,7 +15,9 @@ interface WorkoutCardProps {
   exercises?: number;
   difficulty?: 'Easy' | 'Medium' | 'Hard';
   completed?: boolean;
+  workoutExercises?: WorkoutExercise[];
   onPress?: () => void;
+  onExercisePress?: (exercise: WorkoutExercise, index: number) => void;
 }
 
 const getDifficultyColor = (difficulty: 'Easy' | 'Medium' | 'Hard' | undefined) => {
@@ -70,73 +73,90 @@ export function WorkoutCard({
   exercises,
   difficulty,
   completed = false,
+  workoutExercises = [],
   onPress,
+  onExercisePress,
 }: WorkoutCardProps) {
   const difficultyStyle = getDifficultyColor(difficulty);
   const imageUrl = getImageUrl(image);
+  const hasExercises = workoutExercises && workoutExercises.length > 0;
 
   return (
-    <Pressable onPress={onPress} style={styles.pressable}>
-      <Card>
-        <View style={styles.container}>
-          {/* Image */}
-          <View style={styles.imageContainer}>
-            <Image 
-              source={{ uri: imageUrl }} 
-              style={styles.image}
-              resizeMode="cover"
-            />
-            {completed && (
-              <View style={styles.completedOverlay}>
-                <Ionicons name="checkmark-circle" size={32} color={darkTheme.color.success} />
-              </View>
-            )}
-          </View>
-
-          {/* Content */}
-          <View style={styles.content}>
-            <View style={styles.header}>
-              <Text style={styles.title} numberOfLines={2}>
-                {title}
-              </Text>
-              {difficulty && (
-                <View style={[styles.difficultyBadge, {
-                  backgroundColor: difficultyStyle.backgroundColor,
-                  borderColor: difficultyStyle.borderColor,
-                }]}>
-                  <Text style={[styles.difficultyText, { color: difficultyStyle.color }]}>
-                    {difficulty}
-                  </Text>
+    <View style={styles.wrapper}>
+      <Pressable onPress={onPress} style={styles.pressable} disabled={!onPress}>
+        <Card>
+          <View style={styles.container}>
+            {/* Image */}
+            <View style={styles.imageContainer}>
+              <Image 
+                source={{ uri: imageUrl }} 
+                style={styles.image}
+                resizeMode="cover"
+              />
+              {completed && (
+                <View style={styles.completedOverlay}>
+                  <Ionicons name="checkmark-circle" size={32} color={darkTheme.color.success} />
                 </View>
               )}
             </View>
-            {(duration || exercises !== undefined) && (
-              <View style={styles.meta}>
-                {duration && (
-                  <>
-                    <View style={layoutStyles.rowCenterGap8}>
-                      <Ionicons name="time-outline" size={14} color={darkTheme.color.mutedForeground} />
-                      <Text style={styles.metaText}>{duration}</Text>
-                    </View>
-                    {exercises !== undefined && <Text style={styles.metaSeparator}>•</Text>}
-                  </>
-                )}
-                {exercises !== undefined && (
-                  <View style={layoutStyles.rowCenterGap8}>
-                    <Ionicons name="barbell-outline" size={14} color={darkTheme.color.mutedForeground} />
-                    <Text style={styles.metaText}>{exercises} exercises</Text>
+
+            {/* Content */}
+            <View style={styles.content}>
+              <View style={styles.header}>
+                <Text style={styles.title} numberOfLines={2}>
+                  {title}
+                </Text>
+                {difficulty && (
+                  <View style={[styles.difficultyBadge, {
+                    backgroundColor: difficultyStyle.backgroundColor,
+                    borderColor: difficultyStyle.borderColor,
+                  }]}>
+                    <Text style={[styles.difficultyText, { color: difficultyStyle.color }]}>
+                      {difficulty}
+                    </Text>
                   </View>
                 )}
               </View>
-            )}
+              {(duration || exercises !== undefined) && (
+                <View style={styles.meta}>
+                  {duration && (
+                    <>
+                      <View style={layoutStyles.rowCenterGap8}>
+                        <Ionicons name="time-outline" size={14} color={darkTheme.color.mutedForeground} />
+                        <Text style={styles.metaText}>{duration}</Text>
+                      </View>
+                      {exercises !== undefined && <Text style={styles.metaSeparator}>•</Text>}
+                    </>
+                  )}
+                  {exercises !== undefined && (
+                    <View style={layoutStyles.rowCenterGap8}>
+                      <Ionicons name="barbell-outline" size={14} color={darkTheme.color.mutedForeground} />
+                      <Text style={styles.metaText}>{exercises} exercises</Text>
+                    </View>
+                  )}
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-      </Card>
-    </Pressable>
+        </Card>
+      </Pressable>
+
+      {/* Exercise List - Always Shown */}
+      {hasExercises && (
+        <ExerciseList 
+          exercises={workoutExercises}
+          onExercisePress={onExercisePress}
+          showHeader={false}
+        />
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    width: '100%',
+  },
   pressable: {
     width: '100%',
   },

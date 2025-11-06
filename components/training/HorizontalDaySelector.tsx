@@ -2,25 +2,61 @@ import React, { useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { darkTheme } from '@/styles/theme';
-import { textStyles } from '@/styles/shared-styles';
 
 interface HorizontalDaySelectorProps {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
+  startDate?: Date | string | null;
+  endDate?: Date | string | null;
 }
 
-export function HorizontalDaySelector({ selectedDate, onDateChange }: HorizontalDaySelectorProps) {
+export function HorizontalDaySelector({ 
+  selectedDate, 
+  onDateChange,
+  startDate,
+  endDate,
+}: HorizontalDaySelectorProps) {
   const scrollRef = useRef<ScrollView>(null);
+  const scrollPositionRef = useRef(0);
 
-  // Generate 60 days - 30 before and after today
+  // Parse dates
+  const parseDate = (date: Date | string | null | undefined): Date | null => {
+    if (!date) return null;
+    if (date instanceof Date) return date;
+    return new Date(date);
+  };
+
+  const programStartDate = parseDate(startDate);
+  const programEndDate = parseDate(endDate);
+
+  // Generate days based on program dates or default to 60 days around today
   const generateDays = () => {
     const days = [];
-    const today = new Date();
-    for (let i = -30; i <= 30; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      days.push(date);
+    
+    if (programStartDate && programEndDate) {
+      // Generate days from program start to end date
+      const start = new Date(programStartDate);
+      const end = new Date(programEndDate);
+      
+      // Set time to midnight for accurate day calculations
+      start.setHours(0, 0, 0, 0);
+      end.setHours(0, 0, 0, 0);
+      
+      const currentDate = new Date(start);
+      while (currentDate <= end) {
+        days.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    } else {
+      // Fallback: Generate 60 days - 30 before and after today
+      const today = new Date();
+      for (let i = -30; i <= 30; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        days.push(date);
+      }
     }
+    
     return days;
   };
 
@@ -35,23 +71,42 @@ export function HorizontalDaySelector({ selectedDate, onDateChange }: Horizontal
       if (selectedIndex !== -1) {
         // Calculate approximate scroll position (60px per item + 8px gap)
         const scrollPosition = selectedIndex * 68;
-        scrollRef.current.scrollTo({ x: scrollPosition - 100, animated: true });
+        scrollPositionRef.current = scrollPosition - 100;
+        scrollRef.current.scrollTo({ x: scrollPositionRef.current, animated: true });
       }
     }
   }, [selectedDate]);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTo({ x: -200, animated: true });
+      scrollPositionRef.current = Math.max(0, scrollPositionRef.current - 200);
+      scrollRef.current.scrollTo({ x: scrollPositionRef.current, animated: true });
     }
   };
 
   const scrollRight = () => {
     if (scrollRef.current) {
-      // Use a ref to track current position or use scrollBy
-      // For now, we'll use a simple approach - scroll incrementally
-      scrollRef.current.scrollTo({ x: 200, animated: true });
+      scrollPositionRef.current = scrollPositionRef.current + 200;
+      scrollRef.current.scrollTo({ x: scrollPositionRef.current, animated: true });
     }
+  };
+
+  const handleScroll = (event: any) => {
+    scrollPositionRef.current = event.nativeEvent.contentOffset.x;
+  };
+
+  // Calculate day number relative to program start (1-based)
+  const getDayNumber = (date: Date): number | null => {
+    if (!programStartDate) return null;
+    const start = new Date(programStartDate);
+    start.setHours(0, 0, 0, 0);
+    const current = new Date(date);
+    current.setHours(0, 0, 0, 0);
+    
+    const diffTime = current.getTime() - start.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    return diffDays + 1; // 1-based day number
   };
 
   const formatDay = (date: Date) => {
@@ -101,25 +156,44 @@ export function HorizontalDaySelector({ selectedDate, onDateChange }: Horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
         style={styles.scrollView}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       >
         {days.map((date, index) => {
           const selected = isSelected(date);
           const today = isToday(date);
+          const dayNumber = getDayNumber(date);
+          const isBeforeStart = programStartDate && date < programStartDate;
+          const isAfterEnd = programEndDate && date > programEndDate;
+          const isDisabled = isBeforeStart || isAfterEnd;
+          
           return (
             <Pressable
               key={index}
-              onPress={() => onDateChange(date)}
+              onPress={() => !isDisabled && onDateChange(date)}
+              disabled={isDisabled}
               style={({ pressed }) => [
                 styles.dayButton,
                 selected && styles.dayButtonSelected,
                 today && !selected && styles.dayButtonToday,
-                pressed && styles.dayButtonPressed,
+                isDisabled && styles.dayButtonDisabled,
+                pressed && !isDisabled && styles.dayButtonPressed,
               ]}
             >
+              {dayNumber && (
+                <Text style={[
+                  styles.dayNumberText,
+                  selected && styles.dayNumberTextSelected,
+                  isDisabled && styles.dayNumberTextDisabled,
+                ]}>
+                  Day {dayNumber}
+                </Text>
+              )}
               <Text style={[
                 styles.dayText,
                 selected && styles.dayTextSelected,
                 today && !selected && styles.dayTextToday,
+                isDisabled && styles.dayTextDisabled,
               ]}>
                 {formatDay(date)}
               </Text>
@@ -127,6 +201,7 @@ export function HorizontalDaySelector({ selectedDate, onDateChange }: Horizontal
                 styles.dateText,
                 selected && styles.dateTextSelected,
                 today && !selected && styles.dateTextToday,
+                isDisabled && styles.dateTextDisabled,
               ]}>
                 {formatDate(date)}
               </Text>
@@ -142,13 +217,15 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     marginVertical: 8,
+    width: '100%',
   },
   scrollView: {
-    paddingHorizontal: 32,
+    width: '100%',
   },
   scrollContent: {
     gap: 8,
     paddingVertical: 8,
+    paddingHorizontal: 16,
   },
   scrollButton: {
     position: 'absolute',
@@ -168,10 +245,10 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   scrollButtonLeft: {
-    left: 0,
+    left: 8,
   },
   scrollButtonRight: {
-    right: 0,
+    right: 8,
   },
   scrollButtonPressed: {
     opacity: 0.7,
@@ -218,6 +295,31 @@ const styles = StyleSheet.create({
   },
   dateTextToday: {
     color: darkTheme.color.primary,
+  },
+  dayButtonDisabled: {
+    opacity: 0.4,
+    backgroundColor: `${darkTheme.color.bgMuted}40`,
+  },
+  dayNumberText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: darkTheme.color.mutedForeground,
+    marginBottom: 2,
+  },
+  dayNumberTextSelected: {
+    color: darkTheme.color.primaryForeground,
+  },
+  dayNumberTextDisabled: {
+    color: darkTheme.color.mutedForeground,
+    opacity: 0.5,
+  },
+  dayTextDisabled: {
+    color: darkTheme.color.mutedForeground,
+    opacity: 0.5,
+  },
+  dateTextDisabled: {
+    color: darkTheme.color.mutedForeground,
+    opacity: 0.5,
   },
 });
 
