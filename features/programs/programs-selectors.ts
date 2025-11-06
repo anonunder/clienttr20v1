@@ -9,3 +9,7 @@ export const selectProgramDetail = (state: RootState) => state.programs?.program
 export const selectProgramDetailLoading = (state: RootState) => state.programs?.detailLoading || false;
 export const selectProgramDetailError = (state: RootState) => state.programs?.detailError || null;
 
+export const selectTrainingPlan = (state: RootState) => state.programs?.trainingPlan || null;
+export const selectTrainingPlanLoading = (state: RootState) => state.programs?.trainingPlanLoading || false;
+export const selectTrainingPlanError = (state: RootState) => state.programs?.trainingPlanError || null;
+

@@ -90,8 +90,14 @@ export default function ProgramDetailScreen() {
 
   // Handle training plan press
   const handleTrainingPress = () => {
-    if (programDetail?.trainingPlanId) {
-      router.push(`/(protected)/(tabs)/programs/training/${programDetail.trainingPlanId}` as any);
+    // Use programDetail.id (the actual program ID) not trainingPlanId
+    // The endpoint requires the program ID, not the training plan ID
+    const programId = programDetail?.id;
+    if (programId) {
+      console.log('📍 Navigating to training plan with program ID:', programId);
+      router.push(`/(protected)/(tabs)/programs/training/${programId}` as any);
+    } else {
+      console.warn('⚠️ Cannot navigate to training: No program ID available in programDetail');
     }
   };
 
