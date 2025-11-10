@@ -8,7 +8,7 @@ import { textStyles } from '@/styles/shared-styles';
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
-  image: string;
+  image?: string;
   onBack?: () => void;
   children?: React.ReactNode;
 }
@@ -16,7 +16,7 @@ interface PageHeaderProps {
 export function PageHeader({
   title,
   subtitle,
-  image,
+  image = 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&q=80',
   onBack,
   children,
 }: PageHeaderProps) {

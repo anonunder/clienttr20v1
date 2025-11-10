@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchProgramsList, fetchProgramDetail, fetchTrainingPlan } from './programs-thunks';
+import { fetchProgramsList, fetchProgramDetail, fetchTrainingPlan, fetchNutritionPlan, fetchMealDetail, fetchRecipeDetail } from './programs-thunks';
 
 // Types matching API response
 export interface TrainingPlan {
@@ -102,6 +102,139 @@ export interface NutritionPlan {
   title: string;
 }
 
+// Nutrition Plan Detail Types
+export interface NutritionPlanMeta {
+  meta_id: number;
+  post_id: number;
+  meta_key: string;
+  meta_value: string;
+}
+
+export interface MealIngredient {
+  order: number;
+  foodName: string;
+  measurement: string;
+  servings: number;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+}
+
+export interface MealRecipe {
+  term_taxonomy_id: number;
+  term_id: number;
+  taxonomy: string;
+  description: string | null;
+  post_parent: number;
+  term: {
+    name: string;
+    date: string;
+    meta: {
+      description?: {
+        text: string;
+        editorState: string;
+      };
+      content?: string;
+      ingredients?: string;
+      recipe?: string;
+      recipe_thumbnail_media_id?: string;
+    };
+  };
+  parentTaxonomy: any;
+  alternativeExercises: any[];
+  media: {
+    recipe_thumbnail_media_id?: {
+      id: number;
+      post_title: string;
+      post_content: string;
+      post_mime_type: string;
+    };
+  };
+}
+
+export interface NutritionPlanMeal {
+  id: number;
+  post_type: string;
+  post_title: string;
+  post_content: string;
+  menu_order: number;
+  post_parent: number;
+  referencedMedia: ReferencedMedia[];
+  meta: NutritionPlanMeta[];
+  mealRecipes: MealRecipe[];
+}
+
+export interface NutritionPlanDay {
+  dayNumber: number;
+  nutritionPlanDayMeals: NutritionPlanMeal[];
+}
+
+export interface NutritionPlanMealGroup {
+  meta_id: number;
+  mealGroupName: string;
+  nutritionPlanGroupMeals: NutritionPlanMeal[];
+}
+
+export interface NutritionPlanDetail {
+  id: number;
+  post_title: string;
+  post_content: string;
+  post_date: string;
+  post_type: string;
+  post_mime_type: string;
+  termTaxonomies: any[];
+  meta: NutritionPlanMeta[];
+  nutritionPlanDays?: NutritionPlanDay[];
+  nutritionPlanMealGroups?: NutritionPlanMealGroup[];
+  imageUri: string | null;
+  program?: ProgramData;
+}
+
+// Meal Detail Type (extends NutritionPlanMeal with programId)
+export interface MealDetail extends NutritionPlanMeal {
+  programId: number;
+}
+
+// Recipe Detail Types
+export interface RecipeMedia {
+  id: number;
+  post_title: string;
+  post_content: string;
+  post_mime_type: string;
+}
+
+export interface RecipeDetail {
+  term_taxonomy_id: number;
+  term_id: number;
+  taxonomy: string;
+  description: string | null;
+  post_parent: number;
+  term: {
+    name: string;
+    date: string;
+    meta: {
+      description?: {
+        text: string;
+        editorState: string;
+      };
+      ingredients?: string;
+      instructions?: string;
+      recipe_thumbnail_media_id?: string;
+      demo_media_id?: string[];
+    };
+  };
+  parentTaxonomy: any;
+  alternativeExercises: any[];
+  media: {
+    recipe_thumbnail_media_id?: RecipeMedia;
+    demo_media_id?: RecipeMedia[];
+  };
+  nutritionPlanId: number;
+  programId: number;
+}
+
+
 export interface Program {
   id: number;
   title: string;
@@ -132,12 +265,21 @@ interface ProgramsState {
   programs: Program[];
   programDetail: Program | null;
   trainingPlan: TrainingPlanDetail | null;
+  nutritionPlan: NutritionPlanDetail | null;
+  mealDetail: MealDetail | null;
+  recipeDetail: RecipeDetail | null;
   loading: boolean;
   detailLoading: boolean;
   trainingPlanLoading: boolean;
+  nutritionPlanLoading: boolean;
+  mealDetailLoading: boolean;
+  recipeDetailLoading: boolean;
   error: string | null;
   detailError: string | null;
   trainingPlanError: string | null;
+  nutritionPlanError: string | null;
+  mealDetailError: string | null;
+  recipeDetailError: string | null;
   lastUpdated: number | null;
 }
 
@@ -145,12 +287,21 @@ const initialState: ProgramsState = {
   programs: [],
   programDetail: null,
   trainingPlan: null,
+  nutritionPlan: null,
+  mealDetail: null,
+  recipeDetail: null,
   loading: false,
   detailLoading: false,
   trainingPlanLoading: false,
+  nutritionPlanLoading: false,
+  mealDetailLoading: false,
+  recipeDetailLoading: false,
   error: null,
   detailError: null,
   trainingPlanError: null,
+  nutritionPlanError: null,
+  mealDetailError: null,
+  recipeDetailError: null,
   lastUpdated: null,
 };
 
@@ -194,6 +345,7 @@ const programsSlice = createSlice({
       .addCase(fetchTrainingPlan.pending, (state) => {
         state.trainingPlanLoading = true;
         state.trainingPlanError = null;
+        state.trainingPlan = null; // Clear previous training plan
       })
       .addCase(fetchTrainingPlan.fulfilled, (state, action) => {
         state.trainingPlanLoading = false;
@@ -202,6 +354,49 @@ const programsSlice = createSlice({
       .addCase(fetchTrainingPlan.rejected, (state, action) => {
         state.trainingPlanLoading = false;
         state.trainingPlanError = action.payload as string;
+        state.trainingPlan = null; // Clear on error
+      })
+      .addCase(fetchNutritionPlan.pending, (state) => {
+        state.nutritionPlanLoading = true;
+        state.nutritionPlanError = null;
+        state.nutritionPlan = null; // Clear previous nutrition plan
+      })
+      .addCase(fetchNutritionPlan.fulfilled, (state, action) => {
+        state.nutritionPlanLoading = false;
+        state.nutritionPlan = action.payload;
+      })
+      .addCase(fetchNutritionPlan.rejected, (state, action) => {
+        state.nutritionPlanLoading = false;
+        state.nutritionPlanError = action.payload as string;
+        state.nutritionPlan = null; // Clear on error
+      })
+      .addCase(fetchMealDetail.pending, (state) => {
+        state.mealDetailLoading = true;
+        state.mealDetailError = null;
+        state.mealDetail = null; // Clear previous meal detail
+      })
+      .addCase(fetchMealDetail.fulfilled, (state, action) => {
+        state.mealDetailLoading = false;
+        state.mealDetail = action.payload;
+      })
+      .addCase(fetchMealDetail.rejected, (state, action) => {
+        state.mealDetailLoading = false;
+        state.mealDetailError = action.payload as string;
+        state.mealDetail = null; // Clear on error
+      })
+      .addCase(fetchRecipeDetail.pending, (state) => {
+        state.recipeDetailLoading = true;
+        state.recipeDetailError = null;
+        state.recipeDetail = null; // Clear previous recipe detail
+      })
+      .addCase(fetchRecipeDetail.fulfilled, (state, action) => {
+        state.recipeDetailLoading = false;
+        state.recipeDetail = action.payload;
+      })
+      .addCase(fetchRecipeDetail.rejected, (state, action) => {
+        state.recipeDetailLoading = false;
+        state.recipeDetailError = action.payload as string;
+        state.recipeDetail = null; // Clear on error
       });
   },
 });

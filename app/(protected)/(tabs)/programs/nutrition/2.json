@@ -1,0 +1,1504 @@
+{
+    "success": true,
+    "data": {
+        "id": 5904,
+        "post_title": "56 dana (8ned) Haljina (veganska/posna)",
+        "post_content": "",
+        "post_date": "2025-10-04T01:31:33.000Z",
+        "post_type": "nutrition_plan_assigned",
+        "post_mime_type": "days",
+        "termTaxonomies": [],
+        "meta": [
+            {
+                "meta_id": 18809,
+                "post_id": 5904,
+                "meta_key": "duration",
+                "meta_value": "56"
+            },
+            {
+                "meta_id": 18810,
+                "post_id": 5904,
+                "meta_key": "program_id",
+                "meta_value": "5845"
+            }
+        ],
+        "nutritionPlanDays": [
+            {
+                "dayNumber": 1,
+                "nutritionPlanDayMeals": [
+                    {
+                        "id": 5905,
+                        "post_type": "nutrition_plan_meal",
+                        "post_title": "posni dan",
+                        "post_content": "<p>DAN TRENINGA</p>",
+                        "menu_order": 1,
+                        "post_parent": 5904,
+                        "referencedMedia": [
+                            {
+                                "id": 4535,
+                                "post_content": "/storage/company-1/user-1/media/meal_4534_1759539670992.JPG",
+                                "PostMeta": {
+                                    "meta_id": 18815,
+                                    "post_id": 5905,
+                                    "meta_key": "meal_thumbnail_media_id",
+                                    "meta_value": "4535"
+                                }
+                            }
+                        ],
+                        "meta": [
+                            {
+                                "meta_id": 18811,
+                                "post_id": 5905,
+                                "meta_key": "description",
+                                "meta_value": "{\"text\":\"<p>DAN TRENINGA</p>\",\"editorState\":\"{\\\"root\\\":{\\\"children\\\":[{\\\"children\\\":[{\\\"detail\\\":0,\\\"format\\\":0,\\\"mode\\\":\\\"normal\\\",\\\"style\\\":\\\"\\\",\\\"text\\\":\\\"<p>DAN TRENINGA</p>\\\",\\\"type\\\":\\\"text\\\",\\\"version\\\":1}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"paragraph\\\",\\\"version\\\":1,\\\"textFormat\\\":0,\\\"textStyle\\\":\\\"\\\"}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"root\\\",\\\"version\\\":1}}\"}"
+                            },
+                            {
+                                "meta_id": 18812,
+                                "post_id": 5905,
+                                "meta_key": "day",
+                                "meta_value": "1"
+                            },
+                            {
+                                "meta_id": 18813,
+                                "post_id": 5905,
+                                "meta_key": "menu_order",
+                                "meta_value": "1"
+                            },
+                            {
+                                "meta_id": 18814,
+                                "post_id": 5905,
+                                "meta_key": "meal",
+                                "meta_value": "4535"
+                            },
+                            {
+                                "meta_id": 18815,
+                                "post_id": 5905,
+                                "meta_key": "meal_thumbnail_media_id",
+                                "meta_value": "4535"
+                            },
+                            {
+                                "meta_id": 18816,
+                                "post_id": 5905,
+                                "meta_key": "day",
+                                "meta_value": "1"
+                            }
+                        ],
+                        "mealRecipes": [
+                            {
+                                "term_taxonomy_id": 5883,
+                                "term_id": 5883,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5905,
+                                "term": {
+                                    "name": "Ceđeni crveni grejpfrut sa vodom",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci:</strong></p>\r\n<ol>\r\n<li>jedan crveni grejpfrut</li>\r\n<li>voda</li>\r\n</ol>\r\n<p>Priprema: Iscediti crveni grejpfrut *100ml) i doliti vodu do ukupno 3-4dl.</p>\r\n<p><!--StartFragment--><br><!--EndFragment--></p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci:</strong></p>\\r\\n<ol>\\r\\n<li>jedan crveni grejpfrut</li>\\r\\n<li>voda</li>\\r\\n</ol>\\r\\n<p>Priprema: Iscediti crveni grejpfrut *100ml) i doliti vodu do ukupno 3-4dl.</p>\\r\\n<p><!--StartFragment--><br><!--EndFragment--></p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Ceđeni crveni grejpfrut sa vodom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"crveni grejpfrut\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4536",
+                                        "recipe_thumbnail_media_id": "4536"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4536,
+                                        "post_title": "christine-trant-aj1B4wkOCpI-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4470_1759539671171.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5884,
+                                "term_id": 5884,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5905,
+                                "term": {
+                                    "name": "Kuvani proso sa maslinama i spanaćem",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci za porciju: </strong></p>\r\n<ol>\r\n<li>proso 40g</li>\r\n<li>baby spanać 50g</li>\r\n<li>kašika maslinovog ulja</li>\r\n<li>limun (sok od pola limuna)</li>\r\n<li>cherry paradajz 6 kom</li>\r\n<li>paprika crvena ili zelena</li>\r\n<li>masline 5 kom</li>\r\n</ol>\r\n<p> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Odmerite 40g prosa, operite i kuvajte u 3 puta više vode 15ak min.  Ostaviti da nabubri u preostaloj vodi pa procediti, prohladiti i protresti. Pomešati sa 50g baby spanaća, kaš.maslinovog ulja, par kapi limuna, sitno seckanim cherry paradajzom, sitno seckanom paprikom i maslinama (oko 30g).</p>\r\n<p>Ukupno oko 250g salate za obrok.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci za porciju: </strong></p>\\r\\n<ol>\\r\\n<li>proso 40g</li>\\r\\n<li>baby spanać 50g</li>\\r\\n<li>kašika maslinovog ulja</li>\\r\\n<li>limun (sok od pola limuna)</li>\\r\\n<li>cherry paradajz 6 kom</li>\\r\\n<li>paprika crvena ili zelena</li>\\r\\n<li>masline 5 kom</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Odmerite 40g prosa, operite i kuvajte u 3 puta više vode 15ak min.  Ostaviti da nabubri u preostaloj vodi pa procediti, prohladiti i protresti. Pomešati sa 50g baby spanaća, kaš.maslinovog ulja, par kapi limuna, sitno seckanim cherry paradajzom, sitno seckanom paprikom i maslinama (oko 30g).</p>\\r\\n<p>Ukupno oko 250g salate za obrok.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Kuvani proso sa maslinama i spanaćem",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"proso\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"baby spanać\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"limun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"cherry paradajz\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"masline\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"paprika\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4537",
+                                        "recipe_thumbnail_media_id": "4537"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4537,
+                                        "post_title": "A40A08C3-062C-4BEB-90EE-373C2DC02CCF-cropped.JPG",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4471_1759539674144.JPG",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5885,
+                                "term_id": 5885,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5905,
+                                "term": {
+                                    "name": "Potaž od brokolija",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci za porciju: </strong></p>\r\n<ol>\r\n<li>brokoli 150g</li>\r\n<li>1 crni luk</li>\r\n<li>2 kašike maslinovog ulja</li>\r\n<li>mirođija po želji</li>\r\n<li>peršun</li>\r\n<li>sirove semenke suncokreta i bundeve, ukupno 30g</li>\r\n</ol>\r\n<p> </p>\r\n<p><strong>Dodatno: </strong></p>\r\n<ol>\r\n<li>1 parče hleba od orašastih plodova</li>\r\n</ol>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Kratko obariti  brokoli i crni luk, procediti, prebaciti u blender, dodati maslinovo ulje, malo mirođije, peršuna, semenke (suncokreta, bundeve). Jesti uz 1 parče hleba od orašastih plodova.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci za porciju: </strong></p>\\r\\n<ol>\\r\\n<li>brokoli 150g</li>\\r\\n<li>1 crni luk</li>\\r\\n<li>2 kašike maslinovog ulja</li>\\r\\n<li>mirođija po želji</li>\\r\\n<li>peršun</li>\\r\\n<li>sirove semenke suncokreta i bundeve, ukupno 30g</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><strong>Dodatno: </strong></p>\\r\\n<ol>\\r\\n<li>1 parče hleba od orašastih plodova</li>\\r\\n</ol>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Kratko obariti  brokoli i crni luk, procediti, prebaciti u blender, dodati maslinovo ulje, malo mirođije, peršuna, semenke (suncokreta, bundeve). Jesti uz 1 parče hleba od orašastih plodova.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Potaž od brokolija",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"brokoli\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"crni luk\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"mirođija\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"peršun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"semenke suncokreta\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"semenke bundeve\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":8,\"foodName\":\"hleb\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4538",
+                                        "recipe_thumbnail_media_id": "4538"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4538,
+                                        "post_title": "FullSizeRender-cropped.JPG",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4472_1759539674316.JPG",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5886,
+                                "term_id": 5886,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5905,
+                                "term": {
+                                    "name": "Grilovane pečurke",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci za porciju:</strong></p>\r\n<ol>\r\n<li>pečurke 200g</li>\r\n<li>kokosovo ulje</li>\r\n<li>origano</li>\r\n<li>peršun</li>\r\n<li>maslinovo ulje</li>\r\n<li>patlidžan 150g</li>\r\n<li>sveža salata po izboru 150g</li>\r\n</ol>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Grilovane pečurke (šampinjoni, 200g), na malo kokosovog ulja, uz dodatak origana, peršuna, maslinovog ulja. Jesti uz grilovani patlidžan iseckan na kolutove i svežu salatu po izboru 150g.</p>\r\n<!--StartFragment--><!--EndFragment-->",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci za porciju:</strong></p>\\r\\n<ol>\\r\\n<li>pečurke 200g</li>\\r\\n<li>kokosovo ulje</li>\\r\\n<li>origano</li>\\r\\n<li>peršun</li>\\r\\n<li>maslinovo ulje</li>\\r\\n<li>patlidžan 150g</li>\\r\\n<li>sveža salata po izboru 150g</li>\\r\\n</ol>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Grilovane pečurke (šampinjoni, 200g), na malo kokosovog ulja, uz dodatak origana, peršuna, maslinovog ulja. Jesti uz grilovani patlidžan iseckan na kolutove i svežu salatu po izboru 150g.</p>\\r\\n<!--StartFragment--><!--EndFragment-->\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Grilovane pečurke",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"pečurke\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"patlidžan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"kokosovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"origano\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"sveža salata po izboru\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"peršun\",\"measurement\":\"gram\",\"servings\":\"1\",\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4539",
+                                        "recipe_thumbnail_media_id": "4539"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4539,
+                                        "post_title": "1675289274714-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4473_1759539674494.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5887,
+                                "term_id": 5887,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5905,
+                                "term": {
+                                    "name": "Smoothie jabuka-cimet",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>1 zelena jabuka</li>\r\n<li>cimet (1 kašičica)</li>\r\n<li>bademovo mleko 2dl</li>\r\n<li>šaka badema</li>\r\n</ol>\r\n<p> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema:</strong> U blenderu sjediniti sve sastojke.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>1 zelena jabuka</li>\\r\\n<li>cimet (1 kašičica)</li>\\r\\n<li>bademovo mleko 2dl</li>\\r\\n<li>šaka badema</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema:</strong> U blenderu sjediniti sve sastojke.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Smoothie jabuka-cimet",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"bademovo mleko\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"zelena jabuka\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"cimet\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"badem\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4540",
+                                        "recipe_thumbnail_media_id": "4540"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4540,
+                                        "post_title": "pexels-leah-rolando-4112870-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4474_1759539674680.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5888,
+                                "term_id": 5888,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5905,
+                                "term": {
+                                    "name": "Hidratacija",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit;\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\r\n<p style=\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol style=\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">voda</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">biljni čaj</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">rastvor Colagen Peptana</span></li>\r\n</ol>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit;\\\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\\r\\n<p style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\"> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\">\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">voda</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">biljni čaj</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">rastvor Colagen Peptana</span></li>\\r\\n</ol>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Hidratacija",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"voda\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"biljni čaj\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"rastvor Colagen Peptan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4541",
+                                        "recipe_thumbnail_media_id": "4541"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4541,
+                                        "post_title": "1674994337513-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4475_1759539674853.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "dayNumber": 2,
+                "nutritionPlanDayMeals": [
+                    {
+                        "id": 5906,
+                        "post_type": "nutrition_plan_meal",
+                        "post_title": "posni dan",
+                        "post_content": "<p>DAN ODMORA ILI KARDIO DAN</p>",
+                        "menu_order": 1,
+                        "post_parent": 5904,
+                        "referencedMedia": [
+                            {
+                                "id": 4543,
+                                "post_content": "/storage/company-1/user-1/media/meal_4542_1759539675015.JPG",
+                                "PostMeta": {
+                                    "meta_id": 18821,
+                                    "post_id": 5906,
+                                    "meta_key": "meal_thumbnail_media_id",
+                                    "meta_value": "4543"
+                                }
+                            }
+                        ],
+                        "meta": [
+                            {
+                                "meta_id": 18817,
+                                "post_id": 5906,
+                                "meta_key": "description",
+                                "meta_value": "{\"text\":\"<p>DAN ODMORA ILI KARDIO DAN</p>\",\"editorState\":\"{\\\"root\\\":{\\\"children\\\":[{\\\"children\\\":[{\\\"detail\\\":0,\\\"format\\\":0,\\\"mode\\\":\\\"normal\\\",\\\"style\\\":\\\"\\\",\\\"text\\\":\\\"<p>DAN ODMORA ILI KARDIO DAN</p>\\\",\\\"type\\\":\\\"text\\\",\\\"version\\\":1}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"paragraph\\\",\\\"version\\\":1,\\\"textFormat\\\":0,\\\"textStyle\\\":\\\"\\\"}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"root\\\",\\\"version\\\":1}}\"}"
+                            },
+                            {
+                                "meta_id": 18818,
+                                "post_id": 5906,
+                                "meta_key": "day",
+                                "meta_value": "2"
+                            },
+                            {
+                                "meta_id": 18819,
+                                "post_id": 5906,
+                                "meta_key": "menu_order",
+                                "meta_value": "1"
+                            },
+                            {
+                                "meta_id": 18820,
+                                "post_id": 5906,
+                                "meta_key": "meal",
+                                "meta_value": "4543"
+                            },
+                            {
+                                "meta_id": 18821,
+                                "post_id": 5906,
+                                "meta_key": "meal_thumbnail_media_id",
+                                "meta_value": "4543"
+                            },
+                            {
+                                "meta_id": 18822,
+                                "post_id": 5906,
+                                "meta_key": "day",
+                                "meta_value": "2"
+                            }
+                        ],
+                        "mealRecipes": [
+                            {
+                                "term_taxonomy_id": 5889,
+                                "term_id": 5889,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5906,
+                                "term": {
+                                    "name": "Ceđeni limun sa vodom",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>pola limuna</li>\r\n<li>voda</li>\r\n</ol>\r\n<p>Priprema: Iscediti pola limuna i doliti vodu do ukupno 3 do 4dl.</p>\r\n<p><!--StartFragment--><br><!--EndFragment--></p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>pola limuna</li>\\r\\n<li>voda</li>\\r\\n</ol>\\r\\n<p>Priprema: Iscediti pola limuna i doliti vodu do ukupno 3 do 4dl.</p>\\r\\n<p><!--StartFragment--><br><!--EndFragment--></p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Ceđeni limun sa vodom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"limun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4544",
+                                        "recipe_thumbnail_media_id": "4544"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4544,
+                                        "post_title": "joanna-kosinska-Ym62ahWQtjY-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4476_1759539675203.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5890,
+                                "term_id": 5890,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5906,
+                                "term": {
+                                    "name": "Kuvani proso sa maslinama i spanaćem",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><strong><span style=\"box-sizing: inherit;\">Sastojci za porciju:</span><span style=\"box-sizing: inherit; touch-action: manipulation;\"> </span></strong></p>\r\n<ol>\r\n<li>proso 40g</li>\r\n<li>baby spanać 50g</li>\r\n<li>kašika maslinovog ulja</li>\r\n<li>limun (sok od pola limuna)</li>\r\n<li>cherry paradajz 6 kom</li>\r\n<li>paprika crvena ili zelena</li>\r\n<li>masline 5 kom</li>\r\n</ol>\r\n<p> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Odmerite 40g prosa, operite i kuvajte u 3 puta više vode 15ak min.  Ostaviti da nabubri u preostaloj vodi pa procediti, prohladiti i protresti. Pomešati sa 50g baby spanaća, kaš.maslinovog ulja, par kapi limuna, sitno seckanim cherry paradajzom, sitno seckanom paprikom i maslinama (oko 30g). Ukupno oko 250g salate za obrok.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><strong><span style=\\\"box-sizing: inherit;\\\">Sastojci za porciju:</span><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\"> </span></strong></p>\\r\\n<ol>\\r\\n<li>proso 40g</li>\\r\\n<li>baby spanać 50g</li>\\r\\n<li>kašika maslinovog ulja</li>\\r\\n<li>limun (sok od pola limuna)</li>\\r\\n<li>cherry paradajz 6 kom</li>\\r\\n<li>paprika crvena ili zelena</li>\\r\\n<li>masline 5 kom</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Odmerite 40g prosa, operite i kuvajte u 3 puta više vode 15ak min.  Ostaviti da nabubri u preostaloj vodi pa procediti, prohladiti i protresti. Pomešati sa 50g baby spanaća, kaš.maslinovog ulja, par kapi limuna, sitno seckanim cherry paradajzom, sitno seckanom paprikom i maslinama (oko 30g). Ukupno oko 250g salate za obrok.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Kuvani proso sa maslinama i spanaćem",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"proso\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"baby spanać\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"limun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"cherry paradajz\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"masline\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"paprika\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4545",
+                                        "recipe_thumbnail_media_id": "4545"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4545,
+                                        "post_title": "0EFED8BE-4146-498D-8958-31382B831109-cropped.JPG",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4477_1759539675381.JPG",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5891,
+                                "term_id": 5891,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5906,
+                                "term": {
+                                    "name": "Čia puding sa jagodom",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci za porciju: </strong></p>\r\n<ol>\r\n<li>čia semenke 20-30g</li>\r\n<li>bademovo ili kokosovo mleko 150ml</li>\r\n<li>jagode 50g</li>\r\n<li>1 kašikom bademovog putera</li>\r\n<li>1 kašičica kokosovog sirupa (može i bez)</li>\r\n<li>1 štapić vanile </li>\r\n</ol>\r\n<p><strong> Priprema: </strong></p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p>Puding spremajte rano ujutru ili prethodno veče. 20-30g čia semena pomešati sa 150ml bademovog ili kokosovog mleka, 50g sitno seckanih jagoda, 2 kašike bademovog putera, 1 kašičicom kokosovog sirupa (ili bez ovog zaslađivača). Ostaviti u frižideru na nekoliko sati (najmanje 2 sata), da čija nabubri i masa se zgusne. Može se dodati i štapić vanile.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci za porciju: </strong></p>\\r\\n<ol>\\r\\n<li>čia semenke 20-30g</li>\\r\\n<li>bademovo ili kokosovo mleko 150ml</li>\\r\\n<li>jagode 50g</li>\\r\\n<li>1 kašikom bademovog putera</li>\\r\\n<li>1 kašičica kokosovog sirupa (može i bez)</li>\\r\\n<li>1 štapić vanile </li>\\r\\n</ol>\\r\\n<p><strong> Priprema: </strong></p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p>Puding spremajte rano ujutru ili prethodno veče. 20-30g čia semena pomešati sa 150ml bademovog ili kokosovog mleka, 50g sitno seckanih jagoda, 2 kašike bademovog putera, 1 kašičicom kokosovog sirupa (ili bez ovog zaslađivača). Ostaviti u frižideru na nekoliko sati (najmanje 2 sata), da čija nabubri i masa se zgusne. Može se dodati i štapić vanile.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Čia puding sa jagodom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"čia seme\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"bademovo mleko\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"kokosovo mleko\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"jagode\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"bademov puter\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"kokosov sirup\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"vanila\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4546",
+                                        "recipe_thumbnail_media_id": "4546"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4546,
+                                        "post_title": "E410B2C7-F3A2-4DB5-BC39-5EFEDF6FF0F9-cropped.JPG",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4478_1759539675559.JPG",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5892,
+                                "term_id": 5892,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5906,
+                                "term": {
+                                    "name": "Šejk-pomorandža-ananas-kivi-banana",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci:</strong></p>\r\n<ol>\r\n<li>pomorandža</li>\r\n<li>ananas</li>\r\n<li>kivi</li>\r\n<li>banana</li>\r\n<li>ovsene pahuljice 30g</li>\r\n</ol>\r\n<p> </p>\r\n<p><strong>Priprema: </strong>Pomorandža, ananas, kivi, banana i 30g ovsenih pahuljica, izblendirati.</p>\r\n<!--StartFragment-->\r\n<p> </p>\r\n<!--EndFragment--><!--StartFragment--><!--EndFragment-->",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci:</strong></p>\\r\\n<ol>\\r\\n<li>pomorandža</li>\\r\\n<li>ananas</li>\\r\\n<li>kivi</li>\\r\\n<li>banana</li>\\r\\n<li>ovsene pahuljice 30g</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><strong>Priprema: </strong>Pomorandža, ananas, kivi, banana i 30g ovsenih pahuljica, izblendirati.</p>\\r\\n<!--StartFragment-->\\r\\n<p> </p>\\r\\n<!--EndFragment--><!--StartFragment--><!--EndFragment-->\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Šejk-pomorandža-ananas-kivi-banana",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"pomorandža\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"ananas\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"kivi\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"banana\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"ovsene pahuljice\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4547",
+                                        "recipe_thumbnail_media_id": "4547"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4547,
+                                        "post_title": "Zeleni_smoothie-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4479_1759539675737.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5893,
+                                "term_id": 5893,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5906,
+                                "term": {
+                                    "name": "Riba sa paradajzom",
+                                    "date": "2025-10-04T01:31:33.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci za porciju:</strong></p>\r\n<ol>\r\n<li>riba 150g</li>\r\n<li>1 paradajz</li>\r\n<li>beli luk</li>\r\n<li>kalijumska so</li>\r\n<li>peršun</li>\r\n<li>maslinovo ulje</li>\r\n<li>dinstani paradajz</li>\r\n<li>limun</li>\r\n<li>zelena salata 100g</li>\r\n</ol>\r\n<p> </p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>1 paradajz prelijte ključalom vodom, oljuštite, isecite na veće komade i preručite u tiganj sa vrelim uljem i dinstajte desetak minuta. Pred kraj dinstanja dodajte iseckani beli luk, promešajte dva-tri puta, posolite, pospite iseckanim peršunom i sklonite sa ringle.</p>\r\n<p>Mariniranu ribu stavite u vatrostalnu činiju, prelijte uljem, dodajte malo marinade i pecite 15 minuta u rerni zagrejanoj na 180 stepeni.</p>\r\n<p>Pečenu ribu rasporedite u tanjire za serviranje, dodajte dinstani paradajz, pospite iseckanim peršunom i ukrasite kolutićima limuna.</p>\r\n<p>Prilog: zelena salata sa masl. uljem malo limuna i kalijumske soli.</p>\r\n<!--StartFragment--><!--EndFragment-->",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci za porciju:</strong></p>\\r\\n<ol>\\r\\n<li>riba 150g</li>\\r\\n<li>1 paradajz</li>\\r\\n<li>beli luk</li>\\r\\n<li>kalijumska so</li>\\r\\n<li>peršun</li>\\r\\n<li>maslinovo ulje</li>\\r\\n<li>dinstani paradajz</li>\\r\\n<li>limun</li>\\r\\n<li>zelena salata 100g</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>1 paradajz prelijte ključalom vodom, oljuštite, isecite na veće komade i preručite u tiganj sa vrelim uljem i dinstajte desetak minuta. Pred kraj dinstanja dodajte iseckani beli luk, promešajte dva-tri puta, posolite, pospite iseckanim peršunom i sklonite sa ringle.</p>\\r\\n<p>Mariniranu ribu stavite u vatrostalnu činiju, prelijte uljem, dodajte malo marinade i pecite 15 minuta u rerni zagrejanoj na 180 stepeni.</p>\\r\\n<p>Pečenu ribu rasporedite u tanjire za serviranje, dodajte dinstani paradajz, pospite iseckanim peršunom i ukrasite kolutićima limuna.</p>\\r\\n<p>Prilog: zelena salata sa masl. uljem malo limuna i kalijumske soli.</p>\\r\\n<!--StartFragment--><!--EndFragment-->\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Riba sa paradajzom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"riba\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"paradajz\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"peršun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"limun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"kalijumska so\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"zelena salata\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":8,\"foodName\":\"beli luk\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4548",
+                                        "recipe_thumbnail_media_id": "4548"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4548,
+                                        "post_title": "20-Minute_Pan-Fried_Basa_Fish_Fillets___Desi_licious_RD-cropped.png",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4480_1759539675919.png",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 5894,
+                                "term_id": 5894,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5906,
+                                "term": {
+                                    "name": "Hidratacija",
+                                    "date": "2025-10-04T01:31:34.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit;\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\r\n<p style=\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol style=\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">voda</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">biljni čaj</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">rastvor Colagen Peptana</span></li>\r\n</ol>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit;\\\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\\r\\n<p style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\"> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\">\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">voda</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">biljni čaj</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">rastvor Colagen Peptana</span></li>\\r\\n</ol>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Hidratacija",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"voda\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"biljni čaj\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"rastvor Colagen Peptan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4549",
+                                        "recipe_thumbnail_media_id": "4549"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4549,
+                                        "post_title": "1674994337574-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4481_1759539676148.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "dayNumber": 53,
+                "nutritionPlanDayMeals": [
+                    {
+                        "id": 5953,
+                        "post_type": "nutrition_plan_meal",
+                        "post_title": "POSNI DAN",
+                        "post_content": "<p>DAN ODMORA ILI KARDIO DAN</p>",
+                        "menu_order": 1,
+                        "post_parent": 5904,
+                        "referencedMedia": [
+                            {
+                                "id": 4919,
+                                "post_content": "/storage/company-1/user-1/media/meal_4918_1759539740668.png",
+                                "PostMeta": {
+                                    "meta_id": 19103,
+                                    "post_id": 5953,
+                                    "meta_key": "meal_thumbnail_media_id",
+                                    "meta_value": "4919"
+                                }
+                            }
+                        ],
+                        "meta": [
+                            {
+                                "meta_id": 19099,
+                                "post_id": 5953,
+                                "meta_key": "description",
+                                "meta_value": "{\"text\":\"<p>DAN ODMORA ILI KARDIO DAN</p>\",\"editorState\":\"{\\\"root\\\":{\\\"children\\\":[{\\\"children\\\":[{\\\"detail\\\":0,\\\"format\\\":0,\\\"mode\\\":\\\"normal\\\",\\\"style\\\":\\\"\\\",\\\"text\\\":\\\"<p>DAN ODMORA ILI KARDIO DAN</p>\\\",\\\"type\\\":\\\"text\\\",\\\"version\\\":1}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"paragraph\\\",\\\"version\\\":1,\\\"textFormat\\\":0,\\\"textStyle\\\":\\\"\\\"}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"root\\\",\\\"version\\\":1}}\"}"
+                            },
+                            {
+                                "meta_id": 19100,
+                                "post_id": 5953,
+                                "meta_key": "day",
+                                "meta_value": "53"
+                            },
+                            {
+                                "meta_id": 19101,
+                                "post_id": 5953,
+                                "meta_key": "menu_order",
+                                "meta_value": "1"
+                            },
+                            {
+                                "meta_id": 19102,
+                                "post_id": 5953,
+                                "meta_key": "meal",
+                                "meta_value": "4919"
+                            },
+                            {
+                                "meta_id": 19103,
+                                "post_id": 5953,
+                                "meta_key": "meal_thumbnail_media_id",
+                                "meta_value": "4919"
+                            },
+                            {
+                                "meta_id": 19104,
+                                "post_id": 5953,
+                                "meta_key": "day",
+                                "meta_value": "53"
+                            }
+                        ],
+                        "mealRecipes": [
+                            {
+                                "term_taxonomy_id": 6171,
+                                "term_id": 6171,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5953,
+                                "term": {
+                                    "name": "Topla limunada sa par listova nane 3dl",
+                                    "date": "2025-10-04T01:31:51.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci:</strong></p>\r\n<ol>\r\n<li>limun</li>\r\n<li>listovi nane</li>\r\n<li>voda</li>\r\n</ol>\r\n<p> </p>\r\n<p>Iscedite sok od pola limuna, dolijte vodu do 4dl i listove sveže nane (mogu se prethodno samleti u blenderu)</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci:</strong></p>\\r\\n<ol>\\r\\n<li>limun</li>\\r\\n<li>listovi nane</li>\\r\\n<li>voda</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p>Iscedite sok od pola limuna, dolijte vodu do 4dl i listove sveže nane (mogu se prethodno samleti u blenderu)</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Topla limunada sa par listova nane 3dl",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"limun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"nana\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4920",
+                                        "recipe_thumbnail_media_id": "4920"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4920,
+                                        "post_title": "pexels-mareefe-1638280-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4764_1759539740863.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6172,
+                                "term_id": 6172,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5953,
+                                "term": {
+                                    "name": "Kuvana kinoa sa semenkama",
+                                    "date": "2025-10-04T01:31:51.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci za porciju: </strong></p>\r\n<ol>\r\n<li>kinoa 40g</li>\r\n<li>1 crvena paprika</li>\r\n<li>mlevene semenke lana, suncokreta ili bundeve (30g mešano)</li>\r\n</ol>\r\n<p> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Odmeriti 40g kinoe, i skuvati u 3 puta više vode. Kuvati 10ak min. ostaviti da odstoji, nabubri, procediti ostatak vode (ako ima) , prohladiti i protresti. Dodati 1 crvenu seckanu papriku i mlevene semenke lana, suncokreta ili/i bundeve.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci za porciju: </strong></p>\\r\\n<ol>\\r\\n<li>kinoa 40g</li>\\r\\n<li>1 crvena paprika</li>\\r\\n<li>mlevene semenke lana, suncokreta ili bundeve (30g mešano)</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Odmeriti 40g kinoe, i skuvati u 3 puta više vode. Kuvati 10ak min. ostaviti da odstoji, nabubri, procediti ostatak vode (ako ima) , prohladiti i protresti. Dodati 1 crvenu seckanu papriku i mlevene semenke lana, suncokreta ili/i bundeve.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Kuvana kinoa sa semenkama",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"kinoa\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"paprika\",\"measurement\":\"gram\",\"servings\":\"1\",\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"mlevene semenke lana\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"mlevene semenke bundeve\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"mlevene semenke suncokreta\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4921",
+                                        "recipe_thumbnail_media_id": "4921"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4921,
+                                        "post_title": "10-Minute_Healthy_Quinoa_Veggie_Fried__Rice__-_hellofrozenbananas_com-cropped.png",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4765_1759539741050.png",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6173,
+                                "term_id": 6173,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5953,
+                                "term": {
+                                    "name": "Napitak sa cimetom",
+                                    "date": "2025-10-04T01:31:51.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>bademovo mleko 2dl</li>\r\n<li>cimet 5g</li>\r\n<li>vanila 5g ili bademovo mleko 20ml sa vanilom</li>\r\n<li>1 kašika kokosovog proteina</li>\r\n</ol>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p>Priprema: </p>\r\n<p>2dl bademovog mleka pomešati u blenderu sa 5g cimeta, 5g vanile ili 20ml bademovog mleka sa vanilom, 1 kašikom kokosovog proteina.</p>\r\n<!--StartFragment--><!--EndFragment-->",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>bademovo mleko 2dl</li>\\r\\n<li>cimet 5g</li>\\r\\n<li>vanila 5g ili bademovo mleko 20ml sa vanilom</li>\\r\\n<li>1 kašika kokosovog proteina</li>\\r\\n</ol>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p>Priprema: </p>\\r\\n<p>2dl bademovog mleka pomešati u blenderu sa 5g cimeta, 5g vanile ili 20ml bademovog mleka sa vanilom, 1 kašikom kokosovog proteina.</p>\\r\\n<!--StartFragment--><!--EndFragment-->\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Napitak sa cimetom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"bademovo mleko\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"cimet\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"vanila\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"kokosov protein\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4922",
+                                        "recipe_thumbnail_media_id": "4922"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4922,
+                                        "post_title": "Smoothie_kokos_belanca_mleko-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4766_1759539741251.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6174,
+                                "term_id": 6174,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5953,
+                                "term": {
+                                    "name": "Pasta od leblebija",
+                                    "date": "2025-10-04T01:31:51.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci:</strong></p>\r\n<ol>\r\n<li>pasta od leblebija 80g</li>\r\n<li>pečurke</li>\r\n<li>paradajz</li>\r\n<li>tikvica ili patlidžan</li>\r\n<li>paprika</li>\r\n<li>luk</li>\r\n<li>paradajz sok bez šećera </li>\r\n<li>biljni začini (peršun, origano)</li>\r\n<li>maslinovo ulje</li>\r\n<li>beli luk (može i u prahu)</li>\r\n<li>veganski parmezan 5g</li>\r\n<li>semenke bundeve 10g</li>\r\n</ol>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Pastu od leblebija (kupiti u DM ili Merkatoru) skuvati i umešati sa povrćem: pečurke, paradajz, tikvica ili patlidžan, paprika, luk (sve dinstati sitno seckano sa malo paradajz soka bez šećera DMbio ili napraviti domaći) + dodati biljne začine po želji (peršun, origano), maslonovo ulje, beli luk (može i u prahu). </p>\r\n<p>Preko staviti 5g veganskog parmezana ( recept se nalazi u odeljku ,,recepti koje ćeš voleti,, - namazi i prelivi ), dodati semenke bundeve 10g. Porcija 150g.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci:</strong></p>\\r\\n<ol>\\r\\n<li>pasta od leblebija 80g</li>\\r\\n<li>pečurke</li>\\r\\n<li>paradajz</li>\\r\\n<li>tikvica ili patlidžan</li>\\r\\n<li>paprika</li>\\r\\n<li>luk</li>\\r\\n<li>paradajz sok bez šećera </li>\\r\\n<li>biljni začini (peršun, origano)</li>\\r\\n<li>maslinovo ulje</li>\\r\\n<li>beli luk (može i u prahu)</li>\\r\\n<li>veganski parmezan 5g</li>\\r\\n<li>semenke bundeve 10g</li>\\r\\n</ol>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Pastu od leblebija (kupiti u DM ili Merkatoru) skuvati i umešati sa povrćem: pečurke, paradajz, tikvica ili patlidžan, paprika, luk (sve dinstati sitno seckano sa malo paradajz soka bez šećera DMbio ili napraviti domaći) + dodati biljne začine po želji (peršun, origano), maslonovo ulje, beli luk (može i u prahu). </p>\\r\\n<p>Preko staviti 5g veganskog parmezana ( recept se nalazi u odeljku ,,recepti koje ćeš voleti,, - namazi i prelivi ), dodati semenke bundeve 10g. Porcija 150g.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Pasta od leblebija",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"pasta od leblebija\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"pečurke\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"paradajz\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"tikvica\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"paprika\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"luk\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"paradajz sok\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":8,\"foodName\":\"biljni začini\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":9,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":10,\"foodName\":\"beli luk\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":11,\"foodName\":\"veganski parmezan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":12,\"foodName\":\"semenke bundeve\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":13,\"foodName\":\"patlidžan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4923",
+                                        "recipe_thumbnail_media_id": "4923"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4923,
+                                        "post_title": "Testenina_od_leblebije-cropped.JPG",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4767_1759539744282.JPG",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6175,
+                                "term_id": 6175,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5953,
+                                "term": {
+                                    "name": "Hidratacija",
+                                    "date": "2025-10-04T01:31:51.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit;\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\r\n<p style=\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol style=\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">voda</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">biljni čaj</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">rastvor Colagen Peptana</span></li>\r\n</ol>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit;\\\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\\r\\n<p style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\"> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\">\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">voda</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">biljni čaj</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">rastvor Colagen Peptana</span></li>\\r\\n</ol>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Hidratacija",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"voda\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"biljni čaj\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"rastvor Colagen Peptan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4924",
+                                        "recipe_thumbnail_media_id": "4924"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4924,
+                                        "post_title": "daria-nepriakhina-LsgZo1sUPKc-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4769_1759539744471.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "dayNumber": 54,
+                "nutritionPlanDayMeals": [
+                    {
+                        "id": 5954,
+                        "post_type": "nutrition_plan_meal",
+                        "post_title": "POSNI DAN",
+                        "post_content": "<p>DAN ODMORA ILI KARDIO DAN</p>",
+                        "menu_order": 1,
+                        "post_parent": 5904,
+                        "referencedMedia": [
+                            {
+                                "id": 4926,
+                                "post_content": "/storage/company-1/user-1/media/meal_4925_1759539744632.jpg",
+                                "PostMeta": {
+                                    "meta_id": 19109,
+                                    "post_id": 5954,
+                                    "meta_key": "meal_thumbnail_media_id",
+                                    "meta_value": "4926"
+                                }
+                            }
+                        ],
+                        "meta": [
+                            {
+                                "meta_id": 19105,
+                                "post_id": 5954,
+                                "meta_key": "description",
+                                "meta_value": "{\"text\":\"<p>DAN ODMORA ILI KARDIO DAN</p>\",\"editorState\":\"{\\\"root\\\":{\\\"children\\\":[{\\\"children\\\":[{\\\"detail\\\":0,\\\"format\\\":0,\\\"mode\\\":\\\"normal\\\",\\\"style\\\":\\\"\\\",\\\"text\\\":\\\"<p>DAN ODMORA ILI KARDIO DAN</p>\\\",\\\"type\\\":\\\"text\\\",\\\"version\\\":1}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"paragraph\\\",\\\"version\\\":1,\\\"textFormat\\\":0,\\\"textStyle\\\":\\\"\\\"}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"root\\\",\\\"version\\\":1}}\"}"
+                            },
+                            {
+                                "meta_id": 19106,
+                                "post_id": 5954,
+                                "meta_key": "day",
+                                "meta_value": "54"
+                            },
+                            {
+                                "meta_id": 19107,
+                                "post_id": 5954,
+                                "meta_key": "menu_order",
+                                "meta_value": "1"
+                            },
+                            {
+                                "meta_id": 19108,
+                                "post_id": 5954,
+                                "meta_key": "meal",
+                                "meta_value": "4926"
+                            },
+                            {
+                                "meta_id": 19109,
+                                "post_id": 5954,
+                                "meta_key": "meal_thumbnail_media_id",
+                                "meta_value": "4926"
+                            },
+                            {
+                                "meta_id": 19110,
+                                "post_id": 5954,
+                                "meta_key": "day",
+                                "meta_value": "54"
+                            }
+                        ],
+                        "mealRecipes": [
+                            {
+                                "term_taxonomy_id": 6176,
+                                "term_id": 6176,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5954,
+                                "term": {
+                                    "name": "Ceđeni limun sa vodom",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>pola limuna</li>\r\n<li>voda</li>\r\n</ol>\r\n<p><strong>Priprema: </strong>Iscediti pola limuna i doliti vodu do ukupno 3 do 4dl.</p>\r\n<p><!--StartFragment--><br><!--EndFragment--></p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>pola limuna</li>\\r\\n<li>voda</li>\\r\\n</ol>\\r\\n<p><strong>Priprema: </strong>Iscediti pola limuna i doliti vodu do ukupno 3 do 4dl.</p>\\r\\n<p><!--StartFragment--><br><!--EndFragment--></p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Ceđeni limun sa vodom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"limun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4927",
+                                        "recipe_thumbnail_media_id": "4927"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4927,
+                                        "post_title": "joanna-kosinska-Ym62ahWQtjY-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4770_1759539744817.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6177,
+                                "term_id": 6177,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5954,
+                                "term": {
+                                    "name": "Tortilja sa gvakamole namazom",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci:</strong></p>\r\n<ol>\r\n<li>avokado</li>\r\n<li>paprika</li>\r\n<li>paradajz</li>\r\n<li>maslinovo ulje</li>\r\n<li>crveni luk</li>\r\n<li>kinoa 200g</li>\r\n<li>voda 200ml</li>\r\n<li>laneno seme 100g</li>\r\n<li>seme bundeve 50g</li>\r\n</ol>\r\n<p> </p>\r\n<p><strong>Priprema: </strong>Gvalamole: Avokado, sitno seckana paprika, sitno seckani paradajz, maslinovo ulje, crveni luk, sve izgnječiti i zajedno sjedniti (ili u blenderu).</p>\r\n<p><strong>Tortilja: </strong>kinoa i voda (izmiksati u blenderu 200g kinoe, 100g laneno semena, 50g sirovog semena bundeve, i 200ml vode, maslinovo ulje. Razvući između dva pek papira, iseći na trouglove pa trouglove ispeći u rerni na pek papiru.</p>\r\n<p>Nakon pečenja preliti maslinovim uljem pa jesti uz gvakamole Porcija 200g.</p>\r\n<!--StartFragment--><!--EndFragment-->",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci:</strong></p>\\r\\n<ol>\\r\\n<li>avokado</li>\\r\\n<li>paprika</li>\\r\\n<li>paradajz</li>\\r\\n<li>maslinovo ulje</li>\\r\\n<li>crveni luk</li>\\r\\n<li>kinoa 200g</li>\\r\\n<li>voda 200ml</li>\\r\\n<li>laneno seme 100g</li>\\r\\n<li>seme bundeve 50g</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><strong>Priprema: </strong>Gvalamole: Avokado, sitno seckana paprika, sitno seckani paradajz, maslinovo ulje, crveni luk, sve izgnječiti i zajedno sjedniti (ili u blenderu).</p>\\r\\n<p><strong>Tortilja: </strong>kinoa i voda (izmiksati u blenderu 200g kinoe, 100g laneno semena, 50g sirovog semena bundeve, i 200ml vode, maslinovo ulje. Razvući između dva pek papira, iseći na trouglove pa trouglove ispeći u rerni na pek papiru.</p>\\r\\n<p>Nakon pečenja preliti maslinovim uljem pa jesti uz gvakamole Porcija 200g.</p>\\r\\n<!--StartFragment--><!--EndFragment-->\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Tortilja sa gvakamole namazom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"avokado\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"paprika\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"paradajz\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"crveni luk\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"kinoa\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"laneno seme\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":8,\"foodName\":\"seme bundeve\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4928",
+                                        "recipe_thumbnail_media_id": "4928"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4928,
+                                        "post_title": "Edamame_Hummus_Veggie_Wraps-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4771_1759539744996.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6178,
+                                "term_id": 6178,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5954,
+                                "term": {
+                                    "name": "Potaž od bundeve",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>bundeva</li>\r\n<li>crni luk</li>\r\n<li>indijski orah 50g</li>\r\n<li>semenke bundeve ili suncokreta 30g</li>\r\n<li>kalijumska so</li>\r\n<li>maslinovo ulje</li>\r\n<li>beli luk u prahu</li>\r\n<li>peršun</li>\r\n<li>mirođija</li>\r\n<li>hleb od orašastih plodova (parče)</li>\r\n</ol>\r\n<p> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema:  </strong></p>\r\n<p>Bundevu ispeći ili skuvati, sa crnim lukom. U blenderu pasirati bez kore, sa dodatkom 50g indijskog oraha, 30g semenki bundeve ili suncokreta, maslinovog ulja, bibera, belog luka u prahu po želji, peršuna, mirođije po želji.</p>\r\n<p>Jesti uz parče hleba od orašastih plodova.</p>\r\n<p>Porcija za užinu 300ml.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>bundeva</li>\\r\\n<li>crni luk</li>\\r\\n<li>indijski orah 50g</li>\\r\\n<li>semenke bundeve ili suncokreta 30g</li>\\r\\n<li>kalijumska so</li>\\r\\n<li>maslinovo ulje</li>\\r\\n<li>beli luk u prahu</li>\\r\\n<li>peršun</li>\\r\\n<li>mirođija</li>\\r\\n<li>hleb od orašastih plodova (parče)</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema:  </strong></p>\\r\\n<p>Bundevu ispeći ili skuvati, sa crnim lukom. U blenderu pasirati bez kore, sa dodatkom 50g indijskog oraha, 30g semenki bundeve ili suncokreta, maslinovog ulja, bibera, belog luka u prahu po želji, peršuna, mirođije po želji.</p>\\r\\n<p>Jesti uz parče hleba od orašastih plodova.</p>\\r\\n<p>Porcija za užinu 300ml.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Potaž od bundeve",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"bundeva\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"crni luk\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"indijski orah\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"semenke\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"kalijumska so\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"biber\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":8,\"foodName\":\"beli luk u prahu\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":9,\"foodName\":\"peršun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":10,\"foodName\":\"mirođija\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":11,\"foodName\":\"hleb\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4929",
+                                        "recipe_thumbnail_media_id": "4929"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4929,
+                                        "post_title": "jezebel-rose-KGw62KtHzxA-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4772_1759539745176.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6179,
+                                "term_id": 6179,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5954,
+                                "term": {
+                                    "name": "Šejk kokosov protein - bobičasto voće",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\"><strong>Sastojci:</strong></span></p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol>\r\n<li>kokosovo mleko 2dl</li>\r\n<li>kašika kokosovog proteina</li>\r\n<li>bobičasto voće 100g</li>\r\n</ol>\r\n<p>Priprema: Sjediniti sve u blenderu.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\"><strong>Sastojci:</strong></span></p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol>\\r\\n<li>kokosovo mleko 2dl</li>\\r\\n<li>kašika kokosovog proteina</li>\\r\\n<li>bobičasto voće 100g</li>\\r\\n</ol>\\r\\n<p>Priprema: Sjediniti sve u blenderu.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Šejk kokosov protein - bobičasto voće",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"bademovo mleko\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"kokosov protein\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"bobičasto voće\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4930",
+                                        "recipe_thumbnail_media_id": "4930"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4930,
+                                        "post_title": "mor-shani-gZ2CdzkxWRE-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4773_1759539745371.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6180,
+                                "term_id": 6180,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5954,
+                                "term": {
+                                    "name": "Karfiol sa batatom i paradajzom",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>pola avokada</li>\r\n<li>karfiol</li>\r\n<li>palenta od prosa</li>\r\n<li>batat</li>\r\n<li>paradajz sok ili paradajz</li>\r\n<li>listovi bosiljka</li>\r\n</ol>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Umutiti pola avokada mikserom ili u blenderu ( umesto dva jaja ), iseći karfiol na “ploče”, umočiti u avokado, pa u palentu od prosa. Položiti u pleh obložen pek papirom, poređati preko tanke kriške batata, peći 20min na 180 stepeni, a zatim premazati paradajz sokom (pelat bez šećera) ili staviti preko kriške paradajza. Vratiti u rernu na još nekoliko minuta dok se paradajz ne zapeče. Servirati uz listove bosiljka.</p>\r\n<p>Porcija za ručak 200g.</p>\r\n<!--StartFragment--><!--EndFragment-->",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>pola avokada</li>\\r\\n<li>karfiol</li>\\r\\n<li>palenta od prosa</li>\\r\\n<li>batat</li>\\r\\n<li>paradajz sok ili paradajz</li>\\r\\n<li>listovi bosiljka</li>\\r\\n</ol>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Umutiti pola avokada mikserom ili u blenderu ( umesto dva jaja ), iseći karfiol na “ploče”, umočiti u avokado, pa u palentu od prosa. Položiti u pleh obložen pek papirom, poređati preko tanke kriške batata, peći 20min na 180 stepeni, a zatim premazati paradajz sokom (pelat bez šećera) ili staviti preko kriške paradajza. Vratiti u rernu na još nekoliko minuta dok se paradajz ne zapeče. Servirati uz listove bosiljka.</p>\\r\\n<p>Porcija za ručak 200g.</p>\\r\\n<!--StartFragment--><!--EndFragment-->\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Karfiol sa batatom i paradajzom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"avokado\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"karfiol\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"palenta\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"batat\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"paradajz sok\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"paradajz\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"bosiljak\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4931",
+                                        "recipe_thumbnail_media_id": "4931"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4931,
+                                        "post_title": "Cheesy_Cauliflower_Steaks_-_Hungry_Happens-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4774_1759539745552.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6181,
+                                "term_id": 6181,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5954,
+                                "term": {
+                                    "name": "Hidratacija",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit;\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\r\n<p style=\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol style=\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">voda</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">biljni čaj</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">rastvor Colagen Peptana</span></li>\r\n</ol>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit;\\\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\\r\\n<p style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\"> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\">\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">voda</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">biljni čaj</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">rastvor Colagen Peptana</span></li>\\r\\n</ol>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Hidratacija",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"voda\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"biljni čaj\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"rastvor Colagen Peptan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4932",
+                                        "recipe_thumbnail_media_id": "4932"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4932,
+                                        "post_title": "1674994337513-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4775_1759539745734.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "dayNumber": 55,
+                "nutritionPlanDayMeals": [
+                    {
+                        "id": 5955,
+                        "post_type": "nutrition_plan_meal",
+                        "post_title": "POSNI DAN",
+                        "post_content": "<p>DAN TRENINGA</p>",
+                        "menu_order": 1,
+                        "post_parent": 5904,
+                        "referencedMedia": [
+                            {
+                                "id": 4934,
+                                "post_content": "/storage/company-1/user-1/media/meal_4933_1759539745892.png",
+                                "PostMeta": {
+                                    "meta_id": 19115,
+                                    "post_id": 5955,
+                                    "meta_key": "meal_thumbnail_media_id",
+                                    "meta_value": "4934"
+                                }
+                            }
+                        ],
+                        "meta": [
+                            {
+                                "meta_id": 19111,
+                                "post_id": 5955,
+                                "meta_key": "description",
+                                "meta_value": "{\"text\":\"<p>DAN TRENINGA</p>\",\"editorState\":\"{\\\"root\\\":{\\\"children\\\":[{\\\"children\\\":[{\\\"detail\\\":0,\\\"format\\\":0,\\\"mode\\\":\\\"normal\\\",\\\"style\\\":\\\"\\\",\\\"text\\\":\\\"<p>DAN TRENINGA</p>\\\",\\\"type\\\":\\\"text\\\",\\\"version\\\":1}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"paragraph\\\",\\\"version\\\":1,\\\"textFormat\\\":0,\\\"textStyle\\\":\\\"\\\"}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"root\\\",\\\"version\\\":1}}\"}"
+                            },
+                            {
+                                "meta_id": 19112,
+                                "post_id": 5955,
+                                "meta_key": "day",
+                                "meta_value": "55"
+                            },
+                            {
+                                "meta_id": 19113,
+                                "post_id": 5955,
+                                "meta_key": "menu_order",
+                                "meta_value": "1"
+                            },
+                            {
+                                "meta_id": 19114,
+                                "post_id": 5955,
+                                "meta_key": "meal",
+                                "meta_value": "4934"
+                            },
+                            {
+                                "meta_id": 19115,
+                                "post_id": 5955,
+                                "meta_key": "meal_thumbnail_media_id",
+                                "meta_value": "4934"
+                            },
+                            {
+                                "meta_id": 19116,
+                                "post_id": 5955,
+                                "meta_key": "day",
+                                "meta_value": "55"
+                            }
+                        ],
+                        "mealRecipes": [
+                            {
+                                "term_taxonomy_id": 6182,
+                                "term_id": 6182,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5955,
+                                "term": {
+                                    "name": "Ceđeni limun sa vodom",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>pola limuna</li>\r\n<li>voda</li>\r\n</ol>\r\n<p>Priprema: Iscediti pola limuna i doliti vodu do ukupno 3dl</p>\r\n<p><!--StartFragment--><br><!--EndFragment--></p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>pola limuna</li>\\r\\n<li>voda</li>\\r\\n</ol>\\r\\n<p>Priprema: Iscediti pola limuna i doliti vodu do ukupno 3dl</p>\\r\\n<p><!--StartFragment--><br><!--EndFragment--></p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Ceđeni limun sa vodom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"limun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4935",
+                                        "recipe_thumbnail_media_id": "4935"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4935,
+                                        "post_title": "limun-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4776_1759539746070.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6183,
+                                "term_id": 6183,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5955,
+                                "term": {
+                                    "name": "Namaz od avokada (gvakamole)",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><strong><span style=\"box-sizing: inherit;\">Sastojci:</span><span style=\"box-sizing: inherit; touch-action: manipulation;\"> </span></strong></p>\r\n<ol>\r\n<li>1 šnit hleba od orašastih plodova</li>\r\n<li>1 manji avokado (pola većeg)</li>\r\n<li>beli luk u prahu</li>\r\n<li>mladi luk</li>\r\n<li>crvena paprika (malo)</li>\r\n<li>maslinovo ulje (malo)</li>\r\n<li>kalijumska so</li>\r\n<li>peršun</li>\r\n</ol>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p>Priprema: </p>\r\n<p>Namaz od avokada (gvakamole) namazati preko 2 šnite hleba od orašastih plodova. 1 kašika namaza po parčetu.</p>\r\n<p>Gvakamole: izgnječiti ili u blenderu umikasti pola većeg ili 1 manji avokado, sa 1 crvenim lukom ili percima mladog luka, malo crvene paprike, malo maslinovog ulja, kalijumskom solju i peršunom.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><strong><span style=\\\"box-sizing: inherit;\\\">Sastojci:</span><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\"> </span></strong></p>\\r\\n<ol>\\r\\n<li>1 šnit hleba od orašastih plodova</li>\\r\\n<li>1 manji avokado (pola većeg)</li>\\r\\n<li>beli luk u prahu</li>\\r\\n<li>mladi luk</li>\\r\\n<li>crvena paprika (malo)</li>\\r\\n<li>maslinovo ulje (malo)</li>\\r\\n<li>kalijumska so</li>\\r\\n<li>peršun</li>\\r\\n</ol>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p>Priprema: </p>\\r\\n<p>Namaz od avokada (gvakamole) namazati preko 2 šnite hleba od orašastih plodova. 1 kašika namaza po parčetu.</p>\\r\\n<p>Gvakamole: izgnječiti ili u blenderu umikasti pola većeg ili 1 manji avokado, sa 1 crvenim lukom ili percima mladog luka, malo crvene paprike, malo maslinovog ulja, kalijumskom solju i peršunom.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Namaz od avokada (gvakamole)",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"hleb\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"avokado\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"beli luk u prahu\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"mladi luk\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"crvena paprika\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"kalijumska so\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":8,\"foodName\":\"peršun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4936",
+                                        "recipe_thumbnail_media_id": "4936"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4936,
+                                        "post_title": "takos-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4777_1759539746250.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6184,
+                                "term_id": 6184,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5955,
+                                "term": {
+                                    "name": "Voće i lešnici",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci:</strong></p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol>\r\n<li>voćka ili mešano voće 200g ukupno</li>\r\n<li>šaka lešnika 30g</li>\r\n</ol>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci:</strong></p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol>\\r\\n<li>voćka ili mešano voće 200g ukupno</li>\\r\\n<li>šaka lešnika 30g</li>\\r\\n</ol>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Voće i lešnici",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"voće\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"lešnik\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4937",
+                                        "recipe_thumbnail_media_id": "4937"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4937,
+                                        "post_title": "IMG_3501-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4778_1759539746432.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6185,
+                                "term_id": 6185,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5955,
+                                "term": {
+                                    "name": "Smoothie jabuka-cimet",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>1 zelena jabuka</li>\r\n<li>cimet (malo)</li>\r\n<li>bademovo mleko 2dl</li>\r\n<li>šaka badema 30g</li>\r\n</ol>\r\n<p> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p>Priprema: U blenderu sjediniti sve sastojke.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>1 zelena jabuka</li>\\r\\n<li>cimet (malo)</li>\\r\\n<li>bademovo mleko 2dl</li>\\r\\n<li>šaka badema 30g</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p>Priprema: U blenderu sjediniti sve sastojke.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Smoothie jabuka-cimet",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"bademovo mleko\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"zelena jabuka\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"cimet\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"bademi\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4938",
+                                        "recipe_thumbnail_media_id": "4938"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4938,
+                                        "post_title": "Apple_Pie_Oat_Smoothie-cropped.png",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4779_1759539746606.png",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6186,
+                                "term_id": 6186,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5955,
+                                "term": {
+                                    "name": "Potaž od bundeve",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><strong><span style=\"box-sizing: inherit;\">Sastojci:</span><span style=\"box-sizing: inherit; touch-action: manipulation;\"> </span></strong></p>\r\n<ol>\r\n<li>bundeva</li>\r\n<li>crni luk</li>\r\n<li>indijski orah 50g</li>\r\n<li>semenke bundeve ili suncokreta 30g</li>\r\n<li>kalijumska so</li>\r\n<li>maslinovo ulje</li>\r\n<li>beli luk u prahu</li>\r\n<li>peršun</li>\r\n<li>mirođija</li>\r\n<li>hleb od orašastih plodova (parče)</li>\r\n</ol>\r\n<p> </p>\r\n<p> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p>Priprema:  </p>\r\n<p>Bundevu ispeći ili skuvati, sa crnim lukom. U blenderu pasirati bez kore, sa dodatkom 50g indijskog oraha, 30g semenki bundeve ili suncokreta, maslinovog ulja, bibera, belog luka u prahu po želji, peršuna, mirođije po želji.</p>\r\n<p>Jesti uz parče hleba od orašastih plodova.</p>\r\n<p>Porcija za užinu 300ml.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><strong><span style=\\\"box-sizing: inherit;\\\">Sastojci:</span><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\"> </span></strong></p>\\r\\n<ol>\\r\\n<li>bundeva</li>\\r\\n<li>crni luk</li>\\r\\n<li>indijski orah 50g</li>\\r\\n<li>semenke bundeve ili suncokreta 30g</li>\\r\\n<li>kalijumska so</li>\\r\\n<li>maslinovo ulje</li>\\r\\n<li>beli luk u prahu</li>\\r\\n<li>peršun</li>\\r\\n<li>mirođija</li>\\r\\n<li>hleb od orašastih plodova (parče)</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p>Priprema:  </p>\\r\\n<p>Bundevu ispeći ili skuvati, sa crnim lukom. U blenderu pasirati bez kore, sa dodatkom 50g indijskog oraha, 30g semenki bundeve ili suncokreta, maslinovog ulja, bibera, belog luka u prahu po želji, peršuna, mirođije po želji.</p>\\r\\n<p>Jesti uz parče hleba od orašastih plodova.</p>\\r\\n<p>Porcija za užinu 300ml.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Potaž od bundeve",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"bundeva\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"crni luk\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"indijski orah\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"semenke\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"kalijumska so\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"biber\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":8,\"foodName\":\"beli luk u prahu\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":9,\"foodName\":\"peršun\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":10,\"foodName\":\"mirođija\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":11,\"foodName\":\"hleb\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4939",
+                                        "recipe_thumbnail_media_id": "4939"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4939,
+                                        "post_title": "jezebel-rose-KGw62KtHzxA-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4780_1759539746800.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6187,
+                                "term_id": 6187,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5955,
+                                "term": {
+                                    "name": "Hidratacija",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit;\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\r\n<p style=\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol style=\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">voda</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">biljni čaj</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">rastvor Colagen Peptana</span></li>\r\n</ol>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit;\\\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\\r\\n<p style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\"> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\">\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">voda</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">biljni čaj</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">rastvor Colagen Peptana</span></li>\\r\\n</ol>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Hidratacija",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"voda\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"biljni čaj\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"rastvor Colagen Peptan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4940",
+                                        "recipe_thumbnail_media_id": "4940"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4940,
+                                        "post_title": "1674994337513-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4781_1759539746981.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "dayNumber": 56,
+                "nutritionPlanDayMeals": [
+                    {
+                        "id": 5956,
+                        "post_type": "nutrition_plan_meal",
+                        "post_title": "POSNI DAN",
+                        "post_content": "<p>DAN TRENINGA</p>",
+                        "menu_order": 1,
+                        "post_parent": 5904,
+                        "referencedMedia": [
+                            {
+                                "id": 4942,
+                                "post_content": "/storage/company-1/user-1/media/meal_4941_1759539747139.jpg",
+                                "PostMeta": {
+                                    "meta_id": 19121,
+                                    "post_id": 5956,
+                                    "meta_key": "meal_thumbnail_media_id",
+                                    "meta_value": "4942"
+                                }
+                            }
+                        ],
+                        "meta": [
+                            {
+                                "meta_id": 19117,
+                                "post_id": 5956,
+                                "meta_key": "description",
+                                "meta_value": "{\"text\":\"<p>DAN TRENINGA</p>\",\"editorState\":\"{\\\"root\\\":{\\\"children\\\":[{\\\"children\\\":[{\\\"detail\\\":0,\\\"format\\\":0,\\\"mode\\\":\\\"normal\\\",\\\"style\\\":\\\"\\\",\\\"text\\\":\\\"<p>DAN TRENINGA</p>\\\",\\\"type\\\":\\\"text\\\",\\\"version\\\":1}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"paragraph\\\",\\\"version\\\":1,\\\"textFormat\\\":0,\\\"textStyle\\\":\\\"\\\"}],\\\"direction\\\":\\\"ltr\\\",\\\"format\\\":\\\"\\\",\\\"indent\\\":0,\\\"type\\\":\\\"root\\\",\\\"version\\\":1}}\"}"
+                            },
+                            {
+                                "meta_id": 19118,
+                                "post_id": 5956,
+                                "meta_key": "day",
+                                "meta_value": "56"
+                            },
+                            {
+                                "meta_id": 19119,
+                                "post_id": 5956,
+                                "meta_key": "menu_order",
+                                "meta_value": "1"
+                            },
+                            {
+                                "meta_id": 19120,
+                                "post_id": 5956,
+                                "meta_key": "meal",
+                                "meta_value": "4942"
+                            },
+                            {
+                                "meta_id": 19121,
+                                "post_id": 5956,
+                                "meta_key": "meal_thumbnail_media_id",
+                                "meta_value": "4942"
+                            },
+                            {
+                                "meta_id": 19122,
+                                "post_id": 5956,
+                                "meta_key": "day",
+                                "meta_value": "56"
+                            }
+                        ],
+                        "mealRecipes": [
+                            {
+                                "term_taxonomy_id": 6188,
+                                "term_id": 6188,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5956,
+                                "term": {
+                                    "name": "Ceđeni crveni grejpfrut sa vodom",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci:</strong></p>\r\n<ol>\r\n<li>jedan crveni grejpfrut</li>\r\n<li>voda</li>\r\n</ol>\r\n<p>Priprema: Iscediti crveni grejpfrut i doliti vodu do ukupno 3 do 4dl.</p>\r\n<p><!--StartFragment--><br><!--EndFragment--></p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci:</strong></p>\\r\\n<ol>\\r\\n<li>jedan crveni grejpfrut</li>\\r\\n<li>voda</li>\\r\\n</ol>\\r\\n<p>Priprema: Iscediti crveni grejpfrut i doliti vodu do ukupno 3 do 4dl.</p>\\r\\n<p><!--StartFragment--><br><!--EndFragment--></p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Ceđeni crveni grejpfrut sa vodom",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"crveni grejpfrut\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4943",
+                                        "recipe_thumbnail_media_id": "4943"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4943,
+                                        "post_title": "divyansh-sharma-GfIyosn6FI4-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4782_1759539747316.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6189,
+                                "term_id": 6189,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5956,
+                                "term": {
+                                    "name": "Humus",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci za porciju: </strong></p>\r\n<ol>\r\n<li>humus 60g</li>\r\n<li>golica bundeve - 1 kašičica</li>\r\n<li>suncokret - 1 kašičica</li>\r\n<li>integralni susam - 1 kašičica</li>\r\n<li>krastavac 1</li>\r\n<li>celer - list</li>\r\n<li>1 parče preporučenog hleba od orašastih plodova</li>\r\n</ol>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Humus obogaćen golicom, suncokretom, integralnim susamom premazati preko 1 parčeta preporučenog hleba od orašastih plodova i preko staviti krastavac i celer.</p>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci za porciju: </strong></p>\\r\\n<ol>\\r\\n<li>humus 60g</li>\\r\\n<li>golica bundeve - 1 kašičica</li>\\r\\n<li>suncokret - 1 kašičica</li>\\r\\n<li>integralni susam - 1 kašičica</li>\\r\\n<li>krastavac 1</li>\\r\\n<li>celer - list</li>\\r\\n<li>1 parče preporučenog hleba od orašastih plodova</li>\\r\\n</ol>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Humus obogaćen golicom, suncokretom, integralnim susamom premazati preko 1 parčeta preporučenog hleba od orašastih plodova i preko staviti krastavac i celer.</p>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Humus",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"humus\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"golica\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"suncokret\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"susam\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"krastavac\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"celer\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"hleb\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4944",
+                                        "recipe_thumbnail_media_id": "4944"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4944,
+                                        "post_title": "IMG_1702-cropped.JPG",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4783_1759539747499.JPG",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6190,
+                                "term_id": 6190,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5956,
+                                "term": {
+                                    "name": "Pečena bundeva + šaka badema",
+                                    "date": "2025-10-04T01:31:52.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci:</strong></p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol>\r\n<li>pečena bundeva 100g bez kore</li>\r\n<li>šaka badema 30g</li>\r\n</ol>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci:</strong></p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol>\\r\\n<li>pečena bundeva 100g bez kore</li>\\r\\n<li>šaka badema 30g</li>\\r\\n</ol>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Pečena bundeva + šaka badema",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"bundeva\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"badem\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4945",
+                                        "recipe_thumbnail_media_id": "4945"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4945,
+                                        "post_title": "1675289274682-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4784_1759539747674.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6191,
+                                "term_id": 6191,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5956,
+                                "term": {
+                                    "name": "Čoko kuglice",
+                                    "date": "2025-10-04T01:31:53.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci: </strong></p>\r\n<ol>\r\n<li>urme</li>\r\n<li>orah ili badem ili lešnik 100g</li>\r\n<li>kakao ili crna čokolada</li>\r\n</ol>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>U blenderu sjediniti nekoliko urmi (bez dodatog šećera, bez koštice), orah ili badem ili lešnik oko 100g, kakao ili crna čokolada (2 kašike ili 2 kocke minimum 70 % kakao bez dodatog šećera). Napraviti gustu lepljivu masu, formirati kuglice, staviti badem u sredinu i uvaljati u mleveni orah, badem ili lešnik.</p>\r\n<p>Porcija za užinu 2  kuglice (uk.30 do 40g)</p>\r\n<!--StartFragment--><!--EndFragment-->",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci: </strong></p>\\r\\n<ol>\\r\\n<li>urme</li>\\r\\n<li>orah ili badem ili lešnik 100g</li>\\r\\n<li>kakao ili crna čokolada</li>\\r\\n</ol>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>U blenderu sjediniti nekoliko urmi (bez dodatog šećera, bez koštice), orah ili badem ili lešnik oko 100g, kakao ili crna čokolada (2 kašike ili 2 kocke minimum 70 % kakao bez dodatog šećera). Napraviti gustu lepljivu masu, formirati kuglice, staviti badem u sredinu i uvaljati u mleveni orah, badem ili lešnik.</p>\\r\\n<p>Porcija za užinu 2  kuglice (uk.30 do 40g)</p>\\r\\n<!--StartFragment--><!--EndFragment-->\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Čoko kuglice",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"urme\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"orasi\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"bademi\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"lešnici\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"kakao\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"crna čokolada\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4946",
+                                        "recipe_thumbnail_media_id": "4946"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4946,
+                                        "post_title": "coko_kuglice-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4785_1759539747871.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6192,
+                                "term_id": 6192,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5956,
+                                "term": {
+                                    "name": "Grilovane pečurke",
+                                    "date": "2025-10-04T01:31:53.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p><strong>Sastojci za porciju:</strong></p>\r\n<ol>\r\n<li>pečurke 200g - šampinjoni ili bukovača </li>\r\n<li>kokosovo ulje</li>\r\n<li>origano</li>\r\n<li>peršun</li>\r\n<li>maslinovo ulje</li>\r\n<li>patlidžan 100g</li>\r\n<li>biber</li>\r\n<li>crveni kupus 100g ILI sveža zelena salata 100g</li>\r\n<li>rotkvice</li>\r\n</ol>\r\n<p> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<p><strong>Priprema: </strong></p>\r\n<p>Pečurke grilujte na malo kokosovog ulja, a zatim dodajte biber, origano, peršun, maslinovo ulje. </p>\r\n<p>Jesti uz grilovani patlidžan iseckan na kolutove, kupus salatu 100g i rotkvice 5kom.</p>\r\n<!--StartFragment--><!--EndFragment-->",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p><strong>Sastojci za porciju:</strong></p>\\r\\n<ol>\\r\\n<li>pečurke 200g - šampinjoni ili bukovača </li>\\r\\n<li>kokosovo ulje</li>\\r\\n<li>origano</li>\\r\\n<li>peršun</li>\\r\\n<li>maslinovo ulje</li>\\r\\n<li>patlidžan 100g</li>\\r\\n<li>biber</li>\\r\\n<li>crveni kupus 100g ILI sveža zelena salata 100g</li>\\r\\n<li>rotkvice</li>\\r\\n</ol>\\r\\n<p> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<p><strong>Priprema: </strong></p>\\r\\n<p>Pečurke grilujte na malo kokosovog ulja, a zatim dodajte biber, origano, peršun, maslinovo ulje. </p>\\r\\n<p>Jesti uz grilovani patlidžan iseckan na kolutove, kupus salatu 100g i rotkvice 5kom.</p>\\r\\n<!--StartFragment--><!--EndFragment-->\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Grilovane pečurke",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"pečurke\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"patlidžan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"kokosovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":4,\"foodName\":\"origano\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":5,\"foodName\":\"sveža salata po izboru\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":6,\"foodName\":\"peršun\",\"measurement\":\"gram\",\"servings\":\"1\",\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":7,\"foodName\":\"maslinovo ulje\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":8,\"foodName\":\"biber\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":9,\"foodName\":\"rotkvice\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":10,\"foodName\":\"crveni kupus\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4947",
+                                        "recipe_thumbnail_media_id": "4947"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4947,
+                                        "post_title": "Grilled_Vegetables_(with_Best_Marinade)-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4786_1759539748052.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            },
+                            {
+                                "term_taxonomy_id": 6193,
+                                "term_id": 6193,
+                                "taxonomy": "meal_recipe",
+                                "description": null,
+                                "post_parent": 5956,
+                                "term": {
+                                    "name": "Hidratacija",
+                                    "date": "2025-10-04T01:31:53.000Z",
+                                    "meta": {
+                                        "description": {
+                                            "text": "<p style=\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit;\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\r\n<p style=\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"> </p>\r\n<p><!--StartFragment--><!--EndFragment--></p>\r\n<ol style=\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">voda</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">biljni čaj</span></li>\r\n<li style=\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\"><span style=\"box-sizing: inherit; touch-action: manipulation;\">rastvor Colagen Peptana</span></li>\r\n</ol>",
+                                            "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"<p style=\\\"box-sizing: border-box; touch-action: manipulation; margin: 0px 0px 10px; padding: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; border: 0px; outline: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit;\\\">Nakon poslednjeg obroka, hidratacija do ujutru:</span></p>\\r\\n<p style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 0px; padding: 0px; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\"> </p>\\r\\n<p><!--StartFragment--><!--EndFragment--></p>\\r\\n<ol style=\\\"box-sizing: inherit; touch-action: manipulation; margin: 1em 0px 0px 2em; padding: 0px; list-style-position: outside; list-style-type: decimal; orphans: 2; text-align: left; text-indent: 0px; widows: 2; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\\\">\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">voda</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">biljni čaj</span></li>\\r\\n<li style=\\\"font-variant-numeric: inherit; font-variant-east-asian: inherit; box-sizing: border-box; touch-action: manipulation; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-stretch: inherit; line-height: inherit; vertical-align: baseline;\\\"><span style=\\\"box-sizing: inherit; touch-action: manipulation;\\\">rastvor Colagen Peptana</span></li>\\r\\n</ol>\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
+                                        },
+                                        "content": "Hidratacija",
+                                        "ingredients": "[{\"order\":1,\"foodName\":\"voda\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":2,\"foodName\":\"biljni čaj\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0},{\"order\":3,\"foodName\":\"rastvor Colagen Peptan\",\"measurement\":\"gram\",\"servings\":1,\"calories\":0,\"protein\":0,\"carbs\":0,\"fat\":0}]",
+                                        "recipe": "4948",
+                                        "recipe_thumbnail_media_id": "4948"
+                                    }
+                                },
+                                "parentTaxonomy": null,
+                                "alternativeExercises": [],
+                                "media": {
+                                    "recipe_thumbnail_media_id": {
+                                        "id": 4948,
+                                        "post_title": "daria-nepriakhina-LsgZo1sUPKc-unsplash-cropped.jpg",
+                                        "post_content": "/storage/company-1/user-1/media/recipe_4787_1759539748229.jpg",
+                                        "post_mime_type": "image"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "imageUri": null
+    }
+}

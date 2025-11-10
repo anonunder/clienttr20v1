@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { darkTheme } from '@/styles/theme';
 import { textStyles } from '@/styles/shared-styles';
 import { env } from '@/config/env';
+import { useResponsive } from '@/hooks/use-responsive';
 
 export interface WorkoutExercise {
   term_taxonomy_id: number;
@@ -128,8 +129,36 @@ function ExerciseItem({
   sets: any[];
   onPress: () => void;
 }) {
+  const { isMobile, isTablet, width } = useResponsive();
   const videoRef = useRef<Video>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  
+  // Responsive thumbnail sizing and layout
+  const thumbnailDimensions = useMemo(() => {
+    if (isMobile) {
+      // Full width minus padding (card padding + container padding)
+      const cardPadding = 14 * 2; // left + right padding
+      const containerPadding = 16 * 2; // left + right padding
+      return { width: width - cardPadding - containerPadding, height: 200 }; // Full width on mobile, vertical layout
+    }
+    if (isTablet) {
+      return { width: 280, height: 160 }; // Fixed size on tablet
+    }
+    return { width: 350, height: 200 }; // Larger on desktop
+  }, [isMobile, isTablet, width]);
+  
+  const exerciseContentStyle = useMemo(() => ({
+    flexDirection: isMobile ? 'column' : 'row' as 'row' | 'column',
+    gap: isMobile ? 12 : 12,
+    alignItems: isMobile ? 'stretch' : 'center' as 'center' | 'stretch',
+  }), [isMobile]);
+  
+  const thumbnailContainerStyle = useMemo(() => {
+    if (isMobile) {
+      return { width: '100%' as const, alignSelf: 'stretch' as const };
+    }
+    return {};
+  }, [isMobile]);
 
   const handleVideoPress = () => {
     if (isVideo && videoRef.current) {
@@ -151,9 +180,9 @@ function ExerciseItem({
       onPress={handleVideoPress}
     >
       <Card>
-        <View style={styles.exerciseContent}>
+        <View style={[styles.exerciseContent, exerciseContentStyle]}>
           {/* Exercise Thumbnail/Video */}
-          <View style={styles.exerciseThumbnail}>
+          <View style={[styles.exerciseThumbnail, thumbnailDimensions, thumbnailContainerStyle]}>
             {thumbnailUrl ? (
               <>
                 {isVideo ? (
@@ -195,7 +224,7 @@ function ExerciseItem({
           {/* Exercise Info */}
           <View style={styles.exerciseInfo}>
             <View style={styles.exerciseHeader}>
-              <Text style={styles.exerciseName} numberOfLines={1}>
+              <Text style={styles.exerciseName} numberOfLines={isMobile ? 2 : 1}>
                 {exerciseName}
               </Text>
               <View style={styles.exerciseNumber}>
@@ -204,7 +233,7 @@ function ExerciseItem({
             </View>
             
             {exerciseExcerpt && (
-              <Text style={styles.exerciseDescription} numberOfLines={2}>
+              <Text style={styles.exerciseDescription} numberOfLines={isMobile ? 3 : 2}>
                 {exerciseExcerpt}
               </Text>
             )}
@@ -219,12 +248,14 @@ function ExerciseItem({
             )}
           </View>
 
-          {/* Chevron */}
-          <Ionicons 
-            name="chevron-forward" 
-            size={20} 
-            color={darkTheme.color.mutedForeground} 
-          />
+          {/* Chevron - Only show on non-mobile */}
+          {!isMobile && (
+            <Ionicons 
+              name="chevron-forward" 
+              size={20} 
+              color={darkTheme.color.mutedForeground} 
+            />
+          )}
         </View>
       </Card>
     </Pressable>
@@ -263,14 +294,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   exerciseContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
     padding: 14,
   },
   exerciseThumbnail: {
-    width: 350,
-    height: 200,
     borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: darkTheme.color.bgMuted,
@@ -318,6 +344,7 @@ const styles = StyleSheet.create({
   exerciseInfo: {
     flex: 1,
     gap: 6,
+    width: '100%',
   },
   exerciseHeader: {
     flexDirection: 'row',

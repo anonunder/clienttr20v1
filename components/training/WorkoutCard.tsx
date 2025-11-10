@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
@@ -6,6 +6,7 @@ import { darkTheme } from '@/styles/theme';
 import { textStyles, layoutStyles } from '@/styles/shared-styles';
 import { env } from '@/config/env';
 import { ExerciseList, WorkoutExercise } from './ExerciseList';
+import { useResponsive } from '@/hooks/use-responsive';
 
 interface WorkoutCardProps {
   id: number | string;
@@ -77,17 +78,44 @@ export function WorkoutCard({
   onPress,
   onExercisePress,
 }: WorkoutCardProps) {
+  const { isMobile, isTablet, width } = useResponsive();
   const difficultyStyle = getDifficultyColor(difficulty);
   const imageUrl = getImageUrl(image);
   const hasExercises = workoutExercises && workoutExercises.length > 0;
+  
+  // Responsive image sizing and layout
+  const imageDimensions = useMemo(() => {
+    if (isMobile) {
+      // Full width minus padding (card padding + container padding)
+      const cardPadding = 12 * 2; // left + right padding
+      const containerPadding = 16 * 2; // left + right padding
+      return { width: width - cardPadding - containerPadding, height: 200 }; // Full width on mobile, vertical layout
+    }
+    if (isTablet) {
+      return { width: 250, height: 180 }; // Fixed size on tablet
+    }
+    return { width: 300, height: 200 }; // Larger on desktop
+  }, [isMobile, isTablet, width]);
+  
+  const containerStyle = useMemo(() => ({
+    flexDirection: isMobile ? 'column' : 'row' as 'row' | 'column',
+    gap: isMobile ? 12 : 16,
+  }), [isMobile]);
+  
+  const imageContainerStyle = useMemo(() => {
+    if (isMobile) {
+      return { width: '100%' as const, alignSelf: 'stretch' as const };
+    }
+    return {};
+  }, [isMobile]);
 
   return (
     <View style={styles.wrapper}>
       <Pressable onPress={onPress} style={styles.pressable} disabled={!onPress}>
         <Card>
-          <View style={styles.container}>
+          <View style={[styles.container, containerStyle]}>
             {/* Image */}
-            <View style={styles.imageContainer}>
+            <View style={[styles.imageContainer, imageDimensions, imageContainerStyle]}>
               <Image 
                 source={{ uri: imageUrl }} 
                 style={styles.image}
@@ -161,13 +189,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   container: {
-    flexDirection: 'row',
-    gap: 16,
     overflow: 'hidden',
   },
   imageContainer: {
-    width: 300,
-    height: 200,
     flexShrink: 0,
     overflow: 'hidden',
     borderRadius: 8,
@@ -188,6 +212,7 @@ const styles = StyleSheet.create({
     padding: 12,
     gap: 8,
     justifyContent: 'center',
+    width: '100%',
   },
   header: {
     flexDirection: 'row',

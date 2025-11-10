@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Dimensions, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,6 +15,7 @@ import { darkTheme } from '@/styles/theme';
 import { textStyles } from '@/styles/shared-styles';
 import { env } from '@/config/env';
 import { TrainingPlanWorkout } from '@/features/programs/programs-slice';
+import { useResponsive } from '@/hooks/use-responsive';
 
 /**
  * Training Plan Screen
@@ -24,6 +25,7 @@ export default function TrainingPlanScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { trainingPlan, loading, error } = useTrainingPlan(id || '');
+  const { isMobile, width } = useResponsive();
   
   // Initialize selected date to program start date or today
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -34,13 +36,81 @@ export default function TrainingPlanScreen() {
   // Loading state for day change
   const [isDayLoading, setIsDayLoading] = useState(false);
   
+  // Calculate completed dates - dates where all workouts are completed (needed for default date calculation)
+  const completedDatesForDefault = useMemo(() => {
+    if (!trainingPlan?.trainingPlanDays || !trainingPlan?.program?.startDate) {
+      return new Set<number>(); // Set of day numbers that are completed
+    }
+    
+    const programStartDate = new Date(trainingPlan.program.startDate);
+    programStartDate.setHours(0, 0, 0, 0);
+    const completedDayNumbers = new Set<number>();
+    
+    trainingPlan.trainingPlanDays.forEach((day) => {
+      if (!day.trainingPlanDayWorkouts || day.trainingPlanDayWorkouts.length === 0) {
+        return;
+      }
+      
+      // Check if all workouts for this day are completed
+      const allCompleted = day.trainingPlanDayWorkouts.every((workout: TrainingPlanWorkout) => {
+        const completedMeta = workout.meta?.find(m => 
+          m.meta_key?.includes('completed') || m.meta_key?.includes('started')
+        );
+        return !!completedMeta;
+      });
+      
+      if (allCompleted) {
+        completedDayNumbers.add(day.dayNumber);
+      }
+    });
+    
+    return completedDayNumbers;
+  }, [trainingPlan?.trainingPlanDays, trainingPlan?.program?.startDate]);
+
+  // Calculate the first day with workouts available AFTER the last completed day (default selected date)
+  const getFirstDayWithWorkouts = useMemo(() => {
+    if (!trainingPlan?.program?.startDate || !trainingPlan?.trainingPlanDays) {
+      return null;
+    }
+    
+    const programStartDate = new Date(trainingPlan.program.startDate);
+    programStartDate.setHours(0, 0, 0, 0);
+    
+    // Find all days that have workouts, sorted by day number
+    const daysWithWorkouts = [...trainingPlan.trainingPlanDays]
+      .filter(day => day.trainingPlanDayWorkouts && day.trainingPlanDayWorkouts.length > 0)
+      .sort((a, b) => a.dayNumber - b.dayNumber);
+    
+    if (daysWithWorkouts.length === 0) {
+      return programStartDate;
+    }
+    
+    // Find the last completed day number
+    const completedDayNumbers = Array.from(completedDatesForDefault).sort((a, b) => b - a);
+    const lastCompletedDayNumber = completedDayNumbers.length > 0 ? completedDayNumbers[0] : 0;
+    
+    // Find the first day with workouts that comes AFTER the last completed day
+    const nextDayWithWorkouts = daysWithWorkouts.find(day => day.dayNumber > lastCompletedDayNumber);
+    
+    // If there's a day after the last completed day, use it; otherwise use the first day with workouts
+    const targetDay = nextDayWithWorkouts || daysWithWorkouts[0];
+    
+    // Get the date for this day
+    const targetDate = new Date(programStartDate);
+    targetDate.setDate(programStartDate.getDate() + (targetDay.dayNumber - 1));
+    
+    return targetDate;
+  }, [trainingPlan?.program?.startDate, trainingPlan?.trainingPlanDays, completedDatesForDefault]);
+  
   // Update selected date when program data loads (only once)
   useEffect(() => {
-    if (trainingPlan?.program?.startDate) {
+    if (getFirstDayWithWorkouts) {
+      setSelectedDate(getFirstDayWithWorkouts);
+    } else if (trainingPlan?.program?.startDate) {
       const programStartDate = new Date(trainingPlan.program.startDate);
       setSelectedDate(programStartDate);
     }
-  }, [trainingPlan?.program?.startDate]);
+  }, [getFirstDayWithWorkouts, trainingPlan?.program?.startDate]);
 
   // Handle date change with loading state
   const handleDateChange = (date: Date) => {
@@ -119,6 +189,45 @@ export default function TrainingPlanScreen() {
     return matchingDay.trainingPlanDayWorkouts || [];
   }, [trainingPlan, calculateDayNumber]);
 
+  // Calculate completed dates - dates where all workouts are completed
+  const completedDates = useMemo(() => {
+    if (!trainingPlan?.trainingPlanDays || !trainingPlan?.program?.startDate) {
+      return new Set<string>();
+    }
+    
+    const programStartDate = new Date(trainingPlan.program.startDate);
+    programStartDate.setHours(0, 0, 0, 0);
+    const completedSet = new Set<string>();
+    
+    trainingPlan.trainingPlanDays.forEach((day) => {
+      if (!day.trainingPlanDayWorkouts || day.trainingPlanDayWorkouts.length === 0) {
+        return;
+      }
+      
+      // Check if all workouts for this day are completed
+      const allCompleted = day.trainingPlanDayWorkouts.every((workout: TrainingPlanWorkout) => {
+        const completedMeta = workout.meta?.find(m => 
+          m.meta_key?.includes('completed') || m.meta_key?.includes('started')
+        );
+        return !!completedMeta;
+      });
+      
+      if (allCompleted) {
+        // Calculate the date for this day number
+        const dayDate = new Date(programStartDate);
+        dayDate.setDate(programStartDate.getDate() + (day.dayNumber - 1));
+        // Normalize to YYYY-MM-DD string (using local time)
+        const year = dayDate.getFullYear();
+        const month = String(dayDate.getMonth() + 1).padStart(2, '0');
+        const dayNum = String(dayDate.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${dayNum}`;
+        completedSet.add(dateStr);
+      }
+    });
+    
+    return completedSet;
+  }, [trainingPlan?.trainingPlanDays, trainingPlan?.program?.startDate]);
+
   // Calculate stats
   const completedCount = selectedDayWorkouts.filter((w: TrainingPlanWorkout) => {
     // Check if workout is completed by looking at meta
@@ -150,25 +259,24 @@ export default function TrainingPlanScreen() {
 
   // Calculate full-width header container styles
   const headerContainerStyle = useMemo(() => {
-    const screenWidth = Dimensions.get('window').width;
     const maxWidth = 1200;
-    const padding = 16;
+    const padding = isMobile ? 12 : 16; // Smaller padding on mobile
     
-    const marginLeft = screenWidth > maxWidth 
-      ? -(screenWidth - maxWidth) / 2 - padding
+    const marginLeft = width > maxWidth 
+      ? -(width - maxWidth) / 2 - padding
       : -padding;
-    const marginRight = screenWidth > maxWidth
-      ? -(screenWidth - maxWidth) / 2 - padding
+    const marginRight = width > maxWidth
+      ? -(width - maxWidth) / 2 - padding
       : -padding;
     
     return {
-      width: screenWidth,
-      marginTop: -32,
+      width,
+      marginTop: isMobile ? -24 : -32, // Smaller margin on mobile
       marginLeft,
       marginRight,
       marginBottom: 0,
     };
-  }, []);
+  }, [width, isMobile]);
 
   // Handle back navigation
   const handleBack = () => {
@@ -254,6 +362,7 @@ export default function TrainingPlanScreen() {
           onDateChange={handleDateChange}
           startDate={trainingPlan?.program?.startDate}
           endDate={trainingPlan?.program?.endDate}
+          completedDates={completedDates}
         />
       </View>
 

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'expo-router';
 import { RootState } from '@/state/store';
 import { setSelectedCompany } from '@/state/slices/auth-slice';
 import { darkTheme } from '@/styles/theme';
@@ -21,6 +22,7 @@ interface Company {
 
 const Header = ({ title }: HeaderProps) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -55,11 +57,13 @@ const Header = ({ title }: HeaderProps) => {
         <View style={styles.container}>
           {/* Left Section - Logo & Title */}
           <View style={styles.leftSection}>
-            <Image
-              source={require('@/assets/images/fitness-logo.png')}
-              style={styles.logo}
-              contentFit="contain"
-            />
+            <Pressable onPress={() => router.push('/home')}>
+              <Image
+                source={require('@/assets/images/fitness-logo.png')}
+                style={styles.logo}
+                contentFit="contain"
+              />
+            </Pressable>
             {isTablet && (
               <Text style={styles.desktopTitle}>{title}</Text>
             )}

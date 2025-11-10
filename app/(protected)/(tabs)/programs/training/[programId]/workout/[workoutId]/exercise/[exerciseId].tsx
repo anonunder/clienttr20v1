@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Video, ResizeMode, Audio } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSelector } from 'react-redux';
 import { ExerciseVideoPlayer } from '@/components/exercise/ExerciseVideoPlayer';
 import { ExerciseTimer, ExerciseTimerHandle } from '@/components/exercise/ExerciseTimer';
 import { ExerciseActionButtons } from '@/components/exercise/ExerciseActionButtons';
@@ -30,6 +31,7 @@ import { useTrainingPlan } from '@/hooks/programs/use-training-plan';
 import { ExerciseDetail } from '@/features/exercise/exercise-slice';
 import { api } from '@/services/api-client';
 import { endpoints } from '@/services/api-client/endpoints';
+import { RootState } from '@/state/store';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -47,7 +49,8 @@ export default function ExerciseScreen() {
   }>();
   
   const { trainingPlan, loading: trainingPlanLoading } = useTrainingPlan(programId || '');
-  const companyId = 1; // TODO: Get from auth state
+  const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
+  const companyId = selectedCompanyId ? parseInt(selectedCompanyId, 10) : null;
 
   // UI State
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -110,12 +113,10 @@ export default function ExerciseScreen() {
               parseInt(programId, 10),
               parseInt(workoutId, 10),
               exId,
-              companyId
+              companyId || 0
             );
-            console.log('📡 Fetching exercise:', endpoint);
             
             const response = await api<{ success: boolean; data: ExerciseDetail }>(endpoint);
-            console.log('✅ Exercise fetched:', response);
             
             return response.success ? response.data : null;
           } catch (error) {
@@ -126,7 +127,6 @@ export default function ExerciseScreen() {
 
         const results = await Promise.all(promises);
         const validExercises = results.filter((ex): ex is ExerciseDetail => ex !== null);
-        console.log('🎯 Valid exercises:', validExercises.length);
         setExerciseDetails(validExercises);
       } catch (error) {
         console.error('❌ Failed to fetch exercises:', error);
@@ -777,6 +777,8 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     width: SCREEN_WIDTH,
     position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingContainer: {
     flex: 1,
@@ -836,9 +838,16 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   videoContainerFull: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
-    width: '100%',
-    height: '100%',
   },
   timerOverlay: {
     position: 'absolute',

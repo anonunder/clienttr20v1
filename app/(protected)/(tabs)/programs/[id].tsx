@@ -103,8 +103,14 @@ export default function ProgramDetailScreen() {
 
   // Handle nutrition plan press
   const handleNutritionPress = () => {
-    if (programDetail?.nutritionPlanId) {
-      router.push(`/(protected)/(tabs)/programs/nutrition/${programDetail.nutritionPlanId}` as any);
+    // Use programDetail.id (the actual program ID) not nutritionPlanId
+    // The endpoint requires the program ID, not the nutrition plan ID (similar to training)
+    const programId = programDetail?.id;
+    if (programId) {
+      console.log('📍 Navigating to nutrition plan with program ID:', programId);
+      router.push(`/(protected)/(tabs)/programs/nutrition/${programId}` as any);
+    } else {
+      console.warn('⚠️ Cannot navigate to nutrition: No program ID available in programDetail');
     }
   };
 

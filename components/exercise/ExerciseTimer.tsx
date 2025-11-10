@@ -25,6 +25,8 @@ export const ExerciseTimer = forwardRef<ExerciseTimerHandle, ExerciseTimerProps>
     const [timeLeft, setTimeLeft] = useState(duration);
     const [isResting, setIsResting] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
+    const [shouldTriggerComplete, setShouldTriggerComplete] = useState(false);
+    const [shouldTriggerRestComplete, setShouldTriggerRestComplete] = useState(false);
 
     const prevStart = useRef<number>(0);
     const prevPause = useRef<number>(0);
@@ -54,6 +56,25 @@ export const ExerciseTimer = forwardRef<ExerciseTimerHandle, ExerciseTimerProps>
       }
     }, [pauseSignal]);
 
+    // Trigger callbacks outside of state updates
+    useEffect(() => {
+      if (shouldTriggerComplete) {
+        setShouldTriggerComplete(false);
+        setTimeout(() => {
+          onComplete();
+        }, 0);
+      }
+    }, [shouldTriggerComplete, onComplete]);
+
+    useEffect(() => {
+      if (shouldTriggerRestComplete) {
+        setShouldTriggerRestComplete(false);
+        setTimeout(() => {
+          onRestComplete();
+        }, 0);
+      }
+    }, [shouldTriggerRestComplete, onRestComplete]);
+
     // Timer countdown logic
     useEffect(() => {
       if (!isRunning || timeLeft <= 0) return;
@@ -63,14 +84,14 @@ export const ExerciseTimer = forwardRef<ExerciseTimerHandle, ExerciseTimerProps>
           if (prev <= 1) {
             if (!isResting) {
               // Exercise complete, start rest
-              onComplete();
               setIsResting(true);
+              setShouldTriggerComplete(true);
               return restTime;
             } else {
               // Rest complete
-              onRestComplete();
               setIsRunning(false);
               setIsResting(false);
+              setShouldTriggerRestComplete(true);
               return duration;
             }
           }
@@ -79,7 +100,7 @@ export const ExerciseTimer = forwardRef<ExerciseTimerHandle, ExerciseTimerProps>
       }, 1000);
 
       return () => clearInterval(interval);
-    }, [isRunning, timeLeft, isResting, duration, restTime, onComplete, onRestComplete]);
+    }, [isRunning, timeLeft, isResting, duration, restTime]);
 
     // Expose methods via ref
     useImperativeHandle(ref, () => ({

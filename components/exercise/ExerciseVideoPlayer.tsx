@@ -65,18 +65,20 @@ export function ExerciseVideoPlayer({
         />
       )}
       
-      {/* Main video */}
-      <Video
-        ref={videoRef}
-        source={{ uri: videoUrl }}
-        style={isVertical ? styles.verticalVideo : styles.horizontalVideo}
-        resizeMode={isVertical ? ResizeMode.COVER : ResizeMode.CONTAIN}
-        isLooping
-        isMuted
-        shouldPlay={isPlaying}
-        onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
-        useNativeControls={false}
-      />
+      {/* Main video - Wrapped in centering container */}
+      <View style={styles.videoWrapper}>
+        <Video
+          ref={videoRef}
+          source={{ uri: videoUrl }}
+          style={isVertical ? styles.verticalVideo : styles.horizontalVideo}
+          resizeMode={isVertical ? ResizeMode.COVER : ResizeMode.CONTAIN}
+          isLooping
+          isMuted
+          shouldPlay={isPlaying}
+          onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
+          useNativeControls={false}
+        />
+      </View>
 
       {/* Tap to pause/play overlay */}
       <TouchableOpacity
@@ -97,7 +99,13 @@ export function ExerciseVideoPlayer({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
     backgroundColor: darkTheme.color.bg,
     justifyContent: 'center',
     alignItems: 'center',
@@ -112,15 +120,20 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#000',
   },
+  videoWrapper: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
   verticalVideo: {
     width: '100%',
     height: '100%',
-    zIndex: 10,
   },
   horizontalVideo: {
     width: '100%',
     height: '100%',
-    zIndex: 10,
   },
   backgroundVideo: {
     position: 'absolute',
