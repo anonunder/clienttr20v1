@@ -245,10 +245,67 @@ export default function ExerciseScreen() {
 
   // Handle set complete
   const handleSetComplete = () => {
-    setIsResting(true);
     setIsPlaying(false);
-    playNotificationSound('rest');
-    Alert.alert('Set Complete!', 'Rest time started.');
+    
+    // Get current exercise details
+    const exercise = exercises[currentIndex];
+    if (!exercise) return;
+    
+    const { sets } = parseExerciseData(exercise);
+    
+    // Check if this is the last set
+    if (currentSet >= sets) {
+      // Last set complete - go to next exercise and start rest there
+      playNotificationSound('rest');
+      Alert.alert('Set Complete!', 'Moving to next exercise...');
+      
+      const nextIndex = currentIndex + 1;
+      
+      // Check if there's a next exercise
+      if (nextIndex >= exercises.length) {
+        // No more exercises, just finish
+        return;
+      }
+      
+      // Go to next exercise
+      if (isTransitioning.current) return;
+      
+      isTransitioning.current = true;
+      setCurrentSet(1); // Reset set counter for next exercise
+
+      // Scroll to next exercise
+      scrollViewRef.current?.scrollTo({ 
+        y: nextIndex * SCREEN_HEIGHT, 
+        animated: true 
+      });
+
+      setTimeout(() => {
+        setCurrentIndex(nextIndex);
+        isTransitioning.current = false;
+        
+        // Update URL to the new exercise
+        const nextExercise = exercises[nextIndex];
+        if (nextExercise) {
+          router.replace(
+            `/programs/training/${programId}/workout/${workoutId}/exercise/${nextExercise.term_taxonomy_id}`
+          );
+        }
+        
+        // Start rest time on the new exercise
+        setIsResting(true);
+        // Use a delay to ensure the timer component is mounted and ready
+        setTimeout(() => {
+          if (timerRef.current) {
+            timerRef.current.startRest();
+          }
+        }, 200);
+      }, 500);
+    } else {
+      // Not last set - start rest on current exercise
+      setIsResting(true);
+      playNotificationSound('rest');
+      Alert.alert('Set Complete!', 'Rest time started.');
+    }
   };
 
   // Handle rest complete
@@ -268,10 +325,10 @@ export default function ExerciseScreen() {
       setCurrentSet(prev => prev + 1);
       Alert.alert('Rest Complete!', `Ready for Set ${currentSet + 1}/${sets}!`);
     } else {
-      // All sets complete, move to next exercise
+      // All sets complete - this shouldn't happen normally since we handle it in handleSetComplete
+      // But keep as fallback
       setCurrentSet(1); // Reset for next exercise
-      Alert.alert('Exercise Complete!', 'Moving to next exercise...');
-      goToNextExercise();
+      Alert.alert('Exercise Complete!', 'Ready for next exercise.');
     }
   };
 

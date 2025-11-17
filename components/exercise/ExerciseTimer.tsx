@@ -8,6 +8,7 @@ export interface ExerciseTimerHandle {
   pause: () => void;
   resume: () => void;
   start: () => void;
+  startRest: () => void;
 }
 
 interface ExerciseTimerProps {
@@ -121,7 +122,12 @@ export const ExerciseTimer = forwardRef<ExerciseTimerHandle, ExerciseTimerProps>
         setIsResting(false);
         setIsRunning(false);
       },
-    }), [isRunning, duration, onStart]);
+      startRest: () => {
+        setIsResting(true);
+        setTimeLeft(restTime);
+        setIsRunning(true);
+      },
+    }), [isRunning, duration, restTime, onStart]);
 
     const formatTime = (seconds: number) => {
       const mins = Math.floor(seconds / 60);
