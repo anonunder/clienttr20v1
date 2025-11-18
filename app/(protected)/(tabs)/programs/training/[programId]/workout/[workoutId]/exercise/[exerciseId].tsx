@@ -32,6 +32,9 @@ import { ExerciseDetail } from '@/features/exercise/exercise-slice';
 import { api } from '@/services/api-client';
 import { endpoints } from '@/services/api-client/endpoints';
 import { RootState } from '@/state/store';
+import { useFavorites } from '@/hooks/favorites/use-favorites';
+import { useComments } from '@/hooks/comments/use-comments';
+import { useWorkoutSession } from '@/hooks/workout-session/use-workout-session';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -52,12 +55,37 @@ export default function ExerciseScreen() {
   const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
   const companyId = selectedCompanyId ? parseInt(selectedCompanyId, 10) : null;
 
+  // Favorites and Comments hooks
+  const { 
+    isExerciseFavorited, 
+    toggleExercise, 
+    exerciseFavoritesLoading,
+    fetchExercises: fetchFavoriteExercises
+  } = useFavorites();
+  const { 
+    addExercise: addExerciseComment,
+    fetchExercise: fetchExerciseComments,
+    getExerciseComments,
+    exerciseCommentsLoading
+  } = useComments();
+  
+  // Workout session hook
+  const {
+    currentSession,
+    hasActiveSession,
+    startSession,
+    updateSession,
+    finishSession,
+    startExercise,
+    finishExercise,
+    addExercise: addSessionExercise,
+    updateExercise: updateSessionExercise,
+  } = useWorkoutSession();
+
   // UI State
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentSet, setCurrentSet] = useState(1); // Track current set
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [isResting, setIsResting] = useState(false);
   const [timerStartSignal, setTimerStartSignal] = useState(0);
@@ -65,6 +93,8 @@ export default function ExerciseScreen() {
   const [showCommentRating, setShowCommentRating] = useState(false);
   const [showNextExercisePreview, setShowNextExercisePreview] = useState(false);
   const [previewVideoPlaying, setPreviewVideoPlaying] = useState(false);
+  const [commentText, setCommentText] = useState('');
+  const [hasStarted, setHasStarted] = useState(false); // Track if exercise has been started at least once
   
   const timerRef = useRef<ExerciseTimerHandle | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
@@ -74,6 +104,13 @@ export default function ExerciseScreen() {
   // Fetch exercise details for all exercises in this workout
   const [exerciseDetails, setExerciseDetails] = useState<ExerciseDetail[]>([]);
   const [loadingExercises, setLoadingExercises] = useState(true);
+
+  // Fetch favorites on mount to know which exercises are already favorited
+  useEffect(() => {
+    if (companyId) {
+      fetchFavoriteExercises(companyId).catch(console.error);
+    }
+  }, [companyId]);
 
   useEffect(() => {
     const fetchAllExercises = async () => {
@@ -105,7 +142,7 @@ export default function ExerciseScreen() {
       }
 
       try {
-        setLoadingExercises(true);
+        // Note: loadingExercises is already initialized to true, no need to set again
         
         const promises = exerciseIds.map(async (exId) => {
           try {
@@ -140,6 +177,50 @@ export default function ExerciseScreen() {
 
   const exercises = exerciseDetails;
   const nextExercise = currentIndex < exercises.length - 1 ? exercises[currentIndex + 1] : null;
+  const currentExercise = exercises[currentIndex];
+  const currentExerciseIsFavorited = currentExercise ? isExerciseFavorited(currentExercise.term_taxonomy_id) : false;
+
+  // Start workout session when first exercise starts
+  useEffect(() => {
+    const initSession = async () => {
+      if (isPlaying && !hasActiveSession && workoutId && companyId) {
+        try {
+          console.log('🏋️ Starting workout session...');
+          await startSession(parseInt(workoutId, 10), companyId);
+        } catch (error) {
+          console.error('Failed to start workout session:', error);
+        }
+      }
+    };
+    initSession();
+  }, [isPlaying, hasActiveSession, workoutId, companyId]);
+
+  // Handle favorite toggle
+  const handleFavoriteToggle = async () => {
+    if (!currentExercise || !companyId || exerciseFavoritesLoading) return;
+    
+    try {
+      await toggleExercise(currentExercise.term_taxonomy_id, companyId);
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
+      Alert.alert('Error', 'Failed to update favorite');
+    }
+  };
+
+  // Handle comment submit
+  const handleCommentSubmit = async () => {
+    if (!currentExercise || !companyId || !commentText.trim() || exerciseCommentsLoading) return;
+    
+    try {
+      await addExerciseComment(currentExercise.term_taxonomy_id, companyId, commentText.trim());
+      setCommentText('');
+      Alert.alert('Success', 'Comment added!');
+      setShowCommentRating(false);
+    } catch (error) {
+      console.error('Failed to add comment:', error);
+      Alert.alert('Error', 'Failed to add comment');
+    }
+  };
 
   // Set initial index based on exerciseId
   useEffect(() => {
@@ -148,6 +229,9 @@ export default function ExerciseScreen() {
       if (idx !== -1) {
         setCurrentIndex(idx);
         setCurrentSet(1); // Reset to first set when changing exercise
+        setHasStarted(false); // Reset on new exercise
+        setIsPlaying(false); // Ensure not playing on load
+        setIsResting(false); // Ensure not resting on load
         // Scroll to the exercise
         setTimeout(() => {
           scrollViewRef.current?.scrollTo({ y: idx * SCREEN_HEIGHT, animated: false });
@@ -253,53 +337,19 @@ export default function ExerciseScreen() {
     
     const { sets } = parseExerciseData(exercise);
     
+    // Track exercise completion in session
+    if (currentSession && currentExercise) {
+      finishExercise(currentExercise.term_taxonomy_id);
+    }
+    
     // Check if this is the last set
     if (currentSet >= sets) {
-      // Last set complete - go to next exercise and start rest there
-      playNotificationSound('rest');
-      Alert.alert('Set Complete!', 'Moving to next exercise...');
+      // Last set complete - DON'T auto-switch, let user see buttons and choose
+      playNotificationSound('complete');
+      Alert.alert('Exercise Complete!', 'Great job! Ready for the next exercise?');
       
-      const nextIndex = currentIndex + 1;
-      
-      // Check if there's a next exercise
-      if (nextIndex >= exercises.length) {
-        // No more exercises, just finish
-        return;
-      }
-      
-      // Go to next exercise
-      if (isTransitioning.current) return;
-      
-      isTransitioning.current = true;
-      setCurrentSet(1); // Reset set counter for next exercise
-
-      // Scroll to next exercise
-      scrollViewRef.current?.scrollTo({ 
-        y: nextIndex * SCREEN_HEIGHT, 
-        animated: true 
-      });
-
-      setTimeout(() => {
-        setCurrentIndex(nextIndex);
-        isTransitioning.current = false;
-        
-        // Update URL to the new exercise
-        const nextExercise = exercises[nextIndex];
-        if (nextExercise) {
-          router.replace(
-            `/programs/training/${programId}/workout/${workoutId}/exercise/${nextExercise.term_taxonomy_id}`
-          );
-        }
-        
-        // Start rest time on the new exercise
-        setIsResting(true);
-        // Use a delay to ensure the timer component is mounted and ready
-        setTimeout(() => {
-          if (timerRef.current) {
-            timerRef.current.startRest();
-          }
-        }, 200);
-      }, 500);
+      // Reset set counter for when they move to next
+      setCurrentSet(1);
     } else {
       // Not last set - start rest on current exercise
       setIsResting(true);
@@ -342,6 +392,8 @@ export default function ExerciseScreen() {
 
     isTransitioning.current = true;
     setIsPlaying(false);
+    setIsResting(false);
+    setHasStarted(false); // Reset for new exercise
     setCurrentSet(1); // Reset set counter for next exercise
 
     // Scroll to next exercise
@@ -353,6 +405,14 @@ export default function ExerciseScreen() {
     setTimeout(() => {
       setCurrentIndex(nextIndex);
       isTransitioning.current = false;
+      
+      // Update URL
+      if (nextIndex < exercises.length) {
+        const nextEx = exercises[nextIndex];
+        router.replace(
+          `/programs/training/${programId}/workout/${workoutId}/exercise/${nextEx.term_taxonomy_id}`
+        );
+      }
     }, 500);
   };
 
@@ -366,6 +426,9 @@ export default function ExerciseScreen() {
     if (newIndex !== currentIndex && newIndex <= exercises.length) {
       setCurrentIndex(newIndex);
       setCurrentSet(1); // Reset to first set when manually scrolling
+      setHasStarted(false); // Reset for new exercise
+      setIsPlaying(false); // Ensure not playing
+      setIsResting(false); // Ensure not resting
       
       // Update URL if not on completion screen
       if (newIndex < exercises.length) {
@@ -519,11 +582,14 @@ export default function ExerciseScreen() {
           // Exercise details
           const exerciseData = parseExerciseData(exercise);
           const { name, videoUrl, duration, restTime, sets, reps, description } = exerciseData;
+          
+          // Use isFavorited from API response (backend already checks this)
+          const isThisExerciseFavorited = exercise.isFavorited ?? isExerciseFavorited(exercise.term_taxonomy_id);
 
           return (
             <View key={exercise.term_taxonomy_id || index} style={styles.snapItem}>
-              {/* Header - Only show on active exercise when not playing */}
-              {isActive && !isPlaying && (
+              {/* Header - Show when not playing AND not resting */}
+              {!isPlaying && !isResting && (
                 <SafeAreaView edges={['top']} style={styles.header}>
                   <TouchableOpacity style={styles.headerButton} onPress={handleBack}>
                     <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
@@ -540,6 +606,7 @@ export default function ExerciseScreen() {
                     if (isActive) {
                       if (!isPlaying) {
                         setIsPlaying(true);
+                        setHasStarted(true); // Mark as started
                         setTimerStartSignal((s) => s + 1);
                       } else {
                         setIsPlaying(false);
@@ -552,7 +619,7 @@ export default function ExerciseScreen() {
               </View>
 
               {/* Timer Overlay - Only when playing or resting */}
-              {isActive && (isPlaying || isResting) && (
+              {(isPlaying || isResting) && (
                 <View style={styles.timerOverlay}>
                   <ExerciseTimer
                     ref={timerRef}
@@ -568,26 +635,41 @@ export default function ExerciseScreen() {
               )}
 
               {/* REST TIME Overlay */}
-              {isActive && isResting && (
+              {isResting && (
                 <View style={styles.restOverlay}>
                   <Text style={styles.restText}>REST TIME</Text>
                 </View>
               )}
 
-              {/* Action Buttons - Only when not playing */}
-              {isActive && !isPlaying && (
+              {/* Action Buttons - Show when not playing AND not resting */}
+              {!isPlaying && !isResting && (
                 <View style={styles.actionButtons}>
                   <ExerciseActionButtons
-                    onLike={() => setIsLiked(!isLiked)}
+                    onLike={() => {
+                      // Use the exercise from this slide
+                      if (!companyId || exerciseFavoritesLoading) return;
+                      try {
+                        toggleExercise(exercise.term_taxonomy_id, companyId);
+                      } catch (error) {
+                        console.error('Failed to toggle favorite:', error);
+                        Alert.alert('Error', 'Failed to update favorite');
+                      }
+                    }}
                     onShare={() => Alert.alert('Share', 'Share functionality')}
                     onSave={() => {
-                      setIsSaved(!isSaved);
-                      Alert.alert(isSaved ? 'Removed from saved' : 'Saved');
+                      // Use the exercise from this slide
+                      if (!companyId || exerciseFavoritesLoading) return;
+                      try {
+                        toggleExercise(exercise.term_taxonomy_id, companyId);
+                      } catch (error) {
+                        console.error('Failed to toggle favorite:', error);
+                        Alert.alert('Error', 'Failed to update favorite');
+                      }
                     }}
                     onComment={() => setShowCommentRating(!showCommentRating)}
                     onInfo={() => setShowInfo(!showInfo)}
-                    isLiked={isLiked}
-                    isSaved={isSaved}
+                    isLiked={isThisExerciseFavorited}
+                    isSaved={isThisExerciseFavorited}
                   />
 
                   {/* Up Next Exercise Button */}
@@ -602,8 +684,8 @@ export default function ExerciseScreen() {
                 </View>
               )}
 
-              {/* Bottom Info Panel - Only when not playing */}
-              {isActive && !isPlaying && (
+              {/* Bottom Info Panel - Show when not playing AND not resting */}
+              {!isPlaying && !isResting && (
                 <View style={styles.bottomPanelContainer} pointerEvents="box-none">
                   {/* Gradient Background */}
                   <LinearGradient
@@ -675,11 +757,14 @@ export default function ExerciseScreen() {
                         style={styles.startButton}
                         onPress={() => {
                           setIsPlaying(true);
+                          setHasStarted(true);
                           setTimerStartSignal((s) => s + 1);
                         }}
                         activeOpacity={0.8}
                       >
-                        <Text style={styles.startButtonText}>START</Text>
+                        <Text style={styles.startButtonText}>
+                          {hasStarted ? 'CONTINUE' : 'START'}
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </SafeAreaView>

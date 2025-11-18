@@ -5,11 +5,12 @@ import { darkTheme } from '@/styles/theme';
 interface CardProps {
   children: React.ReactNode;
   className?: string;
+  style?: any; // Allow style prop for custom styling
 }
 
-export function Card({ children, className = '' }: CardProps) {
+export function Card({ children, className = '', style }: CardProps) {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       {children}
     </View>
   );

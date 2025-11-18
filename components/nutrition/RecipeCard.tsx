@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, Animated } from 'react-native';
+import React, { useMemo, useRef } from 'react';
+import { View, Text, StyleSheet, Image, Pressable, Animated, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
 import { darkTheme } from '@/styles/theme';
@@ -7,6 +7,9 @@ import { textStyles } from '@/styles/shared-styles';
 import { env } from '@/config/env';
 import { MacrosDisplay } from './MacrosDisplay';
 import { useResponsive } from '@/hooks/use-responsive';
+import { useFavorites } from '@/hooks/favorites/use-favorites';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
 
 interface RecipeCardProps {
   id: number | string;
@@ -18,6 +21,8 @@ interface RecipeCardProps {
   fat?: number;
   cookTime?: string;
   onPress?: () => void;
+  isFavorited?: boolean; // Backend returns this
+  entityType?: 'recipe' | 'meal'; // Specify if this is a recipe or meal
 }
 
 // Construct image URL from storage path
@@ -37,6 +42,7 @@ const getImageUrl = (imageUri: string | null | undefined): string => {
 };
 
 export function RecipeCard({
+  id,
   title,
   image,
   calories,
@@ -45,13 +51,38 @@ export function RecipeCard({
   fat,
   cookTime,
   onPress,
+  isFavorited: initialIsFavorited = false, // From backend
+  entityType = 'recipe', // Default to recipe
 }: RecipeCardProps) {
   const { isMobile } = useResponsive();
   const imageUrl = getImageUrl(image);
   const hasMacros = protein !== undefined && carbs !== undefined && fat !== undefined;
   
-  // State for favorite toggle
-  const [isFavorited, setIsFavorited] = useState(false);
+  // Get favorites hook
+  const {
+    isRecipeFavorited,
+    isMealFavorited,
+    toggleRecipe,
+    toggleMeal,
+    recipeFavoritesLoading,
+    mealFavoritesLoading,
+  } = useFavorites();
+  
+  // Get company ID from auth state
+  const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
+  const companyId = selectedCompanyId ? parseInt(selectedCompanyId, 10) : null;
+  
+  // Convert id to number
+  const entityId = typeof id === 'string' ? parseInt(id, 10) : id;
+  
+  // Check if favorited from Redux or use backend value as fallback
+  const isFavoritedFromRedux = entityType === 'recipe' 
+    ? isRecipeFavorited(entityId) 
+    : isMealFavorited(entityId);
+  const isFavorited = isFavoritedFromRedux || initialIsFavorited;
+  
+  // Loading state
+  const isLoading = entityType === 'recipe' ? recipeFavoritesLoading : mealFavoritesLoading;
   
   // Animation values
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -61,8 +92,12 @@ export function RecipeCard({
     return isMobile ? 160 : 180;
   }, [isMobile]);
 
-  const handleHeartPress = (e: any) => {
+  const handleHeartPress = async (e: any) => {
     e.stopPropagation();
+    
+    if (!companyId || isLoading) {
+      return;
+    }
     
     // Pop animation
     Animated.sequence([
@@ -79,8 +114,19 @@ export function RecipeCard({
       }),
     ]).start();
     
-    setIsFavorited(!isFavorited);
-    console.log('Recipe favorited:', !isFavorited);
+    try {
+      // Toggle favorite based on entity type
+      if (entityType === 'recipe') {
+        await toggleRecipe(entityId, companyId);
+        console.log('✅ Recipe favorited:', !isFavorited);
+      } else {
+        await toggleMeal(entityId, companyId);
+        console.log('✅ Meal favorited:', !isFavorited);
+      }
+    } catch (error) {
+      console.error(`Failed to toggle ${entityType} favorite:`, error);
+      Alert.alert('Error', `Failed to update ${entityType} favorite`);
+    }
   };
 
   return (
@@ -101,6 +147,7 @@ export function RecipeCard({
             <Pressable 
               style={[styles.heartButton, isFavorited && styles.heartButtonActive]}
               onPress={handleHeartPress}
+              disabled={isLoading}
             >
               {({ pressed: heartPressed }) => (
                 <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
@@ -182,7 +229,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: '30%',
-    background: 'linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3))',
+    backgroundColor: 'transparent', // React Native doesn't support gradients in StyleSheet
   },
   heartButton: {
     position: 'absolute',

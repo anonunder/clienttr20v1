@@ -60,6 +60,54 @@
     "theme": "Theme",
     "language": "Language",
     "notifications": "Notifications"
+  },
+  "reports": {
+    "title": "Reports",
+    "pending": "Pending Reports",
+    "completed": "Completed Reports",
+    "submit": "Submit Report",
+    "saveAsDraft": "Save as Draft",
+    "backToList": "Back to Reports",
+    "detailStatistics": "Body Measurements",
+    "uploadPhotos": "Progress Photos",
+    "measurements": {
+      "bodyWeight": "Body Weight",
+      "height": "Height",
+      "bodyFatPercentage": "Body Fat Percentage",
+      "muscleMass": "Muscle Mass",
+      "musclePercentage": "Muscle Percentage",
+      "bodyWaterPercentage": "Body Water Percentage",
+      "boneMass": "Bone Mass",
+      "visceralFat": "Visceral Fat",
+      "proteinPercentage": "Protein Percentage",
+      "bmi": "BMI",
+      "bmr": "Basal Metabolic Rate",
+      "metabolicAge": "Metabolic Age",
+      "chestCircumference": "Chest Circumference",
+      "shoulderCircumference": "Shoulder Circumference",
+      "waistCircumference": "Waist Circumference",
+      "abdomenCircumference": "Abdomen Circumference",
+      "hipCircumference": "Hip Circumference",
+      "neckCircumference": "Neck Circumference",
+      "bicepsLeftCircumference": "Left Biceps Circumference",
+      "bicepsRightCircumference": "Right Biceps Circumference",
+      "forearmLeftCircumference": "Left Forearm Circumference",
+      "forearmRightCircumference": "Right Forearm Circumference",
+      "wristCircumference": "Wrist Circumference",
+      "thighLeftCircumference": "Left Thigh Circumference",
+      "thighRightCircumference": "Right Thigh Circumference",
+      "calfLeftCircumference": "Left Calf Circumference",
+      "calfRightCircumference": "Right Calf Circumference",
+      "ankleCircumference": "Ankle Circumference"
+    },
+    "descriptions": {
+      "body_mass_index": "Body Mass Index",
+      "basal_metabolic_rate": "Basal Metabolic Rate",
+      "narrowest_part": "Narrowest part",
+      "at_navel_level": "At navel level",
+      "over_glutes": "Over glutes",
+      "at_widest_part": "At widest part"
+    }
   }
 }
 

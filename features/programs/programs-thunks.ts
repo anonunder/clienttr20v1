@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '@/services/api-client';
 import { endpoints } from '@/services/api-client/endpoints';
-import { Program, TrainingPlanDetail, NutritionPlanDetail, MealDetail, RecipeDetail } from './programs-slice';
+import { Program, TrainingPlanDetail, NutritionPlanDetail, MealDetail, RecipeDetail, WorkoutComment } from './programs-slice';
 
 // API Response structure
 interface ProgramsApiResponse {
@@ -174,4 +174,164 @@ export const fetchRecipeDetail = createAsyncThunk(
     }
   }
 );
+
+/**
+ * Toggle Workout Favorite
+ * 
+ * @param params - Object with workoutId and companyId
+ * @returns Promise<{ workoutId: number, isFavorited: boolean }>
+ */
+export const toggleWorkoutFavorite = createAsyncThunk(
+  'programs/toggleWorkoutFavorite',
+  async (
+    { 
+      workoutId, 
+      companyId 
+    }: { 
+      workoutId: number; 
+      companyId: number 
+    }, 
+    { rejectWithValue }
+  ) => {
+    try {
+      const endpoint = endpoints.favorites.toggle('workout', workoutId);
+      console.log('⭐ Toggling workout favorite:', { workoutId, companyId });
+      
+      const response = await api<{ success: boolean; data: { isFavorited: boolean } }>(endpoint, {
+        method: 'POST',
+        body: { companyId },
+      });
+      
+      if (!response.success) {
+        throw new Error('Failed to toggle workout favorite');
+      }
+      
+      console.log('✅ Workout favorite toggled:', response.data);
+      return {
+        workoutId,
+        isFavorited: response.data.isFavorited,
+      };
+    } catch (error: any) {
+      console.error('❌ Programs: Failed to toggle workout favorite:', error);
+      return rejectWithValue(error.message || 'Failed to toggle workout favorite');
+    }
+  }
+);
+
+/**
+ * Fetch Workout Favorites
+ * 
+ * @param companyId - Company ID
+ * @returns Promise<number[]>
+ */
+export const fetchWorkoutFavorites = createAsyncThunk(
+  'programs/fetchWorkoutFavorites',
+  async (companyId: number, { rejectWithValue }) => {
+    try {
+      const endpoint = endpoints.favorites.listByType('workout', companyId);
+      console.log('📋 Fetching workout favorites from:', endpoint);
+      
+      const response = await api<{ success: boolean; data: number[] }>(endpoint);
+      
+      if (!response.success) {
+        throw new Error('Failed to fetch workout favorites');
+      }
+      
+      console.log('✅ Workout favorites fetched:', response.data.length);
+      return response.data;
+    } catch (error: any) {
+      console.error('❌ Programs: Failed to fetch workout favorites:', error);
+      return rejectWithValue(error.message || 'Failed to fetch workout favorites');
+    }
+  }
+);
+
+/**
+ * Add Workout Comment
+ * 
+ * @param params - Object with workoutId, companyId, and comment text
+ * @returns Promise<{ workoutId: number, comment: WorkoutComment }>
+ */
+export const addWorkoutComment = createAsyncThunk(
+  'programs/addWorkoutComment',
+  async (
+    { 
+      workoutId, 
+      companyId,
+      comment 
+    }: { 
+      workoutId: number; 
+      companyId: number;
+      comment: string;
+    }, 
+    { rejectWithValue }
+  ) => {
+    try {
+      const endpoint = endpoints.comments.add('workout', workoutId);
+      console.log('💬 Adding workout comment:', { workoutId, companyId });
+      
+      const response = await api<{ success: boolean; data: WorkoutComment }>(endpoint, {
+        method: 'POST',
+        body: {
+          companyId,
+          comment,
+        },
+      });
+      
+      if (!response.success) {
+        throw new Error('Failed to add workout comment');
+      }
+      
+      console.log('✅ Workout comment added');
+      return {
+        workoutId,
+        comment: response.data,
+      };
+    } catch (error: any) {
+      console.error('❌ Programs: Failed to add workout comment:', error);
+      return rejectWithValue(error.message || 'Failed to add workout comment');
+    }
+  }
+);
+
+/**
+ * Fetch Workout Comments
+ * 
+ * @param params - Object with workoutId and companyId
+ * @returns Promise<{ workoutId: number, comments: WorkoutComment[] }>
+ */
+export const fetchWorkoutComments = createAsyncThunk(
+  'programs/fetchWorkoutComments',
+  async (
+    { 
+      workoutId, 
+      companyId 
+    }: { 
+      workoutId: number; 
+      companyId: number 
+    }, 
+    { rejectWithValue }
+  ) => {
+    try {
+      const endpoint = endpoints.comments.list('workout', workoutId, companyId);
+      console.log('📖 Fetching workout comments from:', endpoint);
+      
+      const response = await api<{ success: boolean; data: WorkoutComment[]; count: number }>(endpoint);
+      
+      if (!response.success) {
+        throw new Error('Failed to fetch workout comments');
+      }
+      
+      console.log('✅ Workout comments fetched:', response.data.length);
+      return {
+        workoutId,
+        comments: response.data,
+      };
+    } catch (error: any) {
+      console.error('❌ Programs: Failed to fetch workout comments:', error);
+      return rejectWithValue(error.message || 'Failed to fetch workout comments');
+    }
+  }
+);
+
 

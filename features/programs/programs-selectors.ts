@@ -25,3 +25,15 @@ export const selectRecipeDetail = (state: RootState) => state.programs?.recipeDe
 export const selectRecipeDetailLoading = (state: RootState) => state.programs?.recipeDetailLoading || false;
 export const selectRecipeDetailError = (state: RootState) => state.programs?.recipeDetailError || null;
 
+// Favorites
+export const selectFavoriteWorkouts = (state: RootState) => state.programs?.favoriteWorkouts || [];
+export const selectWorkoutFavoriteStatus = (state: RootState) => state.programs?.favoriteStatus || {};
+export const selectWorkoutFavoritesLoading = (state: RootState) => state.programs?.favoritesLoading || false;
+export const selectWorkoutFavoritesError = (state: RootState) => state.programs?.favoritesError || null;
+
+// Comments
+export const selectWorkoutComments = (state: RootState) => state.programs?.workoutComments || {};
+export const selectWorkoutCommentsLoading = (state: RootState) => state.programs?.commentsLoading || false;
+export const selectWorkoutCommentsError = (state: RootState) => state.programs?.commentsError || null;
+
+

@@ -1,5 +1,16 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchProgramsList, fetchProgramDetail, fetchTrainingPlan, fetchNutritionPlan, fetchMealDetail, fetchRecipeDetail } from './programs-thunks';
+import { createSlice } from '@reduxjs/toolkit';
+import { 
+  fetchProgramsList, 
+  fetchProgramDetail, 
+  fetchTrainingPlan, 
+  fetchNutritionPlan, 
+  fetchMealDetail, 
+  fetchRecipeDetail,
+  toggleWorkoutFavorite,
+  fetchWorkoutFavorites,
+  addWorkoutComment,
+  fetchWorkoutComments,
+} from './programs-thunks';
 
 // Types matching API response
 export interface TrainingPlan {
@@ -151,6 +162,7 @@ export interface MealRecipe {
       post_mime_type: string;
     };
   };
+  isFavorited?: boolean; // Added from backend
 }
 
 export interface NutritionPlanMeal {
@@ -194,6 +206,7 @@ export interface NutritionPlanDetail {
 // Meal Detail Type (extends NutritionPlanMeal with programId)
 export interface MealDetail extends NutritionPlanMeal {
   programId: number;
+  isFavorited?: boolean; // Added from backend
 }
 
 // Recipe Detail Types
@@ -232,6 +245,15 @@ export interface RecipeDetail {
   };
   nutritionPlanId: number;
   programId: number;
+  isFavorited?: boolean; // Added from backend
+}
+
+export interface WorkoutComment {
+  userId: number;
+  userName: string;
+  userProfileImage?: string;
+  date: string;
+  comment: string;
 }
 
 
@@ -281,6 +303,15 @@ interface ProgramsState {
   mealDetailError: string | null;
   recipeDetailError: string | null;
   lastUpdated: number | null;
+  // Favorites
+  favoriteWorkouts: number[];
+  favoriteStatus: { [workoutId: number]: boolean };
+  favoritesLoading: boolean;
+  favoritesError: string | null;
+  // Comments
+  workoutComments: { [workoutId: number]: WorkoutComment[] };
+  commentsLoading: boolean;
+  commentsError: string | null;
 }
 
 const initialState: ProgramsState = {
@@ -303,6 +334,15 @@ const initialState: ProgramsState = {
   mealDetailError: null,
   recipeDetailError: null,
   lastUpdated: null,
+  // Favorites
+  favoriteWorkouts: [],
+  favoriteStatus: {},
+  favoritesLoading: false,
+  favoritesError: null,
+  // Comments
+  workoutComments: {},
+  commentsLoading: false,
+  commentsError: null,
 };
 
 const programsSlice = createSlice({
@@ -313,6 +353,15 @@ const programsSlice = createSlice({
       state.programs = [];
       state.error = null;
       state.lastUpdated = null;
+    },
+    clearFavorites: (state) => {
+      state.favoriteWorkouts = [];
+      state.favoriteStatus = {};
+      state.favoritesError = null;
+    },
+    clearComments: (state) => {
+      state.workoutComments = {};
+      state.commentsError = null;
     },
   },
   extraReducers: (builder) => {
@@ -397,10 +446,82 @@ const programsSlice = createSlice({
         state.recipeDetailLoading = false;
         state.recipeDetailError = action.payload as string;
         state.recipeDetail = null; // Clear on error
+      })
+      // Toggle workout favorite
+      .addCase(toggleWorkoutFavorite.pending, (state) => {
+        state.favoritesLoading = true;
+        state.favoritesError = null;
+      })
+      .addCase(toggleWorkoutFavorite.fulfilled, (state, action) => {
+        state.favoritesLoading = false;
+        const { workoutId, isFavorited } = action.payload;
+        state.favoriteStatus[workoutId] = isFavorited;
+        
+        if (isFavorited) {
+          if (!state.favoriteWorkouts.includes(workoutId)) {
+            state.favoriteWorkouts.push(workoutId);
+          }
+        } else {
+          state.favoriteWorkouts = state.favoriteWorkouts.filter(
+            id => id !== workoutId
+          );
+        }
+      })
+      .addCase(toggleWorkoutFavorite.rejected, (state, action) => {
+        state.favoritesLoading = false;
+        state.favoritesError = action.payload as string;
+      })
+      // Fetch workout favorites
+      .addCase(fetchWorkoutFavorites.pending, (state) => {
+        state.favoritesLoading = true;
+        state.favoritesError = null;
+      })
+      .addCase(fetchWorkoutFavorites.fulfilled, (state, action) => {
+        state.favoritesLoading = false;
+        state.favoriteWorkouts = action.payload;
+        // Update favorite status map
+        action.payload.forEach(workoutId => {
+          state.favoriteStatus[workoutId] = true;
+        });
+      })
+      .addCase(fetchWorkoutFavorites.rejected, (state, action) => {
+        state.favoritesLoading = false;
+        state.favoritesError = action.payload as string;
+      })
+      // Add workout comment
+      .addCase(addWorkoutComment.pending, (state) => {
+        state.commentsLoading = true;
+        state.commentsError = null;
+      })
+      .addCase(addWorkoutComment.fulfilled, (state, action) => {
+        state.commentsLoading = false;
+        const { workoutId, comment } = action.payload;
+        if (!state.workoutComments[workoutId]) {
+          state.workoutComments[workoutId] = [];
+        }
+        state.workoutComments[workoutId].unshift(comment);
+      })
+      .addCase(addWorkoutComment.rejected, (state, action) => {
+        state.commentsLoading = false;
+        state.commentsError = action.payload as string;
+      })
+      // Fetch workout comments
+      .addCase(fetchWorkoutComments.pending, (state) => {
+        state.commentsLoading = true;
+        state.commentsError = null;
+      })
+      .addCase(fetchWorkoutComments.fulfilled, (state, action) => {
+        state.commentsLoading = false;
+        const { workoutId, comments } = action.payload;
+        state.workoutComments[workoutId] = comments;
+      })
+      .addCase(fetchWorkoutComments.rejected, (state, action) => {
+        state.commentsLoading = false;
+        state.commentsError = action.payload as string;
       });
   },
 });
 
-export const { clearPrograms } = programsSlice.actions;
+export const { clearPrograms, clearFavorites, clearComments } = programsSlice.actions;
 export default programsSlice.reducer;
 

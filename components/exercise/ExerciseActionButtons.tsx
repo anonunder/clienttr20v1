@@ -33,7 +33,7 @@ export function ExerciseActionButtons({
         <Ionicons
           name={isLiked ? 'heart' : 'heart-outline'}
           size={28}
-          color={isLiked ? darkTheme.color.destructive : '#FFFFFF'}
+          color={isLiked ? '#EF4444' : '#FFFFFF'}
         />
       </TouchableOpacity>
 
@@ -46,18 +46,6 @@ export function ExerciseActionButtons({
         <Ionicons name="share-outline" size={26} color="#FFFFFF" />
       </TouchableOpacity>
 
-      {/* Save/Bookmark Button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={onSave}
-        activeOpacity={0.7}
-      >
-        <Ionicons
-          name={isSaved ? 'bookmark' : 'bookmark-outline'}
-          size={26}
-          color={isSaved ? darkTheme.color.warning : '#FFFFFF'}
-        />
-      </TouchableOpacity>
 
       {/* Comment Button */}
       <TouchableOpacity

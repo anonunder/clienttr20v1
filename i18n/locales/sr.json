@@ -60,6 +60,54 @@
     "theme": "Tema",
     "language": "Jezik",
     "notifications": "Obaveštenja"
+  },
+  "reports": {
+    "title": "Izveštaji",
+    "pending": "Izveštaji na čekanju",
+    "completed": "Završeni izveštaji",
+    "submit": "Pošalji izveštaj",
+    "saveAsDraft": "Sačuvaj kao nacrt",
+    "backToList": "Nazad na izveštaje",
+    "detailStatistics": "Telesne mere",
+    "uploadPhotos": "Fotografije napretka",
+    "measurements": {
+      "bodyWeight": "Telesna težina",
+      "height": "Visina",
+      "bodyFatPercentage": "Procenat telesne masti",
+      "muscleMass": "Mišićna masa",
+      "musclePercentage": "Procenat mišića",
+      "bodyWaterPercentage": "Procenat vode u telu",
+      "boneMass": "Koštana masa",
+      "visceralFat": "Visceralna mast",
+      "proteinPercentage": "Procenat proteina",
+      "bmi": "Indeks telesne mase",
+      "bmr": "Bazalni metabolizam",
+      "metabolicAge": "Metabolička starost",
+      "chestCircumference": "Obim grudi",
+      "shoulderCircumference": "Obim ramena",
+      "waistCircumference": "Obim struka",
+      "abdomenCircumference": "Obim abdomena",
+      "hipCircumference": "Obim kukova",
+      "neckCircumference": "Obim vrata",
+      "bicepsLeftCircumference": "Obim levog bicepsa",
+      "bicepsRightCircumference": "Obim desnog bicepsa",
+      "forearmLeftCircumference": "Obim leve podlaktice",
+      "forearmRightCircumference": "Obim desne podlaktice",
+      "wristCircumference": "Obim zgloba",
+      "thighLeftCircumference": "Obim leve noge",
+      "thighRightCircumference": "Obim desne noge",
+      "calfLeftCircumference": "Obim levog lista",
+      "calfRightCircumference": "Obim desnog lista",
+      "ankleCircumference": "Obim članka"
+    },
+    "descriptions": {
+      "body_mass_index": "Indeks telesne mase",
+      "basal_metabolic_rate": "Bazalni metabolizam",
+      "narrowest_part": "Najuži deo",
+      "at_navel_level": "Na nivou pupka",
+      "over_glutes": "Preko gluteusa",
+      "at_widest_part": "Na najširem delu"
+    }
   }
 }
 

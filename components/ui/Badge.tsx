@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-start',
     borderRadius: 9999, // rounded-full
     borderWidth: 1,
     paddingHorizontal: 10,

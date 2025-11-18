@@ -252,6 +252,8 @@ export default function MealDetailScreen() {
                         protein={recipeMacros?.protein}
                         carbs={recipeMacros?.carbs}
                         fat={recipeMacros?.fat}
+                        isFavorited={recipe.isFavorited} // Pass from backend
+                        entityType="recipe" // This is a recipe
                         onPress={() => {
                           router.push(`/programs/nutrition/recipe/${programId}/${recipe.term_taxonomy_id}`);
                         }}

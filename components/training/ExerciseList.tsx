@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity } from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
@@ -7,6 +7,9 @@ import { darkTheme } from '@/styles/theme';
 import { textStyles } from '@/styles/shared-styles';
 import { env } from '@/config/env';
 import { useResponsive } from '@/hooks/use-responsive';
+import { useFavorites } from '@/hooks/favorites/use-favorites';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
 
 export interface WorkoutExercise {
   term_taxonomy_id: number;
@@ -68,6 +71,17 @@ const getExcerpt = (text: string, wordLimit: number = 25): string => {
 };
 
 export function ExerciseList({ exercises, onExercisePress, showHeader = true }: ExerciseListProps) {
+  const { fetchExercises } = useFavorites();
+  const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
+  const companyId = selectedCompanyId ? parseInt(selectedCompanyId, 10) : null;
+
+  // Fetch favorites on mount to know which exercises are already favorited
+  React.useEffect(() => {
+    if (companyId) {
+      fetchExercises(companyId).catch(console.error);
+    }
+  }, [companyId]);
+
   if (!exercises || exercises.length === 0) {
     return null;
   }
@@ -103,6 +117,7 @@ export function ExerciseList({ exercises, onExercisePress, showHeader = true }: 
               isVideo={isVideo}
               sets={sets}
               onPress={() => onExercisePress?.(exercise, index)}
+              exerciseId={exercise.term_taxonomy_id}
             />
           );
         })}
@@ -120,6 +135,7 @@ function ExerciseItem({
   isVideo,
   sets,
   onPress,
+  exerciseId,
 }: {
   index: number;
   exerciseName: string;
@@ -128,10 +144,28 @@ function ExerciseItem({
   isVideo: boolean;
   sets: any[];
   onPress: () => void;
+  exerciseId: number;
 }) {
   const { isMobile, isTablet, width } = useResponsive();
   const videoRef = useRef<Video>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  
+  // Favorites
+  const { isExerciseFavorited, toggleExercise, exerciseFavoritesLoading } = useFavorites();
+  const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
+  const companyId = selectedCompanyId ? parseInt(selectedCompanyId, 10) : null;
+  const isFavorited = isExerciseFavorited(exerciseId);
+
+  const handleFavoritePress = async (e: any) => {
+    e.stopPropagation(); // Prevent triggering exercise press
+    if (!companyId || exerciseFavoritesLoading) return;
+    
+    try {
+      await toggleExercise(exerciseId, companyId);
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
+    }
+  };
   
   // Responsive thumbnail sizing and layout
   const thumbnailDimensions = useMemo(() => {
@@ -227,8 +261,23 @@ function ExerciseItem({
               <Text style={styles.exerciseName} numberOfLines={isMobile ? 2 : 1}>
                 {exerciseName}
               </Text>
-              <View style={styles.exerciseNumber}>
-                <Text style={styles.exerciseNumberText}>{index + 1}</Text>
+              <View style={styles.exerciseHeaderRight}>
+                {/* Favorite Heart Icon */}
+                <TouchableOpacity 
+                  onPress={handleFavoritePress}
+                  style={styles.favoriteButton}
+                  disabled={exerciseFavoritesLoading}
+                >
+                  <Ionicons 
+                    name={isFavorited ? "heart" : "heart-outline"} 
+                    size={22} 
+                    color={isFavorited ? "#EF4444" : darkTheme.color.mutedForeground} 
+                  />
+                </TouchableOpacity>
+                
+                <View style={styles.exerciseNumber}>
+                  <Text style={styles.exerciseNumberText}>{index + 1}</Text>
+                </View>
               </View>
             </View>
             
@@ -351,6 +400,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 8,
+  },
+  exerciseHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  favoriteButton: {
+    padding: 4,
+    borderRadius: 20,
   },
   exerciseName: {
     ...textStyles.body,

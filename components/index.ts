@@ -16,3 +16,6 @@ export * from './dashboard';
 // Icons
 export * from './icons';
 
+// Reports
+export * from './reports';
+

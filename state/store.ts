@@ -4,6 +4,9 @@ import uiReducer from './slices/ui-slice';
 import dashboardReducer from '@/features/dashboard/dashboard-slice';
 import programsReducer from '@/features/programs/programs-slice';
 import exerciseReducer from '@/features/exercise/exercise-slice';
+import workoutSessionReducer from '@/features/workout-session/workout-session-slice';
+import nutritionReducer from '@/features/nutrition/nutrition-slice';
+import reportsReducer from '@/features/reports/reports-slice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +15,9 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     programs: programsReducer,
     exercise: exerciseReducer,
+    workoutSession: workoutSessionReducer,
+    nutrition: nutritionReducer,
+    reports: reportsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
