@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { MainLayout } from '@/components/layout/MainLayout';
@@ -12,7 +12,9 @@ import {
   InfoQuestion,
   TextQuestion,
   TextareaQuestion,
-  OptionsQuestion,
+  SelectQuestion,
+  CheckboxQuestion,
+  RadioQuestion,
   StarsQuestion,
 } from '@/components/reports';
 import { MeasurementCard } from '@/components/reports/MeasurementCard';
@@ -22,6 +24,7 @@ import { textStyles, spacingStyles, layoutStyles, borderStyles } from '@/styles/
 import { useResponsive } from '@/hooks/use-responsive';
 import { useReportsData } from '@/hooks/reports';
 import { QUESTION_TYPES } from '@/constants/reports';
+import { env } from '@/config/env';
 import type { ReportQuestion, ReportResponse } from '@/features/reports';
 
 /**
@@ -44,6 +47,22 @@ export default function ReportDetailScreen() {
     clearReport,
   } = useReportsData();
 
+  // Helper to convert image path to full URL (same as recipes)
+  const getImageUrl = (imagePath: string): string => {
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Extract base URL from apiBaseUrl (remove /api if present)
+    const baseUrl = env.apiBaseUrl.replace(/\/api\/?$/, '');
+    
+    // Ensure imagePath starts with /
+    const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    
+    return `${baseUrl}${path}`;
+  };
+
+console.log(selectedReport);
   const [formData, setFormData] = useState<Record<string, string | string[]>>({});
   const [measurementData, setMeasurementData] = useState<Record<string, string>>({});
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
@@ -76,6 +95,34 @@ export default function ReportDetailScreen() {
       setFormData({});
       setMeasurementData({});
       setUploadedImages([]);
+    } else {
+      // Load existing form data if report has responses
+      if (selectedReport.responses && selectedReport.responses.length > 0) {
+        const existingData: Record<string, string | string[]> = {};
+        selectedReport.responses.forEach((response) => {
+          if (response.answer !== true && typeof response.answer !== 'boolean') { // Skip info questions
+            existingData[response.question] = response.answer;
+          }
+        });
+        setFormData(existingData);
+      }
+      
+      // Load existing measurements data
+      if (selectedReport.measurements) {
+        setMeasurementData(selectedReport.measurements);
+      }
+      
+      // Load existing images if available (for draft reports)
+      if (selectedReport.images && selectedReport.images.length > 0) {
+        const existingImages: UploadedImage[] = selectedReport.images.map((img) => ({
+          uri: getImageUrl(img.path), // Convert storage path to full URL
+          fileName: img.fileName,
+          mimeType: img.mimeType,
+          // No base64 for existing images - they're already on server
+        }));
+        console.log('📸 Loading existing images:', existingImages);
+        setUploadedImages(existingImages);
+      }
     }
   }, [selectedReport]);
 
@@ -129,20 +176,24 @@ export default function ReportDetailScreen() {
     }
 
     try {
+      // Only send new images (ones with base64 data)
+      // Existing images are already on the server
+      const newImages = uploadedImages.filter(img => img.base64);
+      
       await submitReport(
         selectedReport.responseId,
         responses,
         measurementData,
-        uploadedImages,
-        isDraft ? 'draft' : 'completed'
+        newImages.length > 0 ? newImages : undefined,
+        isDraft ? 'draft' : 'submitted'
       );
       
       // If completed, clear form and navigate back
       if (!isDraft) {
-        setFormData({});
+      setFormData({});
         setMeasurementData({});
         setUploadedImages([]);
-        router.back();
+      router.back();
       }
       // If draft, keep the form data so user can continue editing
       // The report status will be updated in Redux automatically
@@ -191,29 +242,38 @@ export default function ReportDetailScreen() {
           />
         );
 
-      case QUESTION_TYPES.RADIO:
       case QUESTION_TYPES.SELECT:
         return (
-          <OptionsQuestion
+          <SelectQuestion
             key={index}
             text={question.text}
             value={value as string}
             options={question.options}
             required={question.required}
-            multiSelect={false}
+            onSelect={(val) => handleInputChange(question.text, val)}
+          />
+        );
+
+      case QUESTION_TYPES.RADIO:
+        return (
+          <RadioQuestion
+            key={index}
+            text={question.text}
+            value={value as string}
+            options={question.options}
+            required={question.required}
             onSelect={(val) => handleInputChange(question.text, val)}
           />
         );
 
       case QUESTION_TYPES.CHECKBOX:
         return (
-          <OptionsQuestion
+          <CheckboxQuestion
             key={index}
             text={question.text}
             value={(value as string[]) || []}
             options={question.options}
             required={question.required}
-            multiSelect={true}
             onSelect={(val) => handleInputChange(question.text, val)}
           />
         );
@@ -271,7 +331,7 @@ export default function ReportDetailScreen() {
             {/* Header */}
             <View style={styles.detailHeader}>
               <View style={layoutStyles.rowBetween}>
-                <Text style={styles.detailTitle}>{selectedReport.title}</Text>
+              <Text style={styles.detailTitle}>{selectedReport.title}</Text>
                 {isDraft && (
                   <Badge variant="outline">
                     <Text style={styles.draftBadgeText}>Draft</Text>
@@ -309,7 +369,13 @@ export default function ReportDetailScreen() {
                     <Text style={styles.completedBadgeText}>Completed</Text>
                   </View>
                 </Badge>
-                {selectedReport.responses.map((response, index) => (
+                
+                {/* Display Question Responses */}
+                {selectedReport.responses.map((response, index) => {
+                  // Skip info questions (they have boolean answers)
+                  if (typeof response.answer === 'boolean') return null;
+                  
+                  return (
                   <View key={index} style={styles.fieldGroup}>
                     <Label>{response.question}</Label>
                     <View style={styles.submittedValueContainer}>
@@ -319,8 +385,49 @@ export default function ReportDetailScreen() {
                           : response.answer || 'Not provided'}
                       </Text>
                     </View>
+                    </View>
+                  );
+                })}
+
+                {/* Display Detail Statistics (Read-only) */}
+                {selectedReport.detailsStatistic && selectedReport.detailStatisticsFields && selectedReport.detailStatisticsFields.length > 0 && (
+                  <View style={styles.statisticsSection}>
+                    <Text style={styles.sectionTitle}>Body Measurements</Text>
+                    <View style={styles.measurementsGrid}>
+                      {selectedReport.detailStatisticsFields
+                        .filter(field => field.enabled)
+                        .sort((a, b) => a.order - b.order)
+                        .map((field) => (
+                          <View key={field.key} style={styles.measurementItem}>
+                            <MeasurementCard
+                              field={field}
+                              value={measurementData[field.key] || ''}
+                              onChange={() => {}} // Read-only
+                              readOnly
+                            />
+                          </View>
+                        ))}
+                    </View>
+                  </View>
+                )}
+
+                {/* Display Uploaded Images (Read-only) */}
+                {selectedReport.uploadImage && uploadedImages.length > 0 && (
+                  <View style={styles.imageSection}>
+                    <Label>Progress Photos</Label>
+                    <View style={styles.imagesGrid}>
+                      {uploadedImages.map((image, index) => (
+                        <View key={index} style={styles.imageWrapper}>
+                          <Image
+                            source={{ uri: image.uri }}
+                            style={styles.uploadedImage}
+                            resizeMode="cover"
+                          />
                   </View>
                 ))}
+                    </View>
+                  </View>
+                )}
               </View>
             ) : (
               <View style={styles.formSection}>
@@ -363,19 +470,19 @@ export default function ReportDetailScreen() {
 
                 {/* Action Buttons */}
                 <View style={styles.actionButtons}>
-                  <Button
+                <Button
                     onPress={() => handleSubmit(false)}
-                    size="lg"
-                    disabled={submitting}
-                    loading={submitting}
-                  >
-                    <View style={layoutStyles.rowCenterGap8}>
-                      <Ionicons name="send" size={16} color={darkTheme.color.primaryForeground} />
-                      <Text style={styles.submitButtonText}>
-                        {submitting ? 'Submitting...' : 'Submit Report'}
-                      </Text>
-                    </View>
-                  </Button>
+                  size="lg"
+                  disabled={submitting}
+                  loading={submitting}
+                >
+                  <View style={layoutStyles.rowCenterGap8}>
+                    <Ionicons name="send" size={16} color={darkTheme.color.primaryForeground} />
+                    <Text style={styles.submitButtonText}>
+                      {submitting ? 'Submitting...' : 'Submit Report'}
+                    </Text>
+                  </View>
+                </Button>
 
                   <Button
                     onPress={() => handleSubmit(true)}
@@ -513,6 +620,23 @@ const styles = StyleSheet.create({
   },
   imageSection: {
     marginTop: 16,
+    gap: 12,
+  },
+  imagesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  imageWrapper: {
+    width: '31%', // 3 columns with gap
+    aspectRatio: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: darkTheme.color.secondary,
+  },
+  uploadedImage: {
+    width: '100%',
+    height: '100%',
   },
   actionButtons: {
     gap: 12,
@@ -545,4 +669,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
 

@@ -10,7 +10,7 @@ export interface Report {
   title: string;
   description: string;
   dueDate: string;
-  status: 'pending' | 'completed' | 'draft';
+  status: 'pending' | 'completed' | 'draft' | 'submitted';
   createdBy: string;
 }
 
@@ -28,8 +28,7 @@ export interface ReportCardProps {
 export const ReportCard = ({ report, onPress }: ReportCardProps) => {
   const isPending = report.status === 'pending';
   const isDraft = report.status === 'draft';
-  const isCompleted = report.status === 'completed';
-
+  const isCompleted = report.status === 'completed' || report.status === 'submitted';
   // Check if due date is today (only for pending/draft reports)
   const isDueToday = () => {
     if (!report.dueDate || isCompleted) return false;

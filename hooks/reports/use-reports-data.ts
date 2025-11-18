@@ -164,7 +164,7 @@ export const useReportsData = () => {
       responses: ReportResponse[],
       measurements?: Record<string, string>,
       images?: { uri: string; base64?: string; fileName?: string; mimeType?: string }[],
-      status?: 'draft' | 'completed'
+      status?: 'draft' | 'submitted'
     ): Promise<void> => {
       if (!selectedCompanyId) {
         throw new Error('No company selected');

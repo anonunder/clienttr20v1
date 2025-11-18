@@ -27,13 +27,11 @@ import { Button } from '@/components/ui/Button';
 import { darkTheme } from '@/styles/theme';
 import { textStyles } from '@/styles/shared-styles';
 import { env } from '@/config/env';
-import { useTrainingPlan } from '@/hooks/programs/use-training-plan';
 import { ExerciseDetail } from '@/features/exercise/exercise-slice';
 import { api } from '@/services/api-client';
 import { endpoints } from '@/services/api-client/endpoints';
 import { RootState } from '@/state/store';
 import { useFavorites } from '@/hooks/favorites/use-favorites';
-import { useComments } from '@/hooks/comments/use-comments';
 import { useWorkoutSession } from '@/hooks/workout-session/use-workout-session';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -51,7 +49,6 @@ export default function ExerciseScreen() {
     exerciseId: string;
   }>();
   
-  const { trainingPlan, loading: trainingPlanLoading } = useTrainingPlan(programId || '');
   const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
   const companyId = selectedCompanyId ? parseInt(selectedCompanyId, 10) : null;
 
@@ -62,24 +59,17 @@ export default function ExerciseScreen() {
     exerciseFavoritesLoading,
     fetchExercises: fetchFavoriteExercises
   } = useFavorites();
-  const { 
-    addExercise: addExerciseComment,
-    fetchExercise: fetchExerciseComments,
-    getExerciseComments,
-    exerciseCommentsLoading
-  } = useComments();
   
   // Workout session hook
   const {
     currentSession,
     hasActiveSession,
     startSession,
-    updateSession,
     finishSession,
-    startExercise,
     finishExercise,
-    addExercise: addSessionExercise,
-    updateExercise: updateSessionExercise,
+    startExercise,
+    addExercise,
+    updateSession,
   } = useWorkoutSession();
 
   // UI State
@@ -93,13 +83,13 @@ export default function ExerciseScreen() {
   const [showCommentRating, setShowCommentRating] = useState(false);
   const [showNextExercisePreview, setShowNextExercisePreview] = useState(false);
   const [previewVideoPlaying, setPreviewVideoPlaying] = useState(false);
-  const [commentText, setCommentText] = useState('');
   const [hasStarted, setHasStarted] = useState(false); // Track if exercise has been started at least once
   
   const timerRef = useRef<ExerciseTimerHandle | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const previewVideoRef = useRef<Video>(null);
   const isTransitioning = useRef(false);
+  const isProgrammaticScroll = useRef(false); // Track programmatic scrolls to avoid double-scrolling
 
   // Fetch exercise details for all exercises in this workout
   const [exerciseDetails, setExerciseDetails] = useState<ExerciseDetail[]>([]);
@@ -110,75 +100,48 @@ export default function ExerciseScreen() {
     if (companyId) {
       fetchFavoriteExercises(companyId).catch(console.error);
     }
-  }, [companyId]);
+  }, [companyId, fetchFavoriteExercises]);
 
+  // Fetch workout with all exercises in ONE API call
   useEffect(() => {
-    const fetchAllExercises = async () => {
-      if (!programId || !workoutId || !trainingPlan) {
-        setLoadingExercises(false);
-        return;
-      }
-
-      // Get all exercise IDs from the workout
-      const exerciseIds: number[] = [];
-      if (trainingPlan.trainingPlanDays) {
-        for (const day of trainingPlan.trainingPlanDays) {
-          for (const workout of day.trainingPlanDayWorkouts) {
-            if (workout.id === parseInt(workoutId || '0', 10)) {
-              exerciseIds.push(...(workout.workoutExercises?.map(e => e.term_taxonomy_id) || []));
-              break;
-            }
-          }
-        }
-      }
-
-      console.log('🏋️ Exercise IDs found:', exerciseIds);
-      console.log('🏋️ Workout ID:', workoutId);
-
-      if (exerciseIds.length === 0) {
-        console.warn('⚠️ No exercise IDs found for workout:', workoutId);
+    const fetchWorkoutWithExercises = async () => {
+      if (!programId || !workoutId || !companyId) {
         setLoadingExercises(false);
         return;
       }
 
       try {
-        // Note: loadingExercises is already initialized to true, no need to set again
+        const endpoint = endpoints.programs.workout(
+          parseInt(programId, 10),
+          parseInt(workoutId, 10),
+          companyId
+        );
         
-        const promises = exerciseIds.map(async (exId) => {
-          try {
-            const endpoint = endpoints.programs.exercise(
-              parseInt(programId, 10),
-              parseInt(workoutId, 10),
-              exId,
-              companyId || 0
-            );
-            
-            const response = await api<{ success: boolean; data: ExerciseDetail }>(endpoint);
-            
-            return response.success ? response.data : null;
-          } catch (error) {
-            console.error('❌ Failed to fetch exercise:', exId, error);
-            return null;
-          }
-        });
-
-        const results = await Promise.all(promises);
-        const validExercises = results.filter((ex): ex is ExerciseDetail => ex !== null);
-        setExerciseDetails(validExercises);
+        console.log('🏋️ Fetching workout with exercises from:', endpoint);
+        
+        const response = await api<{ success: boolean; data: { workoutExercises: ExerciseDetail[] } }>(endpoint);
+        
+        if (response.success && response.data.workoutExercises) {
+          console.log('✅ Loaded', response.data.workoutExercises.length, 'exercises in one call');
+          setExerciseDetails(response.data.workoutExercises);
+        } else {
+          console.warn('⚠️ No exercises found in workout');
+          setExerciseDetails([]);
+        }
       } catch (error) {
-        console.error('❌ Failed to fetch exercises:', error);
+        console.error('❌ Failed to fetch workout exercises:', error);
+        setExerciseDetails([]);
       } finally {
         setLoadingExercises(false);
       }
     };
 
-    fetchAllExercises();
-  }, [programId, workoutId, trainingPlan, companyId]);
+    fetchWorkoutWithExercises();
+  }, [programId, workoutId, companyId]);
 
   const exercises = exerciseDetails;
   const nextExercise = currentIndex < exercises.length - 1 ? exercises[currentIndex + 1] : null;
   const currentExercise = exercises[currentIndex];
-  const currentExerciseIsFavorited = currentExercise ? isExerciseFavorited(currentExercise.term_taxonomy_id) : false;
 
   // Start workout session when first exercise starts
   useEffect(() => {
@@ -193,40 +156,35 @@ export default function ExerciseScreen() {
       }
     };
     initSession();
-  }, [isPlaying, hasActiveSession, workoutId, companyId]);
+  }, [isPlaying, hasActiveSession, workoutId, companyId, startSession]);
 
-  // Handle favorite toggle
-  const handleFavoriteToggle = async () => {
-    if (!currentExercise || !companyId || exerciseFavoritesLoading) return;
-    
-    try {
-      await toggleExercise(currentExercise.term_taxonomy_id, companyId);
-    } catch (error) {
-      console.error('Failed to toggle favorite:', error);
-      Alert.alert('Error', 'Failed to update favorite');
-    }
-  };
-
-  // Handle comment submit
-  const handleCommentSubmit = async () => {
-    if (!currentExercise || !companyId || !commentText.trim() || exerciseCommentsLoading) return;
-    
-    try {
-      await addExerciseComment(currentExercise.term_taxonomy_id, companyId, commentText.trim());
-      setCommentText('');
-      Alert.alert('Success', 'Comment added!');
-      setShowCommentRating(false);
-    } catch (error) {
-      console.error('Failed to add comment:', error);
-      Alert.alert('Error', 'Failed to add comment');
-    }
-  };
-
-  // Set initial index based on exerciseId
+  // Track when exercise starts
   useEffect(() => {
-    if (exerciseId && exercises.length > 0) {
+    if (isPlaying && hasActiveSession && currentExercise && !isResting) {
+      // Start the current exercise
+      startExercise(currentExercise.term_taxonomy_id);
+      
+      // Add exercise to session if not already added
+      const exerciseData = parseExerciseData(currentExercise);
+      addExercise({
+        exercise_id: currentExercise.term_taxonomy_id,
+        exercise_name: exerciseData.name,
+        started_at: new Date().toISOString(),
+        sets: Array.from({ length: exerciseData.sets }, (_, i) => ({
+          setNumber: i + 1,
+          reps: exerciseData.reps,
+          weight: 0,
+          completed: false,
+        })),
+      });
+    }
+  }, [isPlaying, hasActiveSession, currentExercise, isResting, startExercise, addExercise]);
+
+  // Set initial index based on exerciseId - only for initial load or manual URL changes
+  useEffect(() => {
+    if (exerciseId && exercises.length > 0 && !isProgrammaticScroll.current) {
       const idx = exercises.findIndex((ex) => ex.term_taxonomy_id === parseInt(exerciseId, 10));
-      if (idx !== -1) {
+      if (idx !== -1 && idx !== currentIndex) {
         setCurrentIndex(idx);
         setCurrentSet(1); // Reset to first set when changing exercise
         setHasStarted(false); // Reset on new exercise
@@ -238,7 +196,9 @@ export default function ExerciseScreen() {
         }, 100);
       }
     }
-  }, [exerciseId, exercises.length]);
+    // Reset the flag after processing
+    isProgrammaticScroll.current = false;
+  }, [exerciseId, exercises.length, currentIndex]);
 
   // Play notification sound
   const playNotificationSound = async (_type: 'rest' | 'complete') => {
@@ -293,7 +253,7 @@ export default function ExerciseScreen() {
     }
     
     // Parse duration from description
-    let duration = 60;
+    let duration = 5;
     const description = exercise.description || '';
     const durationMatch = description.match(/Trajanje:\s*oko\s*(\d+)\s*min/i);
     if (durationMatch) {
@@ -328,7 +288,7 @@ export default function ExerciseScreen() {
   };
 
   // Handle set complete
-  const handleSetComplete = () => {
+  const handleSetComplete = async () => {
     setIsPlaying(false);
     
     // Get current exercise details
@@ -337,19 +297,63 @@ export default function ExerciseScreen() {
     
     const { sets } = parseExerciseData(exercise);
     
-    // Track exercise completion in session
-    if (currentSession && currentExercise) {
-      finishExercise(currentExercise.term_taxonomy_id);
-    }
-    
     // Check if this is the last set
     if (currentSet >= sets) {
-      // Last set complete - DON'T auto-switch, let user see buttons and choose
-      playNotificationSound('complete');
-      Alert.alert('Exercise Complete!', 'Great job! Ready for the next exercise?');
+      // Last set complete - mark exercise as finished
+      if (currentSession && currentExercise) {
+        finishExercise(currentExercise.term_taxonomy_id);
+        
+        // Update session on backend with completed exercises
+        try {
+          await updateSession({
+            sessionId: currentSession.id,
+            companyId: companyId!,
+          });
+          console.log('✅ Exercise marked as complete in session');
+        } catch (error) {
+          console.error('Failed to update session:', error);
+        }
+      }
       
-      // Reset set counter for when they move to next
-      setCurrentSet(1);
+      playNotificationSound('complete');
+      
+      // Check if there's a next exercise
+      if (currentIndex < exercises.length - 1) {
+        // Move to next exercise
+        const nextIndex = currentIndex + 1;
+        
+        // Scroll to next exercise
+        setTimeout(() => {
+          scrollViewRef.current?.scrollTo({ 
+            y: nextIndex * SCREEN_HEIGHT, 
+            animated: true 
+          });
+          
+          // Update state after scroll
+          setTimeout(() => {
+            setCurrentIndex(nextIndex);
+            setCurrentSet(1); // Reset to first set
+            setHasStarted(false);
+            setIsPlaying(false);
+            setIsResting(true); // Start rest immediately
+            
+            // Mark as programmatic scroll to prevent the URL effect from re-scrolling
+            isProgrammaticScroll.current = true;
+            
+            // Update URL
+            const nextEx = exercises[nextIndex];
+            router.replace(
+              `/programs/training/${programId}/workout/${workoutId}/exercise/${nextEx.term_taxonomy_id}`
+            );
+            
+            Alert.alert('Exercise Complete!', 'Rest time started for next exercise.');
+          }, 500);
+        }, 300);
+      } else {
+        // No more exercises - just complete
+        Alert.alert('Exercise Complete!', 'Great job! This was the last exercise.');
+        setCurrentSet(1);
+      }
     } else {
       // Not last set - start rest on current exercise
       setIsResting(true);
@@ -382,40 +386,6 @@ export default function ExerciseScreen() {
     }
   };
 
-  // Go to next exercise
-  const goToNextExercise = () => {
-    if (isTransitioning.current) return;
-
-    const nextIndex = currentIndex + 1;
-    
-    if (nextIndex > exercises.length) return; // Don't go beyond completion screen
-
-    isTransitioning.current = true;
-    setIsPlaying(false);
-    setIsResting(false);
-    setHasStarted(false); // Reset for new exercise
-    setCurrentSet(1); // Reset set counter for next exercise
-
-    // Scroll to next exercise
-    scrollViewRef.current?.scrollTo({ 
-      y: nextIndex * SCREEN_HEIGHT, 
-      animated: true 
-    });
-
-    setTimeout(() => {
-      setCurrentIndex(nextIndex);
-      isTransitioning.current = false;
-      
-      // Update URL
-      if (nextIndex < exercises.length) {
-        const nextEx = exercises[nextIndex];
-        router.replace(
-          `/programs/training/${programId}/workout/${workoutId}/exercise/${nextEx.term_taxonomy_id}`
-        );
-      }
-    }, 500);
-  };
-
   // Handle scroll end
   const handleScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (isPlaying || isResting || isTransitioning.current) return;
@@ -429,6 +399,9 @@ export default function ExerciseScreen() {
       setHasStarted(false); // Reset for new exercise
       setIsPlaying(false); // Ensure not playing
       setIsResting(false); // Ensure not resting
+      
+      // Mark as programmatic scroll to prevent the URL effect from re-scrolling
+      isProgrammaticScroll.current = true;
       
       // Update URL if not on completion screen
       if (newIndex < exercises.length) {
@@ -473,7 +446,7 @@ export default function ExerciseScreen() {
   };
 
   // Loading state
-  if (trainingPlanLoading || loadingExercises) {
+  if (loadingExercises) {
     return (
       <View style={styles.loadingContainer}>
         <Loading message="Loading exercises..." />
@@ -482,7 +455,7 @@ export default function ExerciseScreen() {
   }
 
   // Error state
-  if (!trainingPlan || exercises.length === 0) {
+  if (exercises.length === 0) {
     return (
       <View style={styles.errorContainer}>
         <Ionicons name="alert-circle-outline" size={64} color={darkTheme.color.destructive} />
@@ -560,8 +533,31 @@ export default function ExerciseScreen() {
                   <View style={styles.completionButtons}>
                     <Button
                       title="Finish Workout"
-                      onPress={() => {
-                        Alert.alert('Workout completed! Great job!');
+                      onPress={async () => {
+                        // Finish workout session
+                        if (currentSession && companyId) {
+                          try {
+                            // Calculate total duration
+                            const startTime = currentSession.started_at 
+                              ? new Date(currentSession.started_at).getTime() 
+                              : new Date().getTime();
+                            const endTime = new Date().getTime();
+                            const durationMinutes = Math.round((endTime - startTime) / 1000 / 60);
+                            
+                            await finishSession({
+                              sessionId: currentSession.id,
+                              companyId,
+                              duration_minutes: durationMinutes,
+                            });
+                            
+                            Alert.alert('Success', 'Workout completed! Great job!');
+                          } catch (error) {
+                            console.error('Failed to finish session:', error);
+                            Alert.alert('Error', 'Failed to save workout session');
+                          }
+                        } else {
+                          Alert.alert('Success', 'Workout completed! Great job!');
+                        }
                         router.back();
                       }}
                       variant="default"
@@ -583,8 +579,8 @@ export default function ExerciseScreen() {
           const exerciseData = parseExerciseData(exercise);
           const { name, videoUrl, duration, restTime, sets, reps, description } = exerciseData;
           
-          // Use isFavorited from API response (backend already checks this)
-          const isThisExerciseFavorited = exercise.isFavorited ?? isExerciseFavorited(exercise.term_taxonomy_id);
+          // Use Redux state for real-time updates (falls back to API response on initial load)
+          const isThisExerciseFavorited = isExerciseFavorited(exercise.term_taxonomy_id) ?? exercise.isFavorited ?? false;
 
           return (
             <View key={exercise.term_taxonomy_id || index} style={styles.snapItem}>
@@ -645,22 +641,22 @@ export default function ExerciseScreen() {
               {!isPlaying && !isResting && (
                 <View style={styles.actionButtons}>
                   <ExerciseActionButtons
-                    onLike={() => {
+                    onLike={async () => {
                       // Use the exercise from this slide
                       if (!companyId || exerciseFavoritesLoading) return;
                       try {
-                        toggleExercise(exercise.term_taxonomy_id, companyId);
+                        await toggleExercise(exercise.term_taxonomy_id, companyId);
                       } catch (error) {
                         console.error('Failed to toggle favorite:', error);
                         Alert.alert('Error', 'Failed to update favorite');
                       }
                     }}
                     onShare={() => Alert.alert('Share', 'Share functionality')}
-                    onSave={() => {
+                    onSave={async () => {
                       // Use the exercise from this slide
                       if (!companyId || exerciseFavoritesLoading) return;
                       try {
-                        toggleExercise(exercise.term_taxonomy_id, companyId);
+                        await toggleExercise(exercise.term_taxonomy_id, companyId);
                       } catch (error) {
                         console.error('Failed to toggle favorite:', error);
                         Alert.alert('Error', 'Failed to update favorite');

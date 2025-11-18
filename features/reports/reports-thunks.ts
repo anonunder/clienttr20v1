@@ -153,7 +153,7 @@ export const submitReportResponse = createAsyncThunk(
       responses: ReportResponse[];
       measurements?: Record<string, string>;
       images?: { uri: string; base64?: string; fileName?: string; mimeType?: string }[];
-      status?: 'draft' | 'completed';
+      status?: 'draft' | 'submitted';
     },
     { rejectWithValue }
   ) => {
@@ -163,7 +163,7 @@ export const submitReportResponse = createAsyncThunk(
       const body: any = {
         companyId,
         responses,
-        status: status || 'completed',
+        status: status || 'submitted', // Default to submitted
       };
 
       // Add measurements if provided
@@ -172,6 +172,9 @@ export const submitReportResponse = createAsyncThunk(
       }
 
       // Add images if provided (convert to base64 if needed)
+      // Note: Images are compressed and resized in ImageUpload component to reduce payload size
+      // - Web: resized to max 1200x1200px with 70% quality
+      // - Mobile: 70% quality via expo-image-picker
       if (images && images.length > 0) {
         body.images = images.map((img) => ({
           data: img.base64 || img.uri,
@@ -179,7 +182,7 @@ export const submitReportResponse = createAsyncThunk(
           mimeType: img.mimeType || 'image/jpeg',
         }));
       }
-
+      
       const response = await api<SubmitReportApiResponse>(
         endpoints.reports.submit(responseId),
         {

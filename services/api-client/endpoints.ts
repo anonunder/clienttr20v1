@@ -14,6 +14,8 @@ export const endpoints = {
       `/client/program/${programId}/nutrition/meals/${mealId}?companyId=${companyId}`,
     recipe: (programId: number, recipeId: number, companyId: number) => 
       `/client/program/${programId}/nutrition/recipes/${recipeId}?companyId=${companyId}`,
+    workout: (programId: number, workoutId: number, companyId: number) => 
+      `/client/programs/${programId}/training/${workoutId}?companyId=${companyId}`,
     exercise: (programId: number, workoutId: number, exerciseId: number, companyId: number) => 
       `/client/programs/${programId}/training/${workoutId}/exercise/${exerciseId}?companyId=${companyId}`,
   },

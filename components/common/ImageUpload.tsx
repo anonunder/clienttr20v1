@@ -51,9 +51,12 @@ export function ImageUpload({
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
-        quality: 0.8,
+        quality: 0.7, // Reduce quality to 70%
         base64: true, // Get base64 for upload
         exif: false,
+        allowsEditing: false,
+        // Resize image to max 1200x1200
+        // Note: expo-image-picker doesn't have resize on all platforms
       });
 
       if (!result.canceled) {
@@ -87,41 +90,91 @@ export function ImageUpload({
     let filesProcessed = 0;
     
     Array.from(files).forEach((file: File) => {
+      // Create image element to resize
+      const img = new window.Image();
       const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        const base64Data = base64String.split(',')[1]; // Remove data:image/... prefix
+      
+      reader.onload = (e) => {
+        img.src = e.target?.result as string;
         
-        const newImage: UploadedImage = {
-          uri: base64String, // For display (includes data:image prefix)
-          base64: base64Data, // For upload (base64 only)
-          fileName: file.name,
-          mimeType: file.type,
+        img.onload = () => {
+          // Create canvas to resize image
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Maximum dimensions
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate new dimensions
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw resized image
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          // Convert to base64 with compression (0.7 quality)
+          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          const base64Data = resizedBase64.split(',')[1];
+          
+          const newImage: UploadedImage = {
+            uri: resizedBase64, // For display
+            base64: base64Data, // For upload
+            fileName: file.name.replace(/\.[^/.]+$/, '.jpg'), // Force .jpg extension
+            mimeType: 'image/jpeg',
+          };
+          
+          newImages.push(newImage);
+          filesProcessed++;
+          
+          console.log(`📸 Processed ${filesProcessed}/${totalFiles}:`, newImage.fileName, 
+            `(Original: ${(img.width)}x${(img.height)}, Resized: ${Math.round(width)}x${Math.round(height)})`);
+          
+          // Update images when all files are read
+          if (filesProcessed === totalFiles) {
+            const totalImages = [...images, ...newImages];
+            const limitedImages = totalImages.slice(0, maxImages);
+            console.log('📸 Total images after update:', limitedImages.length);
+            onImagesChange(limitedImages);
+          }
         };
         
-        newImages.push(newImage);
-        filesProcessed++;
-        
-        console.log(`📸 Processed ${filesProcessed}/${totalFiles}:`, newImage.fileName);
-        
-        // Update images when all files are read
-        if (filesProcessed === totalFiles) {
-          const totalImages = [...images, ...newImages];
-          const limitedImages = totalImages.slice(0, maxImages);
-          console.log('📸 Total images after update:', limitedImages.length, limitedImages);
-          onImagesChange(limitedImages);
-        }
+        img.onerror = () => {
+          console.error('📸 Error loading image:', file.name);
+          filesProcessed++;
+          if (filesProcessed === totalFiles && newImages.length > 0) {
+            const totalImages = [...images, ...newImages];
+            const limitedImages = totalImages.slice(0, maxImages);
+            onImagesChange(limitedImages);
+          }
+        };
       };
+      
       reader.onerror = (error) => {
         console.error('📸 Error reading file:', file.name, error);
         filesProcessed++;
-        // Still check if all files are processed even if one fails
-        if (filesProcessed === totalFiles) {
+        if (filesProcessed === totalFiles && newImages.length > 0) {
           const totalImages = [...images, ...newImages];
           const limitedImages = totalImages.slice(0, maxImages);
           onImagesChange(limitedImages);
         }
       };
+      
       reader.readAsDataURL(file);
     });
 
@@ -143,9 +196,10 @@ export function ImageUpload({
 
       // Launch camera
       const result = await ImagePicker.launchCameraAsync({
-        quality: 0.8,
+        quality: 0.7, // Reduce quality to 70%
         base64: true,
         exif: false,
+        allowsEditing: false,
       });
 
       if (!result.canceled && result.assets[0]) {

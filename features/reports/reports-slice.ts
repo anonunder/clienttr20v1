@@ -32,6 +32,15 @@ export interface DetailStatisticField {
   hasGoal: boolean;
 }
 
+export interface ReportImage {
+  id: number;
+  fileName: string;
+  path: string;
+  size: number;
+  mimeType: string;
+  uploadedAt: string;
+}
+
 export interface Report {
   responseId: number;
   reportId: number;
@@ -39,13 +48,15 @@ export interface Report {
   description: string;
   questions: ReportQuestion[];
   responses?: ReportResponse[];
+  measurements?: Record<string, string>; // Submitted measurement data
   submittedAt?: string | null;
   sentDate: string;
-  status: 'pending' | 'completed' | 'draft';
+  status: 'pending' | 'completed' | 'draft' | 'submitted';
   clientId: string;
   detailsStatistic: boolean;
   detailStatisticsFields?: DetailStatisticField[];
-  uploadImage: boolean;
+  uploadImage: boolean | number; // Can be boolean or 1/0
+  images?: ReportImage[];
   trainerName: string;
   trainerEmail: string;
 }
@@ -189,26 +200,26 @@ const reportsSlice = createSlice({
             state.selectedReport = submittedReport;
           }
         } else {
-          // If status is completed, move from pending to completed
-          const reportIndex = state.pendingReports.findIndex(
-            (r) => r.responseId === submittedReport.responseId
-          );
+          // If status is submitted/completed, move from pending to completed
+        const reportIndex = state.pendingReports.findIndex(
+          (r) => r.responseId === submittedReport.responseId
+        );
+        
+        if (reportIndex !== -1) {
+          // Remove from pending
+          state.pendingReports.splice(reportIndex, 1);
           
-          if (reportIndex !== -1) {
-            // Remove from pending
-            state.pendingReports.splice(reportIndex, 1);
-            
-            // Add to completed with full data from API
-            const completedReport: Report = {
-              ...submittedReport,
-              status: 'completed',
-            };
-            
-            state.completedReports.unshift(completedReport);
-          }
+          // Add to completed with full data from API
+          const completedReport: Report = {
+            ...submittedReport,
+            status: submittedReport.status === 'submitted' ? 'completed' : submittedReport.status,
+          };
           
-          // Clear selected report
-          state.selectedReport = null;
+          state.completedReports.unshift(completedReport);
+        }
+        
+        // Clear selected report
+        state.selectedReport = null;
         }
       })
       .addCase(submitReportResponse.rejected, (state, action) => {

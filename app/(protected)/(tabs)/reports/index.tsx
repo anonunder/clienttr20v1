@@ -129,7 +129,7 @@ export default function ReportsScreen() {
                       title: report.title,
                       description: report.description,
                       dueDate: new Date(report.sentDate).toLocaleDateString(),
-                      status: 'pending',
+                      status: report.status || 'pending', // Use actual status from backend
                       createdBy:  report.trainerName,
                     }}
                     onPress={() => handleReportPress(report)}
@@ -168,7 +168,7 @@ export default function ReportsScreen() {
                       title: report.title,
                       description: report.description,
                       dueDate: new Date(report.sentDate).toLocaleDateString(),
-                      status: 'completed',
+                      status: report.status || 'completed', // Use actual status from backend
                       createdBy: report.trainerName,
                     }}
                     onPress={() => handleReportPress(report)}

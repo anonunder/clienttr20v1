@@ -10,6 +10,7 @@ interface MeasurementCardProps {
   value?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
+  readOnly?: boolean;
 }
 
 /**
@@ -21,8 +22,9 @@ export function MeasurementCard({
   value,
   onChange,
   disabled = false,
+  readOnly = false,
 }: MeasurementCardProps) {
-  const isEditable = !disabled && onChange;
+  const isEditable = !disabled && !readOnly && onChange;
 
   return (
     <View style={styles.container}>
