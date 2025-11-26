@@ -32,9 +32,12 @@ export const ExerciseTimer = forwardRef<ExerciseTimerHandle, ExerciseTimerProps>
     const prevStart = useRef<number>(0);
     const prevPause = useRef<number>(0);
 
-    const progress = isResting
+    // Calculate progress, handling division by zero
+    const progress = isResting && restTime > 0
       ? ((restTime - timeLeft) / restTime) * 100
-      : ((duration - timeLeft) / duration) * 100;
+      : duration > 0
+        ? ((duration - timeLeft) / duration) * 100
+        : 0;
 
     // External start/pause controls via signals
     useEffect(() => {
@@ -84,10 +87,15 @@ export const ExerciseTimer = forwardRef<ExerciseTimerHandle, ExerciseTimerProps>
         setTimeLeft((prev) => {
           if (prev <= 1) {
             if (!isResting) {
-              // Exercise complete, start rest
-              setIsResting(true);
+              // Exercise complete
+              setIsRunning(false);
               setShouldTriggerComplete(true);
-              return restTime;
+              // Only start rest if restTime is configured
+              if (restTime > 0) {
+                setIsResting(true);
+                return restTime;
+              }
+              return duration;
             } else {
               // Rest complete
               setIsRunning(false);

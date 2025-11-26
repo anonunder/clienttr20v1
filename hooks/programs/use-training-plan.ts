@@ -51,12 +51,10 @@ export const useTrainingPlan = (programId: number | string) => {
     }
   }, [dispatch, selectedCompanyId, programId]);
 
-  // Auto-fetch on mount
+  // Auto-fetch on mount or when dependencies change
   useEffect(() => {
-    if (selectedCompanyId && programId) {
-      fetchDetail();
-    }
-  }, [selectedCompanyId, programId, fetchDetail]);
+    fetchDetail();
+  }, [fetchDetail]);
 
   return {
     trainingPlan,

@@ -80,7 +80,6 @@ export default function ExerciseScreen() {
   const [isResting, setIsResting] = useState(false);
   const [timerStartSignal, setTimerStartSignal] = useState(0);
   const [timerPauseSignal, setTimerPauseSignal] = useState(0);
-  const [restTimerStartSignal, setRestTimerStartSignal] = useState(0);
   const [showCommentRating, setShowCommentRating] = useState(false);
   const [showNextExercisePreview, setShowNextExercisePreview] = useState(false);
   const [previewVideoPlaying, setPreviewVideoPlaying] = useState(false);
@@ -318,37 +317,7 @@ export default function ExerciseScreen() {
       
       playNotificationSound('complete');
       
-      // Always start rest time after last set (even if it's the last exercise)
-      setIsResting(true);
-      setRestTimerStartSignal(s => s + 1); // Trigger rest timer
-      Alert.alert('Exercise Complete!', 'Rest time started before next exercise.');
-    } else {
-      // Not last set - start rest on current exercise
-      setIsResting(true);
-      setRestTimerStartSignal(s => s + 1); // Trigger rest timer
-      playNotificationSound('rest');
-      Alert.alert('Set Complete!', 'Rest time started.');
-    }
-  };
-
-  // Handle rest complete
-  const handleRestComplete = () => {
-    setIsResting(false);
-    playNotificationSound('rest');
-    
-    // Get current exercise details
-    const exercise = exercises[currentIndex];
-    if (!exercise) return;
-    
-    const { sets } = parseExerciseData(exercise);
-    
-    // Check if there are more sets in current exercise
-    if (currentSet < sets) {
-      // Move to next set of the same exercise
-      setCurrentSet(prev => prev + 1);
-      Alert.alert('Rest Complete!', `Ready for Set ${currentSet + 1}/${sets}!`);
-    } else {
-      // All sets complete - rest time finished, now move to next exercise
+      // Check if there's a next exercise
       if (currentIndex < exercises.length - 1) {
         // Move to next exercise
         const nextIndex = currentIndex + 1;
@@ -366,6 +335,7 @@ export default function ExerciseScreen() {
             setCurrentSet(1); // Reset to first set
             setHasStarted(false);
             setIsPlaying(false);
+            setIsResting(true); // Start rest immediately
             
             // Mark as programmatic scroll to prevent the URL effect from re-scrolling
             isProgrammaticScroll.current = true;
@@ -376,24 +346,43 @@ export default function ExerciseScreen() {
               `/programs/training/${programId}/workout/${workoutId}/exercise/${nextEx.term_taxonomy_id}`
             );
             
-            Alert.alert('Rest Complete!', 'Ready for next exercise!');
+            Alert.alert('Exercise Complete!', 'Rest time started for next exercise.');
           }, 500);
         }, 300);
       } else {
-        // No more exercises - workout complete, scroll to completion screen
-        setTimeout(() => {
-          scrollViewRef.current?.scrollTo({ 
-            y: exercises.length * SCREEN_HEIGHT, 
-            animated: true 
-          });
-          
-          setTimeout(() => {
-            setCurrentIndex(exercises.length);
-            setCurrentSet(1);
-            Alert.alert('Workout Complete!', 'Great job finishing all exercises!');
-          }, 500);
-        }, 300);
+        // No more exercises - just complete
+        Alert.alert('Exercise Complete!', 'Great job! This was the last exercise.');
+        setCurrentSet(1);
       }
+    } else {
+      // Not last set - start rest on current exercise
+      setIsResting(true);
+      playNotificationSound('rest');
+      Alert.alert('Set Complete!', 'Rest time started.');
+    }
+  };
+
+  // Handle rest complete
+  const handleRestComplete = () => {
+    setIsResting(false);
+    playNotificationSound('rest');
+    
+    // Get current exercise details
+    const exercise = exercises[currentIndex];
+    if (!exercise) return;
+    
+    const { sets } = parseExerciseData(exercise);
+    
+    // Check if there are more sets
+    if (currentSet < sets) {
+      // Move to next set
+      setCurrentSet(prev => prev + 1);
+      Alert.alert('Rest Complete!', `Ready for Set ${currentSet + 1}/${sets}!`);
+    } else {
+      // All sets complete - this shouldn't happen normally since we handle it in handleSetComplete
+      // But keep as fallback
+      setCurrentSet(1); // Reset for next exercise
+      Alert.alert('Exercise Complete!', 'Ready for next exercise.');
     }
   };
 
@@ -625,34 +614,18 @@ export default function ExerciseScreen() {
                 />
               </View>
 
-              {/* Timer Overlay - Show different timers for exercise vs rest */}
-              {isPlaying && !isResting && (
+              {/* Timer Overlay - Only when playing or resting */}
+              {(isPlaying || isResting) && (
                 <View style={styles.timerOverlay}>
                   <ExerciseTimer
                     ref={timerRef}
                     duration={duration}
-                    restTime={0} // Don't use built-in rest mode
+                    restTime={restTime}
                     startSignal={timerStartSignal}
                     pauseSignal={timerPauseSignal}
                     onComplete={handleSetComplete}
-                    onRestComplete={() => {}} // Not used
+                    onRestComplete={handleRestComplete}
                     onStart={() => setIsPlaying(true)}
-                  />
-                </View>
-              )}
-              
-              {/* Rest Timer - Separate timer for rest */}
-              {isResting && (
-                <View style={styles.timerOverlay}>
-                  <ExerciseTimer
-                    ref={timerRef}
-                    duration={restTime}
-                    restTime={0} // Rest mode doesn't need another rest
-                    startSignal={restTimerStartSignal}
-                    pauseSignal={0}
-                    onComplete={handleRestComplete}
-                    onRestComplete={() => {}} // Not used
-                    onStart={() => {}}
                   />
                 </View>
               )}
