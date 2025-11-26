@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
   View,
   Modal,
-  Image,
   StyleSheet,
   Pressable,
   ScrollView,
@@ -10,6 +9,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { darkTheme } from '@/styles/theme';
 
@@ -22,6 +22,7 @@ interface ImageLightboxProps {
 
 export function ImageLightbox({ images, initialIndex, visible, onClose }: ImageLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const scrollViewRef = useRef<ScrollView>(null);
   const { width, height } = Dimensions.get('window');
 
   const handleScroll = useCallback((event: any) => {
@@ -30,9 +31,22 @@ export function ImageLightbox({ images, initialIndex, visible, onClose }: ImageL
     setCurrentIndex(index);
   }, [width]);
 
-  React.useEffect(() => {
-    setCurrentIndex(initialIndex);
-  }, [initialIndex]);
+  // Scroll to initial index when modal opens or initialIndex changes
+  useEffect(() => {
+    if (visible && scrollViewRef.current) {
+      console.log('🖼️ ImageLightbox - Scrolling to index:', initialIndex, 'width:', width, 'offset:', initialIndex * width);
+      console.log('🖼️ ImageLightbox - Images:', images);
+      // Small delay to ensure ScrollView is rendered
+      setTimeout(() => {
+        scrollViewRef.current?.scrollTo({
+          x: initialIndex * width,
+          y: 0,
+          animated: false,
+        });
+        setCurrentIndex(initialIndex);
+      }, 50);
+    }
+  }, [visible, initialIndex, width, images]);
 
   if (!visible) {
     return null;
@@ -68,21 +82,22 @@ export function ImageLightbox({ images, initialIndex, visible, onClose }: ImageL
 
         {/* Image Carousel */}
         <ScrollView
+          ref={scrollViewRef}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           onScroll={handleScroll}
           scrollEventThrottle={16}
-          contentOffset={{ x: initialIndex * width, y: 0 }}
           style={styles.scrollView}
         >
           {images.map((imageUri, index) => (
-            <View key={index} style={[styles.imageContainer, { width, height }]}>
+            <View key={`lightbox-${index}-${imageUri}`} style={[styles.imageContainer, { width, height }]}>
               <Pressable onPress={onClose} style={styles.imagePressable}>
                 <Image
-                  source={{ uri: imageUri }}
+                  source={imageUri}
                   style={styles.image}
-                  resizeMode="contain"
+                  contentFit="contain"
+                  cachePolicy="none"
                 />
               </Pressable>
             </View>

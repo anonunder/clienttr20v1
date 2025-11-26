@@ -163,7 +163,13 @@ export default function RecipeDetailScreen() {
     if (!recipeDetail?.media?.demo_media_id || !Array.isArray(recipeDetail.media.demo_media_id)) {
       return [];
     }
-    return recipeDetail.media.demo_media_id.map(media => media.post_content);
+    const images = recipeDetail.media.demo_media_id.map(media => media.post_content);
+    console.log('🍽️ Recipe demoImages:', {
+      mediaCount: recipeDetail.media.demo_media_id.length,
+      images,
+      fullMedia: recipeDetail.media.demo_media_id
+    });
+    return images;
   }, [recipeDetail]);
 
   // Loading state

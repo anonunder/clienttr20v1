@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { Card } from '@/components/ui/Card';
 import { ImageLightbox } from '@/components/common/ImageLightbox';
 import { darkTheme } from '@/styles/theme';
@@ -18,14 +19,38 @@ const getImageUrl = (imageUri: string | null | undefined): string => {
     return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80';
   }
   
-  if (imageUri.startsWith('http')) {
-    return imageUri;
-  }
-  
   const baseUrl = env.apiBaseUrl.replace(/\/api\/?$/, '');
   const imagePath = imageUri.startsWith('/') ? imageUri : `/${imageUri}`;
   
   return `${baseUrl}${imagePath}`;
+};
+
+// Separate component for each gallery image to prevent caching issues
+const GalleryImage = ({ 
+  imageUrl, 
+  size, 
+  onPress 
+}: { 
+  imageUrl: string; 
+  size: number; 
+  onPress: () => void;
+}) => {
+  return (
+    <Pressable
+      style={[styles.imageContainer, { width: size, height: size }]}
+      onPress={onPress}
+    >
+      {({ pressed }) => (
+        <Image
+          source={imageUrl}
+          style={[styles.image, pressed && styles.imagePressed]}
+          contentFit="cover"
+          cachePolicy="none"
+          transition={200}
+        />
+      )}
+    </Pressable>
+  );
 };
 
 export function ImageGallery({ images, title = 'Gallery' }: ImageGalleryProps) {
@@ -40,7 +65,13 @@ export function ImageGallery({ images, title = 'Gallery' }: ImageGalleryProps) {
 
   // Convert all images to full URLs
   const imageUrls = useMemo(() => {
-    return images.map(getImageUrl);
+    const urls = images.map(getImageUrl);
+    console.log('🖼️ ImageGallery - Processing images:', {
+      inputImages: images,
+      outputUrls: urls,
+      count: urls.length
+    });
+    return urls;
   }, [images]);
 
   const handleImagePress = (index: number) => {
@@ -67,24 +98,14 @@ export function ImageGallery({ images, title = 'Gallery' }: ImageGalleryProps) {
             contentContainerStyle={styles.scrollContent}
             style={styles.scrollView}
           >
-            {images.map((imageUri, index) => {
-              const imageUrl = getImageUrl(imageUri);
-              return (
-                <Pressable
-                  key={index}
-                  style={[styles.imageContainer, { width: imageSize, height: imageSize }]}
-                  onPress={() => handleImagePress(index)}
-                >
-                  {({ pressed }) => (
-                    <Image
-                      source={{ uri: imageUrl }}
-                      style={[styles.image, pressed && styles.imagePressed]}
-                      resizeMode="cover"
-                    />
-                  )}
-                </Pressable>
-              );
-            })}
+            {imageUrls.map((imageUrl, index) => (
+              <GalleryImage
+                key={`${imageUrl}-${index}`}
+                imageUrl={imageUrl}
+                size={imageSize}
+                onPress={() => handleImagePress(index)}
+              />
+            ))}
           </ScrollView>
         </View>
       </Card>
