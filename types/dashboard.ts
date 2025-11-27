@@ -23,7 +23,10 @@ export interface ContinueWorkout {
   workoutTitle: string;
   startedAt: string;
   exercisesCompleted: number;
+  exercises: any[];
   currentExerciseId: number | null;
+  programId: number;
+  trainingPlanId: number;
 }
 
 export interface TodayWorkout {

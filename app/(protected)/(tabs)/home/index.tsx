@@ -45,11 +45,12 @@ export default function DashboardScreen() {
 
   const continueWorkout = dashboard.continueWorkout ? {
     name: dashboard.continueWorkout.workoutTitle,
-    progress: (dashboard.continueWorkout.exercisesCompleted / (dashboard.data?.totalExercises || 1)) * 100,
+    progress: (dashboard.continueWorkout.exercisesCompleted / (dashboard.continueWorkout.exercises?.length || 1)) * 100,
     lastExercise: dashboard.continueWorkout.currentExerciseId ? `Exercise #${dashboard.continueWorkout.currentExerciseId}` : 'Not started',
-    planId: '',
-    workoutId: String(dashboard.continueWorkout.workoutId),
-    exerciseId: String(dashboard.continueWorkout.currentExerciseId || ''),
+    programId: dashboard.continueWorkout.programId,
+    workoutId: dashboard.continueWorkout.workoutId,
+    sessionId: dashboard.continueWorkout.sessionId,
+    trainingPlanId: dashboard.continueWorkout.trainingPlanId,
   } : null;
 
   const todayExercises = dashboard.todayWorkouts.map((workout, index) => ({
@@ -226,7 +227,11 @@ export default function DashboardScreen() {
                 </View>
                 <Button
                   size="lg"
-                  onPress={() => console.log('Continue workout - route not implemented')}
+                  onPress={() => {
+                    if (continueWorkout) {
+                      router.push(`/programs/training/${continueWorkout.programId}`);
+                    }
+                  }}
                 >
                   <Text style={{ color: darkTheme.color.primaryForeground, marginRight: 8 }}>Continue</Text>
                   <Ionicons name="chevron-forward" size={16} color={darkTheme.color.primaryForeground} />

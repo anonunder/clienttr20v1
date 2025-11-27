@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, TextInput, Alert, ScrollView } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, Image, Pressable, TextInput, Alert, ScrollView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Modal } from '@/components/ui/Modal';
@@ -21,16 +21,106 @@ export function MeasurementDialog({ visible, onClose, measurement, history, onQu
   const [quickAddValue, setQuickAddValue] = useState('');
   const [quickAddImages, setQuickAddImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!measurement) return null;
 
+  // Web-specific image resizing and compression
+  const handleWebFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const totalFiles = files.length;
+    const newImages: string[] = [];
+    let filesProcessed = 0;
+    
+    Array.from(files).forEach((file: File) => {
+      const img = new window.Image();
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        img.src = e.target?.result as string;
+        
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Maximum dimensions - match ImageUpload component
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate new dimensions
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          // Convert to base64 with compression (0.7 quality - match ImageUpload)
+          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          
+          newImages.push(resizedBase64);
+          filesProcessed++;
+          
+          console.log(`📸 Processed ${filesProcessed}/${totalFiles}: ${file.name}`, 
+            `(Original: ${img.width}x${img.height}, Resized: ${Math.round(width)}x${Math.round(height)})`);
+          
+          if (filesProcessed === totalFiles) {
+            setQuickAddImages(prev => [...prev, ...newImages]);
+          }
+        };
+        
+        img.onerror = () => {
+          console.error('📸 Error loading image:', file.name);
+          filesProcessed++;
+          if (filesProcessed === totalFiles && newImages.length > 0) {
+            setQuickAddImages(prev => [...prev, ...newImages]);
+          }
+        };
+      };
+      
+      reader.onerror = (error) => {
+        console.error('📸 Error reading file:', file.name, error);
+        filesProcessed++;
+      };
+      
+      reader.readAsDataURL(file);
+    });
+
+    if (event.target) {
+      event.target.value = '';
+    }
+  };
+
   const handlePickImage = async () => {
     try {
+      // On web, trigger the file input
+      if (Platform.OS === 'web') {
+        fileInputRef.current?.click();
+        return;
+      }
+
+      // Mobile: use ImagePicker with compression
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
-        quality: 0.8,
+        quality: 0.7, // Match ImageUpload component compression
         base64: true,
+        exif: false,
+        allowsEditing: false,
       });
 
       if (!result.canceled && result.assets) {
@@ -87,6 +177,18 @@ export function MeasurementDialog({ visible, onClose, measurement, history, onQu
       title={measurement.name}
       description="View measurement history and progress photos"
     >
+      {/* Hidden file input for web */}
+      {Platform.OS === 'web' && (
+        <input
+          ref={fileInputRef as any}
+          type="file"
+          accept="image/*"
+          multiple
+          style={{ display: 'none' }}
+          onChange={handleWebFileInput as any}
+        />
+      )}
+      
       <View style={styles.container}>
         {/* Quick Add Section */}
         <Card style={styles.quickAddCard}>
