@@ -30,6 +30,15 @@ export const endpoints = {
     toggle: (entityType: string, entityId: number) => `/client/favorites/${entityType}/${entityId}`,
     list: (companyId: number) => `/client/favorites?companyId=${companyId}`,
     listByType: (entityType: string, companyId: number) => `/client/favorites/${entityType}?companyId=${companyId}`,
+    detailed: (params: { companyId: number; limit?: number; offset?: number; entityType?: string }) => {
+      const query = new URLSearchParams({
+        companyId: params.companyId.toString(),
+        ...(params.limit && { limit: params.limit.toString() }),
+        ...(params.offset && { offset: params.offset.toString() }),
+        ...(params.entityType && { entityType: params.entityType }),
+      });
+      return `/client/favorites/detailed?${query.toString()}`;
+    },
     status: (entityType: string, entityId: number, companyId: number) => 
       `/client/favorites/${entityType}/${entityId}/status?companyId=${companyId}`,
   },
@@ -96,6 +105,13 @@ export const endpoints = {
       });
       return `/client/measurements/progress/${fieldName}?${query.toString()}`;
     },
+  },
+  dashboard: {
+    overview: (companyId: number) => `/client/dashboard?companyId=${companyId}`,
+    weekly: (companyId: number) => `/client/dashboard/weekly?companyId=${companyId}`,
+    programs: (companyId: number) => `/client/dashboard/programs?companyId=${companyId}`,
+    workouts: (companyId: number) => `/client/dashboard/workouts?companyId=${companyId}`,
+    daily: (companyId: number) => `/client/dashboard/daily?companyId=${companyId}`,
   },
 };
 

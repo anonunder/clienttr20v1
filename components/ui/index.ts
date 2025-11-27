@@ -24,3 +24,5 @@ export type { TextareaProps } from './Textarea';
 
 export { Modal } from './Modal';
 
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
+

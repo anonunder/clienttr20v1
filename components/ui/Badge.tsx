@@ -1,79 +1,119 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { darkTheme } from '@/styles/theme';
 
 export interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'default' | 'secondary' | 'destructive' | 'outline';
-  className?: string;
+  variant?: 'default' | 'secondary' | 'outline' | 'success' | 'warning' | 'destructive';
+  style?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
-export function Badge({ children, variant = 'default' }: BadgeProps) {
-  const getVariantStyle = () => {
+export function Badge({ 
+  children, 
+  variant = 'default',
+  style,
+  textStyle 
+}: BadgeProps) {
+  const getBadgeStyle = (): ViewStyle => {
+    const baseStyle: ViewStyle = {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 10,
+      paddingVertical: 2,
+      borderRadius: 9999, // fully rounded
+      gap: 4,
+    };
+
     switch (variant) {
       case 'default':
         return {
+          ...baseStyle,
           backgroundColor: darkTheme.color.primary,
-          borderColor: 'transparent',
+        };
+      case 'secondary':
+        return {
+          ...baseStyle,
+          backgroundColor: darkTheme.color.secondary,
+        };
+      case 'outline':
+        return {
+          ...baseStyle,
+          backgroundColor: 'transparent',
+          borderWidth: 1,
+          borderColor: darkTheme.color.border,
+        };
+      case 'success':
+        return {
+          ...baseStyle,
+          backgroundColor: `${darkTheme.color.success}33`, // 20% opacity
+        };
+      case 'warning':
+        return {
+          ...baseStyle,
+          backgroundColor: `${darkTheme.color.warning}33`, // 20% opacity
+        };
+      case 'destructive':
+        return {
+          ...baseStyle,
+          backgroundColor: `${darkTheme.color.destructive}33`, // 20% opacity
+        };
+      default:
+        return baseStyle;
+    }
+  };
+
+  const getTextStyle = (): TextStyle => {
+    const baseStyle: TextStyle = {
+      fontSize: 12,
+      fontWeight: '600',
+      lineHeight: 16,
+    };
+
+    switch (variant) {
+      case 'default':
+        return {
+          ...baseStyle,
           color: darkTheme.color.primaryForeground,
         };
       case 'secondary':
         return {
-          backgroundColor: darkTheme.color.secondary,
-          borderColor: 'transparent',
+          ...baseStyle,
           color: darkTheme.color.secondaryForeground,
-        };
-      case 'destructive':
-        return {
-          backgroundColor: darkTheme.color.destructive,
-          borderColor: 'transparent',
-          color: darkTheme.color.destructiveForeground,
         };
       case 'outline':
         return {
-          backgroundColor: 'transparent',
-          borderColor: darkTheme.color.border,
+          ...baseStyle,
           color: darkTheme.color.foreground,
         };
-      default:
+      case 'success':
         return {
-          backgroundColor: darkTheme.color.primary,
-          borderColor: 'transparent',
-          color: darkTheme.color.primaryForeground,
+          ...baseStyle,
+          color: darkTheme.color.success,
         };
+      case 'warning':
+        return {
+          ...baseStyle,
+          color: darkTheme.color.warning,
+        };
+      case 'destructive':
+        return {
+          ...baseStyle,
+          color: darkTheme.color.destructive,
+        };
+      default:
+        return baseStyle;
     }
   };
 
-  const variantStyle = getVariantStyle();
-
   return (
-    <View style={[
-      styles.badge,
-      {
-        backgroundColor: variantStyle.backgroundColor,
-        borderColor: variantStyle.borderColor,
-      },
-    ]}>
-      <Text style={[styles.text, { color: variantStyle.color }]}>
-        {children}
-      </Text>
+    <View style={[getBadgeStyle(), style]}>
+      {typeof children === 'string' ? (
+        <Text style={[getTextStyle(), textStyle]}>{children}</Text>
+      ) : (
+        children
+      )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  badge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    borderRadius: 9999, // rounded-full
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  text: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-});
-

@@ -20,7 +20,7 @@ import { useResponsive } from '@/hooks/use-responsive';
  * Displays nutrition plan details with optional day selector and meals
  */
 export default function NutritionPlanScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, day } = useLocalSearchParams<{ id: string; day?: string }>();
   const router = useRouter();
   const { nutritionPlan, loading, error } = useNutritionPlan(id || '');
   const { isMobile, width } = useResponsive();
@@ -73,13 +73,31 @@ export default function NutritionPlanScreen() {
 
   // Set default selected date when nutrition plan loads
   useEffect(() => {
+    // If day parameter is provided in URL, use it
+    if (day && nutritionPlan?.program?.startDate) {
+      const dayNumber = parseInt(day, 10);
+      if (!isNaN(dayNumber) && dayNumber > 0) {
+        const programStartDate = new Date(nutritionPlan.program.startDate);
+        programStartDate.setHours(0, 0, 0, 0);
+        
+        // Calculate date for the given day number (day 1 = start date)
+        const targetDate = new Date(programStartDate);
+        targetDate.setDate(programStartDate.getDate() + (dayNumber - 1));
+        
+        console.log('🎯 Setting selected date from URL day parameter:', dayNumber, '→', targetDate.toISOString());
+        setSelectedDate(targetDate);
+        return; // Exit early, don't use default logic
+      }
+    }
+    
+    // Default logic: use program start date
     if (nutritionPlan?.program?.startDate && !selectedDate) {
       const programStartDate = new Date(nutritionPlan.program.startDate);
       programStartDate.setHours(0, 0, 0, 0);
       console.log('🎯 Setting initial selected date to program start date:', programStartDate.toISOString());
       setSelectedDate(programStartDate);
     }
-  }, [nutritionPlan?.program?.startDate, nutritionPlan?.id, selectedDate]);
+  }, [day, nutritionPlan?.program?.startDate, nutritionPlan?.id, selectedDate]);
 
   // Get available day numbers (sorted)
   const availableDays = useMemo(() => {

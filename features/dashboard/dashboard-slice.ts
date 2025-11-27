@@ -1,167 +1,213 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchDashboardData } from './dashboard-thunks';
+import { fetchDashboardData, fetchWeeklyOverview } from './dashboard-thunks';
+import { 
+  DashboardData, 
+  WeeklyOverview,
+  ActiveProgram,
+  ContinueWorkout,
+  TodayWorkout,
+  TodayMeal,
+  DailyProgress,
+  RecentMeasurement,
+  PendingReport,
+  OverallStats
+} from '@/types/dashboard';
 
-// Types
-export interface Exercise {
-  id: string;
-  name: string;
-  sets: number;
-  reps: number;
-  completed: boolean;
-}
-
-export interface Meal {
-  name: string;
-  description: string;
-  calories: number;
-  protein?: number;
-  carbs?: number;
-  fats?: number;
-}
-
-export interface TodayMeals {
-  breakfast: Meal;
-  lunch: Meal;
-  dinner: Meal;
-  totalCalories: number;
-  targetCalories: number;
-}
-
-export interface ContinueWorkout {
-  name: string;
-  progress: number;
-  lastExercise: string;
-  planId: string;
-  workoutId: string;
-  exerciseId: string;
-}
-
-export interface Stats {
-  activePrograms: number;
-  completedWorkouts: number;
-  totalExercises: number;
-  streak: number;
-}
-
-export interface Goal {
-  name: string;
-  current: number;
-  target: number;
-  unit: string;
-}
-
-export interface Measurement {
-  label: string;
-  value: string;
-  unit: string;
-  change?: string;
-  trend?: 'up' | 'down';
-}
-
-export interface Report {
-  id: string;
-  name: string;
-  date: string;
-  type: string;
-}
-
-export interface DashboardData {
-  stats: Stats;
-  continueWorkout?: ContinueWorkout | null;
-  todayExercises: Exercise[];
-  todayMeals: TodayMeals;
-  todayGoals: Goal[];
-  measurements: Measurement[];
-  recentReports: Report[];
-}
+/**
+ * Dashboard Redux Slice
+ * Manages complete dashboard state with real API integration
+ */
 
 interface DashboardState {
+  // Main dashboard data
   data: DashboardData | null;
+  
+  // Weekly overview data
+  weeklyOverview: WeeklyOverview | null;
+  
+  // Loading states
   loading: boolean;
+  weeklyLoading: boolean;
+  
+  // Error states
   error: string | null;
+  weeklyError: string | null;
+  
+  // Metadata
   lastUpdated: number | null;
+  lastWeeklyUpdate: number | null;
 }
 
 const initialState: DashboardState = {
   data: null,
+  weeklyOverview: null,
   loading: false,
+  weeklyLoading: false,
   error: null,
+  weeklyError: null,
   lastUpdated: null,
+  lastWeeklyUpdate: null,
 };
 
 const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState,
   reducers: {
-    // Real-time socket updates
-    updateExerciseCompletion: (state, action: PayloadAction<{ exerciseId: string; completed: boolean }>) => {
-      if (state.data?.todayExercises) {
-        const exercise = state.data.todayExercises.find(ex => ex.id === action.payload.exerciseId);
-        if (exercise) {
-          exercise.completed = action.payload.completed;
+    // === Real-time Updates via Socket or Optimistic Updates ===
+    
+    /**
+     * Update workout session progress
+     */
+    updateWorkoutSessionProgress: (state, action: PayloadAction<{
+      sessionId: number;
+      exercisesCompleted: number;
+      currentExerciseId?: number;
+    }>) => {
+      if (state.data?.continueWorkout && state.data.continueWorkout.sessionId === action.payload.sessionId) {
+        state.data.continueWorkout.exercisesCompleted = action.payload.exercisesCompleted;
+        if (action.payload.currentExerciseId !== undefined) {
+          state.data.continueWorkout.currentExerciseId = action.payload.currentExerciseId;
         }
       }
     },
-    updateWorkoutProgress: (state, action: PayloadAction<{ workoutId: string; progress: number }>) => {
-      if (state.data?.continueWorkout && state.data.continueWorkout.workoutId === action.payload.workoutId) {
-        state.data.continueWorkout.progress = action.payload.progress;
+
+    /**
+     * Update continue workout when workout is completed
+     */
+    clearContinueWorkout: (state) => {
+      if (state.data) {
+        state.data.continueWorkout = null;
+        state.data.hasInProgressWorkout = false;
       }
     },
-    updateMealLog: (state, action: PayloadAction<{ mealType: 'breakfast' | 'lunch' | 'dinner'; data: Partial<Meal> }>) => {
-      if (state.data?.todayMeals) {
-        const currentMeal = state.data.todayMeals[action.payload.mealType];
-        state.data.todayMeals[action.payload.mealType] = {
-          ...currentMeal,
-          ...action.payload.data,
+
+    /**
+     * Update continue workout data
+     */
+    setContinueWorkout: (state, action: PayloadAction<ContinueWorkout | null>) => {
+      if (state.data) {
+        state.data.continueWorkout = action.payload;
+        state.data.hasInProgressWorkout = action.payload !== null;
+      }
+    },
+
+    /**
+     * Update daily progress in real-time
+     */
+    updateDailyProgress: (state, action: PayloadAction<Partial<DailyProgress>>) => {
+      if (state.data?.dailyProgress) {
+        state.data.dailyProgress = {
+          ...state.data.dailyProgress,
+          ...action.payload,
         };
-        // Recalculate total
-        state.data.todayMeals.totalCalories = 
-          state.data.todayMeals.breakfast.calories +
-          state.data.todayMeals.lunch.calories +
-          state.data.todayMeals.dinner.calories;
       }
     },
-    updateGoalProgress: (state, action: PayloadAction<{ goalId: string; goalName: string; current: number }>) => {
-      if (state.data?.todayGoals) {
-        const goal = state.data.todayGoals.find(g => g.name === action.payload.goalName);
-        if (goal) {
-          goal.current = action.payload.current;
-        }
-      }
-    },
-    updateStats: (state, action: PayloadAction<Stats>) => {
+
+    /**
+     * Increment completed workouts
+     */
+    incrementCompletedWorkouts: (state) => {
       if (state.data) {
-        state.data.stats = action.payload;
-      }
-    },
-    addMeasurement: (state, action: PayloadAction<Measurement>) => {
-      if (state.data) {
-        // Check if measurement already exists, update or add
-        const existingIndex = state.data.measurements.findIndex(m => m.label === action.payload.label);
-        if (existingIndex >= 0) {
-          state.data.measurements[existingIndex] = action.payload;
-        } else {
-          state.data.measurements.push(action.payload);
+        state.data.completedWorkouts += 1;
+        state.data.weeklyWorkouts += 1;
+        state.data.monthlyWorkouts += 1;
+        
+        // Recalculate completion rate
+        if (state.data.totalWorkouts > 0) {
+          state.data.workoutCompletionRate = Math.round(
+            (state.data.completedWorkouts / state.data.totalWorkouts) * 100
+          );
         }
+        
+        // Update overall stats
+        state.data.overallStats.workoutsCompleted += 1;
+        
+        // Update daily progress
+        state.data.dailyProgress.workoutsCompleted += 1;
       }
     },
-    addReport: (state, action: PayloadAction<Report>) => {
+
+    /**
+     * Add a new measurement to recent measurements
+     */
+    addMeasurement: (state, action: PayloadAction<RecentMeasurement>) => {
       if (state.data) {
-        // Add to beginning of reports array
-        state.data.recentReports.unshift(action.payload);
-        // Keep only last 5 reports
-        if (state.data.recentReports.length > 5) {
-          state.data.recentReports = state.data.recentReports.slice(0, 5);
+        // Add to the beginning of the array
+        state.data.recentMeasurements.unshift(action.payload);
+        
+        // Keep only the 3 most recent
+        if (state.data.recentMeasurements.length > 3) {
+          state.data.recentMeasurements = state.data.recentMeasurements.slice(0, 3);
         }
+        
+        // Increment count
+        state.data.measurementsCount += 1;
+        state.data.overallStats.measurementsTaken += 1;
       }
     },
+
+    /**
+     * Update pending reports count
+     */
+    updatePendingReportsCount: (state, action: PayloadAction<number>) => {
+      if (state.data) {
+        state.data.pendingReportsCount = action.payload;
+      }
+    },
+
+    /**
+     * Mark a report as completed
+     */
+    markReportCompleted: (state, action: PayloadAction<number>) => {
+      if (state.data) {
+        // Remove from pending reports
+        state.data.recentReports = state.data.recentReports.filter(
+          report => report.id !== action.payload
+        );
+        
+        // Decrement pending count
+        if (state.data.pendingReportsCount > 0) {
+          state.data.pendingReportsCount -= 1;
+        }
+        
+        // Increment completed count
+        state.data.overallStats.reportsCompleted += 1;
+      }
+    },
+
+    /**
+     * Update overall stats
+     */
+    updateOverallStats: (state, action: PayloadAction<Partial<OverallStats>>) => {
+      if (state.data?.overallStats) {
+        state.data.overallStats = {
+          ...state.data.overallStats,
+          ...action.payload,
+        };
+      }
+    },
+
+    /**
+     * Clear all dashboard data
+     */
     clearDashboard: (state) => {
       state.data = null;
+      state.weeklyOverview = null;
       state.error = null;
+      state.weeklyError = null;
       state.lastUpdated = null;
+      state.lastWeeklyUpdate = null;
+    },
+
+    /**
+     * Set loading state manually
+     */
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     },
   },
   extraReducers: (builder) => {
+    // === Main Dashboard Data ===
     builder
       .addCase(fetchDashboardData.pending, (state) => {
         state.loading = true;
@@ -171,24 +217,58 @@ const dashboardSlice = createSlice({
         state.loading = false;
         state.data = action.payload;
         state.lastUpdated = Date.now();
+        state.error = null;
       })
       .addCase(fetchDashboardData.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload as string || 'Failed to fetch dashboard data';
+      });
+
+    // === Weekly Overview ===
+    builder
+      .addCase(fetchWeeklyOverview.pending, (state) => {
+        state.weeklyLoading = true;
+        state.weeklyError = null;
+      })
+      .addCase(fetchWeeklyOverview.fulfilled, (state, action) => {
+        state.weeklyLoading = false;
+        state.weeklyOverview = action.payload;
+        state.lastWeeklyUpdate = Date.now();
+        state.weeklyError = null;
+      })
+      .addCase(fetchWeeklyOverview.rejected, (state, action) => {
+        state.weeklyLoading = false;
+        state.weeklyError = action.payload as string || 'Failed to fetch weekly overview';
       });
   },
 });
 
 export const {
-  updateExerciseCompletion,
-  updateWorkoutProgress,
-  updateMealLog,
-  updateGoalProgress,
-  updateStats,
+  updateWorkoutSessionProgress,
+  clearContinueWorkout,
+  setContinueWorkout,
+  updateDailyProgress,
+  incrementCompletedWorkouts,
   addMeasurement,
-  addReport,
+  updatePendingReportsCount,
+  markReportCompleted,
+  updateOverallStats,
   clearDashboard,
+  setLoading,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
 
+// Re-export types for convenience
+export type { 
+  DashboardData,
+  ActiveProgram,
+  ContinueWorkout,
+  TodayWorkout,
+  TodayMeal,
+  DailyProgress,
+  RecentMeasurement,
+  PendingReport,
+  OverallStats,
+  WeeklyOverview,
+};

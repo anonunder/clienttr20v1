@@ -1,104 +1,176 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { DashboardData } from './dashboard-slice';
+import { DashboardData, WeeklyOverview } from '@/types/dashboard';
+import { getDashboardData, getWeeklyOverview } from './dashboard-service';
+import { RootState } from '@/state/store';
 
 /**
- * MOCK DATA ONLY - Development Mode
- * 
- * Dashboard is configured to use ONLY mock data.
- * No API calls are made in this implementation.
+ * Dashboard Async Thunks
+ * Handles async operations for dashboard data fetching
  */
 
-const USE_MOCK_DATA = true; // Set to false when real API is ready
-
 /**
- * Mock Dashboard Data Generator
- * Returns simulated dashboard data for development/testing
- */
-const mockFetchDashboardData = async (): Promise<DashboardData> => {
-  // Simulate API delay (500-1500ms random)
-  const delay = Math.floor(Math.random() * 1000) + 500;
-  await new Promise(resolve => setTimeout(resolve, delay));
-
-  // Return mock data
-  return {
-    stats: {
-      activePrograms: 0,
-      completedWorkouts: 0,
-      totalExercises: 0,
-      streak: 0,
-    },
-    continueWorkout: {
-      name: "Upper Body Strength",
-      progress: 60,
-      lastExercise: "Dumbbell Shoulder Press",
-      planId: "1",
-      workoutId: "1",
-      exerciseId: "2"
-    },
-    todayExercises: [
-      { id: "1", name: "Dumbbell Shoulder Press", sets: 3, reps: 12, completed: true },
-      { id: "2", name: "Barbell Squats", sets: 4, reps: 10, completed: false },
-      { id: "3", name: "Bench Press", sets: 3, reps: 8, completed: false },
-      { id: "4", name: "Deadlifts", sets: 3, reps: 8, completed: false },
-      { id: "5", name: "Pull-ups", sets: 3, reps: 10, completed: false },
-    ],
-    todayMeals: {
-      breakfast: { name: "Breakfast", description: "Oatmeal with Berries & Almonds", calories: 350, protein: 12, carbs: 45, fats: 8 },
-      lunch: { name: "Lunch", description: "Grilled Chicken Salad with Quinoa", calories: 450, protein: 35, carbs: 30, fats: 15 },
-      dinner: { name: "Dinner", description: "Not logged yet", calories: 0, protein: 0, carbs: 0, fats: 0 },
-      totalCalories: 800,
-      targetCalories: 2100
-    },
-    todayGoals: [
-      { name: "Today's Exercise Time", current: 22, target: 30, unit: "min" },
-      { name: "Daily Steps", current: 5832, target: 10000, unit: "steps" },
-      { name: "Completed Goals", current: 3, target: 5, unit: "goals" },
-      { name: "Water Intake", current: 6, target: 8, unit: "glasses" },
-    ],
-    measurements: [
-      { label: "Weight", value: "75.2", unit: "kg", change: "-0.5", trend: "down" },
-      { label: "Body Fat", value: "18.5", unit: "%", change: "-1.2", trend: "down" },
-      { label: "Muscle Mass", value: "61.3", unit: "kg", change: "+0.8", trend: "up" },
-    ],
-    recentReports: [
-      { id: "1", name: "Weekly Progress", date: "2025-10-20", type: "Progress" },
-      { id: "2", name: "Body Composition", date: "2025-10-15", type: "Measurements" },
-      { id: "3", name: "Nutrition Summary", date: "2025-10-12", type: "Nutrition" },
-    ],
-  };
-};
-
-/**
- * Fetch Dashboard Data
+ * Fetch complete dashboard data from the API
  * 
- * Currently configured to use MOCK DATA ONLY
+ * Requires:
+ * - User must be authenticated
+ * - Company must be selected
  * 
  * @returns Promise<DashboardData>
  */
-export const fetchDashboardData = createAsyncThunk(
+export const fetchDashboardData = createAsyncThunk<
+  DashboardData,
+  void,
+  { state: RootState; rejectValue: string }
+>(
   'dashboard/fetchData',
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
-      // FORCE MOCK DATA USAGE
-      if (USE_MOCK_DATA) {
-        console.log('📊 Dashboard: Loading MOCK data...');
-        const data = await mockFetchDashboardData();
-        console.log('✅ Dashboard: Mock data loaded successfully');
-        return data;
+      const state = getState();
+      const { selectedCompanyId, isAuthenticated } = state.auth;
+
+      // Validation checks
+      if (!isAuthenticated) {
+        console.error('❌ Dashboard: User not authenticated');
+        return rejectWithValue('User not authenticated');
       }
 
-      // Real API integration (currently disabled)
-      throw new Error('API integration not implemented. USE_MOCK_DATA must be true.');
-      
-      // Future API implementation:
-      // import { getDashboardData } from '@/api/dashboard/service';
-      // const data = await getDashboardData();
-      // return data;
-      
+      if (!selectedCompanyId) {
+        console.error('❌ Dashboard: No company selected');
+        return rejectWithValue('No company selected');
+      }
+
+      console.log('📊 Dashboard: Fetching data for company:', selectedCompanyId);
+
+      // Call the API
+      const response = await getDashboardData(Number(selectedCompanyId));
+
+      if (!response.success || !response.data) {
+        console.error('❌ Dashboard: Invalid API response');
+        return rejectWithValue('Invalid response from server');
+      }
+
+      console.log('✅ Dashboard: Data fetched successfully');
+      console.log('  - Active programs:', response.data.totalPrograms);
+      console.log('  - Completed workouts:', response.data.completedWorkouts);
+      console.log('  - Has in-progress workout:', response.data.hasInProgressWorkout);
+      console.log('  - Today\'s workouts:', response.data.todayWorkouts.length);
+      console.log('  - Today\'s meals:', response.data.todayMeals.length);
+      console.log('  - Recent measurements:', response.data.recentMeasurements.length);
+      console.log('  - Pending reports:', response.data.pendingReportsCount);
+
+      return response.data;
     } catch (error: any) {
       console.error('❌ Dashboard: Failed to fetch data:', error);
-      return rejectWithValue(error.message || 'Failed to fetch dashboard data');
+      
+      // Handle specific error cases
+      if (error?.message?.includes('jwt expired')) {
+        return rejectWithValue('Session expired. Please login again.');
+      }
+      
+      if (error?.message?.includes('403')) {
+        return rejectWithValue('Access denied to this company');
+      }
+      
+      if (error?.message?.includes('404')) {
+        return rejectWithValue('Dashboard data not found');
+      }
+
+      return rejectWithValue(
+        error?.message || 'Failed to fetch dashboard data. Please try again.'
+      );
     }
   }
 );
 
+/**
+ * Fetch weekly overview with daily breakdown
+ * 
+ * Requires:
+ * - User must be authenticated
+ * - Company must be selected
+ * 
+ * @returns Promise<WeeklyOverview>
+ */
+export const fetchWeeklyOverview = createAsyncThunk<
+  WeeklyOverview,
+  void,
+  { state: RootState; rejectValue: string }
+>(
+  'dashboard/fetchWeekly',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const { selectedCompanyId, isAuthenticated } = state.auth;
+
+      // Validation checks
+      if (!isAuthenticated) {
+        console.error('❌ Dashboard: User not authenticated');
+        return rejectWithValue('User not authenticated');
+      }
+
+      if (!selectedCompanyId) {
+        console.error('❌ Dashboard: No company selected');
+        return rejectWithValue('No company selected');
+      }
+
+      console.log('📊 Dashboard: Fetching weekly overview for company:', selectedCompanyId);
+
+      // Call the API
+      const response = await getWeeklyOverview(Number(selectedCompanyId));
+
+      if (!response.success || !response.data) {
+        console.error('❌ Dashboard: Invalid weekly overview response');
+        return rejectWithValue('Invalid response from server');
+      }
+
+      console.log('✅ Dashboard: Weekly overview fetched successfully');
+      console.log('  - Period:', response.data.period);
+      console.log('  - Start date:', response.data.startDate);
+      console.log('  - End date:', response.data.endDate);
+      console.log('  - Total workouts:', response.data.totalWorkouts);
+      console.log('  - Total completed:', response.data.totalCompleted);
+
+      return response.data;
+    } catch (error: any) {
+      console.error('❌ Dashboard: Failed to fetch weekly overview:', error);
+      
+      // Handle specific error cases
+      if (error?.message?.includes('jwt expired')) {
+        return rejectWithValue('Session expired. Please login again.');
+      }
+      
+      if (error?.message?.includes('403')) {
+        return rejectWithValue('Access denied to this company');
+      }
+
+      return rejectWithValue(
+        error?.message || 'Failed to fetch weekly overview. Please try again.'
+      );
+    }
+  }
+);
+
+/**
+ * Refresh dashboard data
+ * Convenience thunk that fetches both main dashboard and weekly overview
+ * 
+ * @returns Promise<void>
+ */
+export const refreshDashboard = createAsyncThunk<
+  void,
+  void,
+  { state: RootState }
+>(
+  'dashboard/refresh',
+  async (_, { dispatch }) => {
+    console.log('🔄 Dashboard: Refreshing all data...');
+    
+    // Fetch both main dashboard and weekly overview in parallel
+    await Promise.all([
+      dispatch(fetchDashboardData()),
+      dispatch(fetchWeeklyOverview()),
+    ]);
+    
+    console.log('✅ Dashboard: Refresh complete');
+  }
+);

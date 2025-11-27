@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: darkTheme.color.background,
+    backgroundColor: darkTheme.color.bg,
     borderWidth: 1,
     borderColor: darkTheme.color.border,
     borderRadius: 8,

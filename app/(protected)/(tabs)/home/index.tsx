@@ -9,12 +9,9 @@ import { Button } from '@/components/ui/Button';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { SectionHeader } from '@/components/data-display/SectionHeader';
 import { DashboardStats } from '@/components/dashboard/DashboardStats';
-import { TodayExercises } from '@/components/dashboard/TodayExercises';
-import { TodayMeals } from '@/components/dashboard/TodayMeals';
 import { DailyProgress } from '@/components/dashboard/DailyProgress';
 import { darkTheme } from '@/styles/theme';
-import { useResponsive } from '@/hooks/use-responsive';
-import { useDashboardData } from '@/hooks/dashboard';
+import { useDashboardAutoFetch } from '@/hooks/dashboard/use-dashboard';
 import { 
   spacingStyles, 
   layoutStyles, 
@@ -24,43 +21,109 @@ import {
 } from '@/styles/shared-styles';
 
 /**
- * 📊 Dashboard Screen - MOCK DATA ONLY
+ * 📊 Dashboard Screen - REAL API DATA
  * 
- * This screen displays mock data for development.
- * No real API calls are made.
+ * This screen displays real data from the backend API.
+ * Data is fetched from /api/client/dashboard endpoint.
  */
 export default function DashboardScreen() {
-  const { isTablet } = useResponsive();
+  // Use dashboard data hook with auto-fetch
+  const dashboard = useDashboardAutoFetch(true, false);
   
-  // Use dashboard data hook - MOCK DATA ONLY
-  const {
-    stats,
-    todayExercises,
-    todayMeals,
-    continueWorkout,
-    todayGoals,
-    measurements,
-    recentReports,
-    loading,
-    isRefreshing,
-    isInitializing,
-    error,
-    socketConnected,
-    socketReady,
-    initializeDashboard,
-    refresh,
-  } = useDashboardData();
+  // Extract data with default fallbacks for UI
+  const stats = dashboard.overallStats ? {
+    activePrograms: dashboard.overallStats.programsActive || 0,
+    completedWorkouts: dashboard.overallStats.workoutsCompleted || 0,
+    totalExercises: dashboard.data?.totalExercises || 0,
+    streak: 0, // Not in API yet, using 0 as default
+  } : {
+    activePrograms: 0,
+    completedWorkouts: 0,
+    totalExercises: 0,
+    streak: 0,
+  };
 
-  // Initialize dashboard data on mount
-  React.useEffect(() => {
-    initializeDashboard().catch((error) => {
-      console.error('Failed to initialize dashboard:', error);
-      // Error is already handled in the hook, but component can add custom handling here if needed
-    });
-  }, [initializeDashboard]);
+  const continueWorkout = dashboard.continueWorkout ? {
+    name: dashboard.continueWorkout.workoutTitle,
+    progress: (dashboard.continueWorkout.exercisesCompleted / (dashboard.data?.totalExercises || 1)) * 100,
+    lastExercise: dashboard.continueWorkout.currentExerciseId ? `Exercise #${dashboard.continueWorkout.currentExerciseId}` : 'Not started',
+    planId: '',
+    workoutId: String(dashboard.continueWorkout.workoutId),
+    exerciseId: String(dashboard.continueWorkout.currentExerciseId || ''),
+  } : null;
+
+  const todayExercises = dashboard.todayWorkouts.map((workout, index) => ({
+    id: workout.id ? String(workout.id) : `workout-${index}`,
+    name: workout.title,
+    sets: 3,
+    reps: 10,
+    completed: false,
+    programId: workout.programId, // Keep programId for navigation
+    day: workout.day, // Keep day for navigation
+  }));
+
+  // Map today's meals from API data - list them like exercises
+  const todayMeals = dashboard.todayMeals.map((meal, index) => ({
+    id: meal.id ? String(meal.id) : `meal-${index}`,
+    name: meal.title,
+    description: meal.description || '',
+    day: meal.day,
+    programId: meal.programId, // Keep programId for navigation
+    programTitle: meal.programTitle,
+  }));
+
+  const todayGoals = [
+    { 
+      name: "Today's Exercise Time", 
+      current: dashboard.dailyProgress?.totalDuration || 0, 
+      target: 30, 
+      unit: "min" 
+    },
+    { 
+      name: "Workouts Completed", 
+      current: dashboard.dailyProgress?.workoutsCompleted || 0, 
+      target: 1, 
+      unit: "workouts" 
+    },
+    { 
+      name: "Exercises Completed", 
+      current: dashboard.dailyProgress?.exercisesCompleted || 0, 
+      target: 10, 
+      unit: "exercises" 
+    },
+  ];
+
+  // Map measurements with unique keys
+  const measurements = dashboard.recentMeasurements.map((m) => {
+    const firstKey = Object.keys(m.measurements)[0];
+    const value = m.measurements[firstKey];
+    return {
+      id: `${m.id}-${firstKey}`, // Unique key combining measurement ID and field name
+      label: firstKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      value: String(value),
+      unit: firstKey.includes('weight') ? 'kg' : firstKey.includes('fat') ? '%' : '',
+      change: undefined,
+      trend: undefined,
+    };
+  }).slice(0, 3);
+
+  const recentReports = dashboard.recentReports.map((r, index) => ({
+    id: r.id ? String(r.id) : `report-${index}`,
+    name: r.title,
+    date: new Date(r.sentDate).toLocaleDateString(),
+    type: r.status,
+  }));
+
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+  
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await dashboard.refresh();
+    setIsRefreshing(false);
+  };
 
   // Show loading state on initial load
-  if ((loading || isInitializing) && !stats) {
+  if (dashboard.loading && !dashboard.data) {
     return (
       <MainLayout title="Dashboard" description="Loading your fitness data...">
         <View style={styles.centerContainer}>
@@ -71,7 +134,7 @@ export default function DashboardScreen() {
   }
 
   // Show error state (but still allow refresh)
-  if (error && !stats) {
+  if (dashboard.error && !dashboard.data) {
     return (
       <MainLayout 
         title="Dashboard" 
@@ -79,15 +142,15 @@ export default function DashboardScreen() {
         refreshControl={
           <RefreshControl 
             refreshing={isRefreshing} 
-            onRefresh={refresh}
+            onRefresh={handleRefresh}
             tintColor={darkTheme.color.primary}
           />
         }
       >
         <View style={styles.centerContainer}>
           <Ionicons name="alert-circle-outline" size={48} color={darkTheme.color.destructive} />
-          <Text style={styles.errorText}>{error}</Text>
-          <Button onPress={refresh} title="Retry" />
+          <Text style={styles.errorText}>{dashboard.error}</Text>
+          <Button onPress={handleRefresh} title="Retry" />
         </View>
       </MainLayout>
     );
@@ -100,21 +163,11 @@ export default function DashboardScreen() {
       refreshControl={
         <RefreshControl 
           refreshing={isRefreshing} 
-          onRefresh={refresh}
+          onRefresh={handleRefresh}
           tintColor={darkTheme.color.primary}
         />
       }
     >
-      {/* Socket Status Indicator */}
-      {!socketReady && (
-        <View style={styles.offlineBanner}>
-          <Ionicons name="cloud-offline-outline" size={16} color={darkTheme.color.warning} />
-          <Text style={styles.offlineText}>
-            {socketConnected ? 'Connecting to real-time updates...' : 'Real-time updates unavailable'}
-          </Text>
-        </View>
-      )}
-
       {/* Stats Grid */}
       <DashboardStats stats={stats} />
 
@@ -184,19 +237,71 @@ export default function DashboardScreen() {
         </Card>
       )}
 
-      {/* Today's Exercises & Meals Grid */}
-      <View style={styles.grid}>
-        <TodayExercises 
-          exercises={todayExercises.length > 0 ? todayExercises : []} 
-        />
-        <TodayMeals
-          breakfast={todayMeals.breakfast}
-          lunch={todayMeals.lunch}
-          dinner={todayMeals.dinner}
-          totalCalories={todayMeals.totalCalories}
-          targetCalories={todayMeals.targetCalories}
-        />
-      </View>
+      {/* Today's Exercises */}
+      <Card>
+        <View style={styles.cardPadding}>
+          <SectionHeader
+            icon="barbell"
+            title="Today's Workouts"
+            actionTitle={`${todayExercises.length} Workout${todayExercises.length !== 1 ? 's' : ''}`}
+          />
+          {todayExercises.length > 0 ? (
+            <View style={styles.exercisesList}>
+              {todayExercises.map((exercise) => (
+                <Pressable
+                  key={exercise.id}
+                  style={componentStyles.listItem}
+                  onPress={() => router.push(`/programs/training/${exercise.programId}?day=${exercise.day}` as any)}
+                >
+                  <View style={styles.exerciseContent}>
+                    <Text style={styles.exerciseName}>{exercise.name}</Text>
+                    <Text style={styles.exerciseDay}>Day {exercise.day}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={20} color={darkTheme.color.mutedForeground} />
+                </Pressable>
+              ))}
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
+              <Ionicons name="barbell-outline" size={32} color={darkTheme.color.mutedForeground} />
+              <Text style={styles.emptyStateText}>No workouts scheduled for today</Text>
+            </View>
+          )}
+        </View>
+      </Card>
+
+      {/* Today's Meals - Listed like exercises */}
+      {todayMeals.length > 0 && (
+        <Card>
+          <View style={styles.cardPadding}>
+            <SectionHeader
+              icon="restaurant"
+              title="Today's Meals"
+              actionTitle={`${todayMeals.length} Meal${todayMeals.length !== 1 ? 's' : ''}`}
+            />
+            <View style={styles.mealsList}>
+              {todayMeals.map((meal) => (
+                <Pressable
+                  key={meal.id}
+                  style={componentStyles.listItem}
+                  onPress={() => router.push(`/programs/nutrition/${meal.programId}?day=${meal.day}` as any)}
+                >
+                  <View style={styles.mealContent}>
+                    <Text style={styles.mealName}>{meal.name}</Text>
+                    {meal.description && (
+                      <Text style={styles.mealDescription}>{meal.description}</Text>
+                    )}
+                    <Text style={styles.mealProgram}>
+                      From: {meal.programTitle} (Day {meal.day})
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={20} color={darkTheme.color.mutedForeground} />
+                </Pressable>
+              ))}
+            </View>
+          </View>
+        </Card>
+      )}
 
       {/* Progress Section */}
       <DailyProgress goals={todayGoals} />
@@ -215,7 +320,7 @@ export default function DashboardScreen() {
             <View style={styles.measurementsList}>
               {measurements.length > 0 ? (
                 measurements.map((measurement) => (
-                  <View key={measurement.label} style={componentStyles.listItem}>
+                  <View key={measurement.id} style={componentStyles.listItem}>
                     <View>
                       <Text style={styles.measurementLabel}>{measurement.label}</Text>
                       <Text style={styles.measurementValue}>
@@ -290,33 +395,7 @@ export default function DashboardScreen() {
         </Card>
       </View>
 
-      {/* Daily Goal Card */}
-      <Card>
-        <LinearGradient
-          colors={[darkTheme.color.card, darkTheme.color.secondary]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradientCard}
-        >
-          <View style={styles.cardPadding}>
-            <View style={[
-              styles.dailyGoalCard,
-              isTablet ? styles.dailyGoalCardHorizontal : styles.dailyGoalCardVertical,
-            ]}>
-              <View style={styles.dailyGoalContent}>
-                <Text style={styles.dailyGoalTitle}>Daily Goal</Text>
-                <Text style={styles.dailyGoalDescription}>
-                  Do 3-5 exercises you haven't done today
-                </Text>
-              </View>
-              <Button
-                title="Try a 6-min cardio workout today"
-                onPress={() => console.log('Programs - route not implemented')}
-              />
-            </View>
-          </View>
-        </LinearGradient>
-      </Card>
+      
     </MainLayout>
   );
 }
@@ -419,6 +498,38 @@ const styles = StyleSheet.create({
   },
   grid: {
     gap: 24,
+  },
+  exercisesList: {
+    gap: 12,
+  },
+  exerciseContent: {
+    flex: 1,
+    gap: 4,
+  },
+  exerciseName: {
+    ...textStyles.bodyMedium,
+  },
+  exerciseDay: {
+    ...textStyles.smallMuted,
+    fontSize: 11,
+  },
+  mealsList: {
+    gap: 12,
+  },
+  mealContent: {
+    flex: 1,
+    gap: 4,
+  },
+  mealName: {
+    ...textStyles.bodyMedium,
+  },
+  mealDescription: {
+    ...textStyles.small,
+    color: darkTheme.color.mutedForeground,
+  },
+  mealProgram: {
+    ...textStyles.smallMuted,
+    fontSize: 11,
   },
   measurementsList: {
     gap: 16,

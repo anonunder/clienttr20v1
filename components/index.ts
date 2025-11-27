@@ -22,3 +22,6 @@ export * from './reports';
 // Measurements
 export * from './measurements';
 
+// Favorites
+export * from './favorites';
+

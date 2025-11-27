@@ -22,7 +22,7 @@ import { useResponsive } from '@/hooks/use-responsive';
  * Displays training plan details with day selector and workouts
  */
 export default function TrainingPlanScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, day } = useLocalSearchParams<{ id: string; day?: string }>();
   const router = useRouter();
   const { trainingPlan, loading, error } = useTrainingPlan(id || '');
   const { isMobile, width } = useResponsive();
@@ -104,13 +104,30 @@ export default function TrainingPlanScreen() {
   
   // Update selected date when program data loads (only once)
   useEffect(() => {
+    // If day parameter is provided in URL, use it
+    if (day && trainingPlan?.program?.startDate) {
+      const dayNumber = parseInt(day, 10);
+      if (!isNaN(dayNumber) && dayNumber > 0) {
+        const programStartDate = new Date(trainingPlan.program.startDate);
+        programStartDate.setHours(0, 0, 0, 0);
+        
+        // Calculate date for the given day number (day 1 = start date)
+        const targetDate = new Date(programStartDate);
+        targetDate.setDate(programStartDate.getDate() + (dayNumber - 1));
+        
+        setSelectedDate(targetDate);
+        return; // Exit early, don't use default logic
+      }
+    }
+    
+    // Default logic: use first day with workouts or program start date
     if (getFirstDayWithWorkouts) {
       setSelectedDate(getFirstDayWithWorkouts);
     } else if (trainingPlan?.program?.startDate) {
       const programStartDate = new Date(trainingPlan.program.startDate);
       setSelectedDate(programStartDate);
     }
-  }, [getFirstDayWithWorkouts, trainingPlan?.program?.startDate]);
+  }, [day, getFirstDayWithWorkouts, trainingPlan?.program?.startDate]);
 
   // Handle date change with loading state
   const handleDateChange = (date: Date) => {
