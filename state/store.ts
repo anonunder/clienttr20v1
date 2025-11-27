@@ -7,6 +7,7 @@ import exerciseReducer from '@/features/exercise/exercise-slice';
 import workoutSessionReducer from '@/features/workout-session/workout-session-slice';
 import nutritionReducer from '@/features/nutrition/nutrition-slice';
 import reportsReducer from '@/features/reports/reports-slice';
+import measurementsReducer from '@/features/measurements/measurements-slice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     workoutSession: workoutSessionReducer,
     nutrition: nutritionReducer,
     reports: reportsReducer,
+    measurements: measurementsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

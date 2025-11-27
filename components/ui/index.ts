@@ -22,3 +22,5 @@ export type { SeparatorProps } from './Separator';
 export { Textarea } from './Textarea';
 export type { TextareaProps } from './Textarea';
 
+export { Modal } from './Modal';
+

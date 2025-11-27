@@ -61,5 +61,41 @@ export const endpoints = {
     submit: (responseId: number) => 
       `/client/reports/${responseId}/submit`,
   },
+  measurements: {
+    templates: (companyId: number) => `/client/measurements/templates?companyId=${companyId}`,
+    submit: () => '/client/measurements/submit',
+    history: (params: {
+      companyId: number;
+      templateId?: number;
+      startDate?: string;
+      endDate?: string;
+      limit?: number;
+      offset?: number;
+    }) => {
+      const query = new URLSearchParams({
+        companyId: params.companyId.toString(),
+        ...(params.templateId && { templateId: params.templateId.toString() }),
+        ...(params.startDate && { startDate: params.startDate }),
+        ...(params.endDate && { endDate: params.endDate }),
+        ...(params.limit && { limit: params.limit.toString() }),
+        ...(params.offset && { offset: params.offset.toString() }),
+      });
+      return `/client/measurements/history?${query.toString()}`;
+    },
+    detail: (measurementId: number, companyId: number) => 
+      `/client/measurements/${measurementId}?companyId=${companyId}`,
+    progress: (fieldName: string, params: {
+      companyId: number;
+      startDate?: string;
+      endDate?: string;
+    }) => {
+      const query = new URLSearchParams({
+        companyId: params.companyId.toString(),
+        ...(params.startDate && { startDate: params.startDate }),
+        ...(params.endDate && { endDate: params.endDate }),
+      });
+      return `/client/measurements/progress/${fieldName}?${query.toString()}`;
+    },
+  },
 };
 
