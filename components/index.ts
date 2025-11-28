@@ -25,3 +25,6 @@ export * from './measurements';
 // Favorites
 export * from './favorites';
 
+// Chat Components
+export * from './chat';
+
