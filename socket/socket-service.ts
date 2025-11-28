@@ -5,13 +5,17 @@ class SocketService {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
 
-  async connect(url?: string, token?: string): Promise<Socket> {
-    // If socket exists and is connected with the same token, return it
-    if (this.socket?.connected && this.socket.auth?.token === token) {
+  async connect(url?: string, token?: string, companyId?: string): Promise<Socket> {
+    // If socket exists and is connected with the same token and company, return it
+    if (
+      this.socket?.connected && 
+      this.socket.auth?.token === token &&
+      this.socket.auth?.companyId === companyId
+    ) {
       return this.socket;
     }
 
-    // If socket exists but token is different or missing, disconnect and recreate
+    // If socket exists but token/company is different or missing, disconnect and recreate
     if (this.socket) {
       this.disconnect();
     }
@@ -22,8 +26,15 @@ class SocketService {
 
     const socketUrl = url || process.env.EXPO_PUBLIC_SOCKET_URL || 'ws://localhost:3000';
 
+    // Include company_id in auth if available
+    const authPayload: { token: string; company_id?: string } = { token };
+    if (companyId) {
+      authPayload.company_id = companyId;
+      console.log('🏢 Socket connecting with company:', companyId);
+    }
+
     this.socket = io(socketUrl, {
-      auth: { token },
+      auth: authPayload,
       transports: ['websocket'],
       reconnection: true,
       reconnectionDelay: 1000,
@@ -32,6 +43,7 @@ class SocketService {
 
     this.socket.on('connect', () => {
       console.log('✅ Socket connected:', this.socket?.id);
+      console.log('🏢 Company context:', companyId);
       this.reconnectAttempts = 0;
     });
 

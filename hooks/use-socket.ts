@@ -13,6 +13,7 @@ export const useSocket = () => {
   const [connected, setConnected] = useState(false);
   const token = useSelector((state: RootState) => state.auth.token);
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const selectedCompanyId = useSelector((state: RootState) => state.auth.selectedCompanyId);
 
   useEffect(() => {
     const initSocket = async () => {
@@ -42,14 +43,22 @@ export const useSocket = () => {
           return;
         }
 
-        // If socket exists but is connected without proper auth, disconnect first
+        // Check if we need to reconnect with new company context
         const currentSocket = socketService.getSocket();
-        if (currentSocket?.connected && (!currentSocket.auth || !currentSocket.auth.token)) {
-          console.log('Socket: Reconnecting with token...');
+        const needsReconnect = 
+          currentSocket?.connected && 
+          currentSocket.auth?.company_id !== selectedCompanyId;
+
+        if (needsReconnect) {
+          console.log('🔄 Socket: Reconnecting with new company context...');
           socketService.disconnect();
         }
 
-        const socketInstance = await socketService.connect(undefined, authToken);
+        const socketInstance = await socketService.connect(
+          undefined, 
+          authToken, 
+          selectedCompanyId
+        );
         setSocket(socketInstance);
 
         // Only set up listeners if not already set up
@@ -81,7 +90,7 @@ export const useSocket = () => {
       // Don't disconnect on unmount, let the app manage socket lifecycle
       setConnected(false);
     };
-  }, [isAuthenticated, token]);
+  }, [isAuthenticated, token, selectedCompanyId]);
 
   return {
     socket,

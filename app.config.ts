@@ -18,6 +18,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.tr20.client',
+    infoPlist: {
+      NSCameraUsageDescription: 'This app uses the camera to record exercise videos.',
+      NSMicrophoneUsageDescription: 'This app uses the microphone to record audio for videos.',
+      NSPhotoLibraryUsageDescription: 'This app accesses your photo library to select exercise images and videos.',
+    },
   },
   android: {
     adaptiveIcon: {
@@ -25,6 +30,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#10b981',
     },
     package: 'com.tr20.client',
+    permissions: [
+      'CAMERA',
+      'RECORD_AUDIO',
+      'READ_EXTERNAL_STORAGE',
+      'WRITE_EXTERNAL_STORAGE',
+    ],
   },
   web: {
     bundler: 'metro',
@@ -33,6 +44,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     'expo-router',
     'expo-secure-store',
+    [
+      'expo-av',
+      {
+        microphonePermission: 'Allow TR20 to access your microphone to record exercise videos.',
+      },
+    ],
     [
       'expo-build-properties',
       {

@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/auth-slice';
+import { logout } from './slices/auth-slice';
 import uiReducer from './slices/ui-slice';
 import dashboardReducer from '@/features/dashboard/dashboard-slice';
 import programsReducer from '@/features/programs/programs-slice';
@@ -8,6 +9,8 @@ import workoutSessionReducer from '@/features/workout-session/workout-session-sl
 import nutritionReducer from '@/features/nutrition/nutrition-slice';
 import reportsReducer from '@/features/reports/reports-slice';
 import measurementsReducer from '@/features/measurements/measurements-slice';
+import chatReducer from '@/features/chat/chat-slice';
+import { setTokenExpiredCallback } from '@/services/api-client';
 
 export const store = configureStore({
   reducer: {
@@ -20,14 +23,21 @@ export const store = configureStore({
     nutrition: nutritionReducer,
     reports: reportsReducer,
     measurements: measurementsReducer,
+    chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        // Ignore socket-related actions
+        // Ignore socket-related actions and Set objects in chat state
         ignoredActions: ['socket/connect', 'socket/disconnect'],
+        ignoredPaths: ['chat.onlineUsers'],
       },
     }),
+});
+
+// Setup token expiration callback to avoid circular dependency
+setTokenExpiredCallback(() => {
+  store.dispatch(logout());
 });
 
 export type RootState = ReturnType<typeof store.getState>;

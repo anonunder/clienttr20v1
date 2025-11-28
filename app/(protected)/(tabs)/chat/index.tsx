@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   View, 
   StyleSheet, 
   Dimensions,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
+  Text,
 } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import Header from '@/components/layout/Header';
 import Navigation from '@/components/layout/Navigation';
 import { darkTheme } from '@/styles/theme';
@@ -19,204 +22,316 @@ import {
   GlobalCallFloat,
 } from '@/components/chat';
 import { Contact, Message, Group } from '@/components/chat/types';
+import { useChatSocket } from '@/hooks/chat';
+import { RootState, AppDispatch } from '@/state/store';
+import {
+  fetchContacts,
+  fetchGroups,
+  fetchChatHistory,
+  sendMessage as sendMessageThunk,
+  sendGroupMessage as sendGroupMessageThunk,
+} from '@/features/chat/chat-thunks';
+import { setActiveChat } from '@/features/chat/chat-slice';
+import { useAuth } from '@/hooks/use-auth';
+import { useUserRole } from '@/hooks/use-user-role';
 
 /**
- * 💬 Chat Screen
+ * 💬 Chat Screen - Real-time Socket Implementation
  * 
  * Full-featured chat interface with:
- * - Contacts list (sidebar on desktop, drawer on mobile)
- * - Trainers/Groups tabs
- * - Message list with auto-scroll
- * - Message input with emoji picker and attachments
+ * - Real-time Socket.IO connection
+ * - Direct messaging (client ↔ trainer)
+ * - Group chat
+ * - Typing indicators
+ * - Online status
+ * - Read receipts
  * - Voice and video call support
- * - Incoming call handling
- * - Minimized call floating widget
  */
 export default function ChatScreen() {
-  // Mock contacts data
-  const [contacts] = useState<Contact[]>([
-    {
-      id: '1',
-      name: 'Coach Mike',
-      role: 'Head Trainer',
-      online: true,
-      lastMessage: "That's awesome! Remember to stretch...",
-      unread: 2,
-    },
-    {
-      id: '2',
-      name: 'Sarah Johnson',
-      role: 'Nutritionist',
-      online: true,
-      lastMessage: 'Your meal plan is ready!',
-    },
-    {
-      id: '3',
-      name: 'John Fitness',
-      role: 'Personal Trainer',
-      online: false,
-      lastMessage: 'See you tomorrow at 9 AM',
-    },
-    {
-      id: '4',
-      name: 'Emma Wilson',
-      role: 'Yoga Instructor',
-      online: true,
-      lastMessage: 'Great progress on flexibility!',
-    },
-  ]);
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useAuth();
+  const userRole = useUserRole();
+  
+  // Socket connection
+  const {
+    isReady,
+    isConnected,
+    sendTyping,
+    sendGroupTyping,
+    markAsRead,
+  } = useChatSocket();
 
-  // Mock groups data
-  const [groups] = useState<Group[]>([
-    {
-      id: 'g1',
-      name: 'Morning Workout Group',
-      memberCount: 12,
-      lastMessage: 'Great session today everyone!',
-      unread: 3,
-    },
-    {
-      id: 'g2',
-      name: 'Nutrition Tips',
-      memberCount: 45,
-      lastMessage: 'Check out this recipe...',
-    },
-    {
-      id: 'g3',
-      name: 'Yoga & Meditation',
-      memberCount: 28,
-      lastMessage: 'New meditation session tomorrow',
-      unread: 1,
-    },
-  ]);
+  // Redux state
+  const {
+    contacts,
+    groups,
+    messagesByChat,
+    activeChatId,
+    activeChatType,
+    loading,
+    onlineUsers,
+  } = useSelector((state: RootState) => state.chat);
 
-  // State
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(contacts[0]);
-  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: "Hey! How's your training going today?",
-      sender: 'contact',
-      timestamp: '10:30 AM',
-    },
-    {
-      id: '2',
-      text: 'Great! Just finished the upper body workout. Feeling strong!',
-      sender: 'user',
-      timestamp: '10:32 AM',
-    },
-    {
-      id: '3',
-      text: "That's awesome! Remember to stretch and stay hydrated. Keep up the great work! 💪",
-      sender: 'contact',
-      timestamp: '10:33 AM',
-    },
-  ]);
+  // Local UI state
   const [newMessage, setNewMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
   
   // Call state
   const [isCallActive, setIsCallActive] = useState(false);
   const [isVideoActive, setIsVideoActive] = useState(false);
   const [isCallMinimized, setIsCallMinimized] = useState(false);
   const [showIncomingCall, setShowIncomingCall] = useState(false);
-  const [incomingCallType, setIncomingCallType] = useState<'audio' | 'video'>('audio');
+  const [incomingCallType] = useState<'audio' | 'video'>('audio');
   const [callDuration, setCallDuration] = useState(0);
-  const [isConnected, setIsConnected] = useState(false);
 
   const windowWidth = Dimensions.get('window').width;
   const isDesktop = windowWidth >= 768;
 
+  // Load initial data when socket is ready
+  useEffect(() => {
+    if (isReady) {
+      console.log('✅ Socket ready, loading chat data...');
+      dispatch(fetchContacts({}));
+      dispatch(fetchGroups());
+    }
+  }, [isReady, dispatch]);
+
+  // Convert socket types to component types
+  const convertedContacts: Contact[] = contacts.map(c => ({
+    id: c.id,
+    name: c.name,
+    role: c.role,
+    avatar: c.avatar,
+    online: c.is_online || onlineUsers.has(c.id),
+    lastMessage: c.last_message?.content,
+    unread: c.unread_count,
+  }));
+
+  const convertedGroups: Group[] = groups.map(g => ({
+    id: g.id,
+    name: g.name,
+    avatar: g.avatar,
+    memberCount: g.member_count,
+    lastMessage: g.last_message?.content,
+    unread: g.unread_count,
+  }));
+
+  // Get current messages
+  const currentMessages: Message[] = activeChatId
+    ? [...(messagesByChat[activeChatId] || [])] // Create a copy first!
+        .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()) // Sort oldest first
+        .map(m => {
+          // Format timestamp properly
+          let formattedTime = 'Invalid Date';
+          try {
+            const date = new Date(m.created_at);
+            if (!isNaN(date.getTime())) {
+              formattedTime = date.toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              });
+            }
+          } catch (error) {
+            console.error('Error formatting date:', m.created_at, error);
+          }
+
+          return {
+            id: m.id,
+            text: m.content,
+            sender: m.sender_id === user?.id ? 'user' : 'contact',
+            timestamp: formattedTime,
+          };
+        })
+    : [];
+
+  // Log messages for debugging
+  console.log('💬 Current Messages:', {
+    activeChatId,
+    activeChatType,
+    messagesCount: currentMessages.length,
+    rawMessagesCount: activeChatId ? (messagesByChat[activeChatId] || []).length : 0,
+    allChats: Object.keys(messagesByChat),
+    messages: currentMessages.slice(-3), // Last 3 messages
+  });
+
+  // Get selected contact/group
+  const selectedContact = activeChatType === 'direct' && activeChatId
+    ? convertedContacts.find(c => c.id === activeChatId) || null
+    : null;
+
+  const selectedGroup = activeChatType === 'group' && activeChatId
+    ? convertedGroups.find(g => g.id === activeChatId) || null
+    : null;
+
+  // Handle contact selection
+  const handleContactSelect = useCallback((contact: Contact) => {
+    console.log('👤 Contact selected:', {
+      contactId: contact.id,
+      contactName: contact.name,
+      unreadCount: contact.unread,
+    });
+    
+    dispatch(setActiveChat({ chatId: contact.id, type: 'direct' }));
+    dispatch(fetchChatHistory({ 
+      chatId: contact.id, 
+      isGroup: false,
+      options: { limit: 50 }
+    }));
+    setIsSheetOpen(false);
+    
+    // Mark messages as read if there are unread messages
+    if (contact.unread && contact.unread > 0) {
+      const isTrainer = userRole && ['trainer', 'manager', 'admin'].includes(userRole);
+      
+      // Get message IDs from the current chat
+      const messagesToMark = messagesByChat[contact.id] || [];
+      const unreadMessageIds = messagesToMark
+        .filter(m => !m.read_at && m.sender_id !== user?.id)
+        .map(m => m.id);
+      
+      if (unreadMessageIds.length > 0) {
+        markAsRead({
+          [isTrainer ? 'client_id' : 'trainer_id']: contact.id,
+          message_ids: unreadMessageIds,
+        });
+      }
+    }
+  }, [dispatch, markAsRead, userRole, messagesByChat, user?.id]);
+
+  // Handle group selection
+  const handleGroupSelect = useCallback((group: Group) => {
+    dispatch(setActiveChat({ chatId: group.id, type: 'group' }));
+    dispatch(fetchChatHistory({ 
+      chatId: group.id, 
+      isGroup: true,
+      options: { limit: 50 }
+    }));
+    setIsSheetOpen(false);
+  }, [dispatch]);
+
   // Handle message send
-  const handleSend = () => {
-    if (!newMessage.trim()) return;
+  const handleSend = useCallback(async () => {
+    if (!newMessage.trim() || !activeChatId) return;
 
-    const message: Message = {
-      id: Date.now().toString(),
-      text: newMessage,
-      sender: 'user',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
+    console.log('📤 Sending message:', {
+      activeChatId,
+      activeChatType,
+      content: newMessage.trim(),
+    });
 
-    setMessages([...messages, message]);
-    setNewMessage('');
-    setShowEmojiPicker(false);
+    try {
+      if (activeChatType === 'group') {
+        // Send group message
+        await dispatch(sendGroupMessageThunk({
+          group_id: activeChatId,
+          type: 'text',
+          content: newMessage.trim(),
+        })).unwrap();
+      } else {
+        // Send direct message
+        await dispatch(sendMessageThunk({
+          recipient_id: activeChatId,
+          type: 'text',
+          content: newMessage.trim(),
+        })).unwrap();
+      }
 
-    // Simulate contact reply after 2 seconds
-    setTimeout(() => {
-      const replies = [
-        "Thanks for your message! I'll get back to you soon.",
-        "Got it! Let me check that for you.",
-        "Sounds good! I'll look into it.",
-        'Perfect! Keep up the great work! 💪',
-        "That's awesome! Let's keep the momentum going!",
-      ];
-      const randomReply = replies[Math.floor(Math.random() * replies.length)];
+      console.log('✅ Message sent successfully');
+      setNewMessage('');
+      setShowEmojiPicker(false);
 
-      const reply: Message = {
-        id: Date.now().toString(),
-        text: randomReply,
-        sender: 'contact',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-      setMessages((prev) => [...prev, reply]);
-    }, 2000);
-  };
+      // Stop typing indicator
+      if (activeChatType === 'group') {
+        sendGroupTyping({ group_id: activeChatId, is_typing: false });
+      } else {
+        const isTrainer = userRole && ['trainer', 'manager', 'admin'].includes(userRole);
+        sendTyping({
+          [isTrainer ? 'client_id' : 'trainer_id']: activeChatId,
+          is_typing: false,
+        });
+      }
+    } catch (error) {
+      console.error('❌ Failed to send message:', error);
+    }
+  }, [newMessage, activeChatId, activeChatType, dispatch, sendGroupTyping, sendTyping, userRole]);
+
+  // Handle message change with typing indicator
+  const handleMessageChange = useCallback((text: string) => {
+    setNewMessage(text);
+
+    if (!activeChatId) return;
+
+    // Clear existing timeout
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    // Send typing indicator
+    if (text.trim()) {
+      if (activeChatType === 'group') {
+        sendGroupTyping({ group_id: activeChatId, is_typing: true });
+      } else {
+        const isTrainer = userRole && ['trainer', 'manager', 'admin'].includes(userRole);
+        sendTyping({
+          [isTrainer ? 'client_id' : 'trainer_id']: activeChatId,
+          is_typing: true,
+        });
+      }
+
+      // Stop typing after 3 seconds
+      const timeout = setTimeout(() => {
+        if (activeChatType === 'group') {
+          sendGroupTyping({ group_id: activeChatId, is_typing: false });
+        } else {
+          const isTrainer = userRole && ['trainer', 'manager', 'admin'].includes(userRole);
+          sendTyping({
+            [isTrainer ? 'client_id' : 'trainer_id']: activeChatId,
+            is_typing: false,
+          });
+        }
+      }, 3000);
+
+      setTypingTimeout(timeout);
+    }
+  }, [activeChatId, activeChatType, typingTimeout, sendGroupTyping, sendTyping, userRole]);
 
   // Handle attachment
-  const handleAttachment = (file: { name: string; uri: string; type?: string }) => {
-    const message: Message = {
-      id: Date.now().toString(),
-      text: `📎 Sent ${file.name}`,
-      sender: 'user',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-    setMessages([...messages, message]);
-  };
+  const handleAttachment = useCallback((file: { name: string; uri: string; type?: string }) => {
+    // TODO: Implement file upload
+    console.log('Upload file:', file);
+  }, []);
 
   // Handle voice recording
-  const handleVoiceRecord = () => {
+  const handleVoiceRecord = useCallback(() => {
     setIsRecording(!isRecording);
-    if (!isRecording) {
-      // Simulate voice recording
-      setTimeout(() => {
-        const message: Message = {
-          id: Date.now().toString(),
-          text: '🎤 Voice message (0:05)',
-          sender: 'user',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        };
-        setMessages((prev) => [...prev, message]);
-        setIsRecording(false);
-      }, 2000);
-    }
-  };
+    // TODO: Implement voice recording
+  }, [isRecording]);
 
   // Handle emoji select
-  const handleEmojiSelect = (emoji: string) => {
-    setNewMessage(newMessage + emoji);
-  };
+  const handleEmojiSelect = useCallback((emoji: string) => {
+    setNewMessage(prev => prev + emoji);
+  }, []);
 
-  // Handle calls
-  const handleCall = () => {
+  // Call handlers
+  const handleCall = useCallback(() => {
     setIsCallActive(true);
     setIsVideoActive(false);
     setIsCallMinimized(false);
     setCallDuration(0);
-  };
+  }, []);
 
-  const handleVideo = () => {
+  const handleVideo = useCallback(() => {
     setIsVideoActive(true);
     setIsCallActive(false);
     setIsCallMinimized(false);
     setCallDuration(0);
-  };
+  }, []);
 
-  const handleAnswerCall = () => {
+  const handleAnswerCall = useCallback(() => {
     setShowIncomingCall(false);
     if (incomingCallType === 'video') {
       setIsVideoActive(true);
@@ -226,91 +341,64 @@ export default function ChatScreen() {
       setIsVideoActive(false);
     }
     setIsCallMinimized(false);
-    setIsConnected(false);
     setCallDuration(0);
-  };
+  }, [incomingCallType]);
+
+  const handleDeclineCall = useCallback(() => {
+    setShowIncomingCall(false);
+  }, []);
+
+  const handleHideIncomingCall = useCallback(() => {
+    setShowIncomingCall(false);
+  }, []);
+
+  const handleMinimizeCall = useCallback(() => {
+    setIsCallMinimized(true);
+  }, []);
+
+  const handleMaximizeCall = useCallback(() => {
+    setIsCallMinimized(false);
+  }, []);
+
+  const handleEndCall = useCallback(() => {
+    setIsCallActive(false);
+    setIsVideoActive(false);
+    setIsCallMinimized(false);
+    setCallDuration(0);
+  }, []);
+
+  const formatDuration = useCallback((seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }, []);
 
   // Call duration timer
   useEffect(() => {
     if (!isCallActive && !isVideoActive) return;
 
-    if (callDuration === 0) {
-      const connectionTimeout = setTimeout(() => {
-        setIsConnected(true);
-      }, 2000);
+    const interval = setInterval(() => {
+      setCallDuration((prev) => prev + 1);
+    }, 1000);
 
-      const interval = setInterval(() => {
-        setCallDuration((prev) => prev + 1);
-      }, 1000);
+    return () => clearInterval(interval);
+  }, [isCallActive, isVideoActive]);
 
-      return () => {
-        clearTimeout(connectionTimeout);
-        clearInterval(interval);
-      };
-    } else {
-      setIsConnected(true);
-
-      const interval = setInterval(() => {
-        setCallDuration((prev) => prev + 1);
-      }, 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  }, [isCallActive, isVideoActive, callDuration]);
-
-  const handleDeclineCall = () => {
-    setShowIncomingCall(false);
-  };
-
-  const handleHideIncomingCall = () => {
-    setShowIncomingCall(false);
-  };
-
-  const handleMinimizeCall = () => {
-    setIsCallMinimized(true);
-  };
-
-  const handleMaximizeCall = () => {
-    setIsCallMinimized(false);
-  };
-
-  const handleEndCall = () => {
-    setIsCallActive(false);
-    setIsVideoActive(false);
-    setIsCallMinimized(false);
-    setCallDuration(0);
-    setIsConnected(false);
-  };
-
-  const formatDuration = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const handleContactSelect = (contact: Contact) => {
-    setSelectedContact(contact);
-    setSelectedGroup(null);
-    setIsSheetOpen(false);
-  };
-
-  const handleGroupSelect = (group: Group) => {
-    setSelectedGroup(group);
-    setSelectedContact(null);
-    setIsSheetOpen(false);
-  };
-
-  const handleSimulateCall = () => {
-    setIncomingCallType('audio');
-    setShowIncomingCall(true);
-  };
-
-  const handleSimulateVideo = () => {
-    setIncomingCallType('video');
-    setShowIncomingCall(true);
-  };
+  // Show loading state
+  if (!isReady) {
+    return (
+      <View style={styles.container}>
+        <Header title="Chat" />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={darkTheme.color.primary} />
+          <Text style={styles.loadingText}>
+            {isConnected ? 'Initializing chat...' : 'Connecting to chat...'}
+          </Text>
+        </View>
+        <Navigation />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -327,8 +415,8 @@ export default function ChatScreen() {
           {isDesktop && (
             <View style={styles.sidebar}>
               <ContactsList
-                contacts={contacts}
-                groups={groups}
+                contacts={convertedContacts}
+                groups={convertedGroups}
                 selectedContact={selectedContact}
                 selectedGroup={selectedGroup}
                 searchQuery={searchQuery}
@@ -353,14 +441,14 @@ export default function ChatScreen() {
                 isVideoActive={isVideoActive}
                 onCallToggle={handleCall}
                 onVideoToggle={handleVideo}
-                onSimulateCall={handleSimulateCall}
-                onSimulateVideo={handleSimulateVideo}
+                onSimulateCall={() => {}} // Remove in production
+                onSimulateVideo={() => {}} // Remove in production
                 isSheetOpen={isSheetOpen}
                 onSheetOpenChange={setIsSheetOpen}
                 contactsListElement={
                   <ContactsList
-                    contacts={contacts}
-                    groups={groups}
+                    contacts={convertedContacts}
+                    groups={convertedGroups}
                     selectedContact={selectedContact}
                     selectedGroup={selectedGroup}
                     searchQuery={searchQuery}
@@ -372,22 +460,30 @@ export default function ChatScreen() {
               />
             )}
 
-            <MessageList 
-              messages={messages} 
-              contactName={selectedContact?.name || selectedGroup?.name || ''} 
-            />
+            {loading && !currentMessages.length ? (
+              <View style={styles.loadingMessages}>
+                <ActivityIndicator color={darkTheme.color.primary} />
+              </View>
+            ) : (
+              <MessageList 
+                messages={currentMessages} 
+                contactName={selectedContact?.name || selectedGroup?.name || ''} 
+              />
+            )}
 
-            <MessageInput
-              newMessage={newMessage}
-              onMessageChange={setNewMessage}
-              onSend={handleSend}
-              onAttachment={handleAttachment}
-              onVoiceRecord={handleVoiceRecord}
-              showEmojiPicker={showEmojiPicker}
-              onToggleEmojiPicker={() => setShowEmojiPicker(!showEmojiPicker)}
-              onEmojiSelect={handleEmojiSelect}
-              isRecording={isRecording}
-            />
+            {(selectedContact || selectedGroup) && (
+              <MessageInput
+                newMessage={newMessage}
+                onMessageChange={handleMessageChange}
+                onSend={handleSend}
+                onAttachment={handleAttachment}
+                onVoiceRecord={handleVoiceRecord}
+                showEmojiPicker={showEmojiPicker}
+                onToggleEmojiPicker={() => setShowEmojiPicker(!showEmojiPicker)}
+                onEmojiSelect={handleEmojiSelect}
+                isRecording={isRecording}
+              />
+            )}
           </View>
         </View>
 
@@ -456,5 +552,20 @@ const styles = StyleSheet.create({
   chatArea: {
     flex: 1,
     flexDirection: 'column',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 16,
+  },
+  loadingText: {
+    color: darkTheme.color.mutedForeground,
+    fontSize: 14,
+  },
+  loadingMessages: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

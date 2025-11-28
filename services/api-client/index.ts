@@ -1,12 +1,18 @@
 import { env } from '../../config/env';
 import { getTokenSecure, clearTokenSecure } from '../auth/auth-storage';
-import { store } from '@/state/store';
-import { logout } from '@/state/slices/auth-slice';
 
 interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   body?: unknown;
   signal?: AbortSignal;
+}
+
+// Callback to handle logout when token expires
+// This will be set by the store setup to avoid circular dependencies
+let onTokenExpiredCallback: (() => void) | null = null;
+
+export function setTokenExpiredCallback(callback: () => void) {
+  onTokenExpiredCallback = callback;
 }
 
 export async function api<T>(path: string, options: RequestOptions = {}): Promise<T> {
@@ -31,9 +37,14 @@ export async function api<T>(path: string, options: RequestOptions = {}): Promis
     try {
       const errorData = JSON.parse(text);
       if (errorData?.message === 'jwt expired' || errorData?.message?.toLowerCase().includes('jwt expired')) {
-        // Automatically log out user - clear token and update Redux
+        // Automatically log out user - clear token and trigger callback
         await clearTokenSecure();
-        store.dispatch(logout());
+        
+        // Call the logout callback if registered
+        if (onTokenExpiredCallback) {
+          onTokenExpiredCallback();
+        }
+        
         throw new Error('Session expired. Please login again.');
       }
     } catch (parseError) {

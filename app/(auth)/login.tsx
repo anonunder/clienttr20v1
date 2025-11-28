@@ -43,24 +43,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 24,
     maxWidth: 600,
+    paddingHorizontal: 16,
   },
   logoCircle: {
-    width: 256,
-    height: 256,
-    borderRadius: 128,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logoCircleTablet: {
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+  },
+  logoCircleDesktop: {
+    width: 256,
+    height: 256,
+    borderRadius: 128,
   },
   logoEmoji: {
     fontSize: 128,
   },
   leftTitle: {
-    fontSize: 48,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#FFFFFF',
     textAlign: 'center',
     letterSpacing: 2,
+  },
+  leftTitleTablet: {
+    fontSize: 40,
+  },
+  leftTitleDesktop: {
+    fontSize: 48,
   },
   leftSubtitle: {
     color: 'rgba(255, 255, 255, 0.9)',
@@ -71,9 +88,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+    backgroundColor: darkTheme.color.bg,
+  },
+  rightSideTablet: {
     paddingHorizontal: 48,
     paddingVertical: 48,
-    backgroundColor: darkTheme.color.bg,
   },
   mobileContainer: {
     flex: 1,
@@ -81,28 +102,54 @@ const styles = StyleSheet.create({
   mobileLogoSection: {
     alignItems: 'center',
     gap: 16, // gap-4 = 16px
-    marginBottom: 32, // mb-8 = 32px
-    paddingTop: 32,
+    marginBottom: 24,
+    paddingTop: 24,
     paddingHorizontal: 24,
   },
   mobileLogo: {
-    width: 128,
-    height: 128,
-    borderRadius: 64,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     backgroundColor: `${darkTheme.color.primary}33`,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  mobileLogoLarge: {
+    width: 128,
+    height: 128,
+    borderRadius: 64,
+  },
   mobileLogoImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  mobileLogoImageLarge: {
     width: 128,
     height: 128,
     borderRadius: 64,
   },
   logoImage: {
+    width: 200,
+    height: 200,
+  },
+  logoImageTablet: {
+    width: 220,
+    height: 220,
+  },
+  logoImageDesktop: {
     width: 256,
     height: 256,
   },
   logoImageAnimated: {
+    width: 200,
+    height: 200,
+  },
+  logoImageAnimatedTablet: {
+    width: 220,
+    height: 220,
+  },
+  logoImageAnimatedDesktop: {
     width: 256,
     height: 256,
   },
@@ -115,8 +162,13 @@ const styles = StyleSheet.create({
   formContainer: {
     width: '100%',
     maxWidth: 600,
-    minWidth: 450,
     paddingHorizontal: 24,
+  },
+  formContainerTablet: {
+    minWidth: 450,
+  },
+  formContainerMobile: {
+    paddingHorizontal: 16,
   },
   welcomeSection: {
     marginBottom: 8,
@@ -126,6 +178,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: darkTheme.color.foreground,
     marginBottom: 8, // space-y-2 = 8px
+  },
+  welcomeTitleMobile: {
+    fontSize: 24,
+  },
+  welcomeTitleTablet: {
+    fontSize: 36,
   },
   welcomeSubtitle: {
     color: darkTheme.color.mutedForeground,
@@ -138,6 +196,9 @@ const styles = StyleSheet.create({
   formGroup: {
     gap: 8, // space-y-2 = 8px
     marginBottom: 24, // space-y-6 = 24px
+  },
+  formGroupMobile: {
+    marginBottom: 16,
   },
   errorText: {
     color: darkTheme.color.destructive,
@@ -216,6 +277,9 @@ export default function LoginScreen() {
   });
 
   const isTablet = screenData.width >= 768;
+  const isDesktop = screenData.width >= 1024;
+  const isMobile = screenData.width < 768;
+  const isSmallMobile = screenData.width < 375;
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
@@ -276,29 +340,51 @@ export default function LoginScreen() {
               >
                 <View style={styles.leftSide}>
                   <View style={styles.leftContent}>
-                    <Animated.View style={[styles.logoImageAnimated, animatedImageStyle]}>
+                    <Animated.View style={[
+                      styles.logoImageAnimated,
+                      isTablet && styles.logoImageAnimatedTablet,
+                      isDesktop && styles.logoImageAnimatedDesktop,
+                      animatedImageStyle,
+                    ]}>
                       <Image
                         source={require('@/assets/images/fitness-logo.png')}
-                        style={styles.logoImage}
+                        style={[
+                          styles.logoImage,
+                          isTablet && styles.logoImageTablet,
+                          isDesktop && styles.logoImageDesktop,
+                        ]}
                         contentFit="contain"
                       />
                     </Animated.View>
-                    <Text style={styles.leftTitle}>FITNESS APP</Text>
+                    <Text style={[
+                      styles.leftTitle,
+                      isTablet && styles.leftTitleTablet,
+                      isDesktop && styles.leftTitleDesktop,
+                    ]}>FITNESS APP</Text>
                     <Text style={styles.leftSubtitle}>Transform your body, transform your life</Text>
                   </View>
                 </View>
               </LinearGradient>
 
               {/* Right Side - Form Section */}
-              <View style={styles.rightSide}>
+              <View style={[
+                styles.rightSide,
+                isTablet && styles.rightSideTablet,
+              ]}>
                 <ScrollView
                   contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
                   keyboardShouldPersistTaps="handled"
                 >
-                  <View style={styles.formContainer}>
+                  <View style={[
+                    styles.formContainer,
+                    isTablet && styles.formContainerTablet,
+                  ]}>
                     {/* Welcome Text */}
                     <View style={styles.welcomeSection}>
-                      <Text style={styles.welcomeTitle}>Welcome Back</Text>
+                      <Text style={[
+                        styles.welcomeTitle,
+                        isTablet && styles.welcomeTitleTablet,
+                      ]}>Welcome Back</Text>
                       <Text style={styles.welcomeSubtitle}>Enter your email and password</Text>
                     </View>
 
@@ -378,10 +464,17 @@ export default function LoginScreen() {
             >
               {/* Mobile Logo Section */}
               <View style={styles.mobileLogoSection}>
-                <Animated.View style={[styles.mobileLogo, animatedImageStyle]}>
+                <Animated.View style={[
+                  styles.mobileLogo,
+                  !isSmallMobile && styles.mobileLogoLarge,
+                  animatedImageStyle,
+                ]}>
                   <Image
                     source={require('@/assets/images/fitness-logo.png')}
-                    style={styles.mobileLogoImage}
+                    style={[
+                      styles.mobileLogoImage,
+                      !isSmallMobile && styles.mobileLogoImageLarge,
+                    ]}
                     contentFit="contain"
                   />
                 </Animated.View>
@@ -389,11 +482,20 @@ export default function LoginScreen() {
               </View>
 
               {/* Form Section */}
-              <View style={styles.rightSide}>
-              <View style={styles.formContainer}>
+              <View style={[
+                styles.rightSide,
+                isMobile && styles.formContainerMobile,
+              ]}>
+              <View style={[
+                styles.formContainer,
+                isMobile && styles.formContainerMobile,
+              ]}>
                 {/* Welcome Text */}
                 <View style={styles.welcomeSection}>
-                  <Text style={styles.welcomeTitle}>Welcome Back</Text>
+                  <Text style={[
+                    styles.welcomeTitle,
+                    isMobile && styles.welcomeTitleMobile,
+                  ]}>Welcome Back</Text>
                   <Text style={styles.welcomeSubtitle}>Enter your email and password</Text>
                 </View>
 
